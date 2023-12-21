@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <h1>실시간 영상</h1>
+        <div>
+            <video id='video' width='800' height="600" autoplay muted playsinline></video>
+            <br>
+            <button onclick="captureImage()">캡쳐</button>
+        </div>
+        {% comment %} <div>
+            <p>서버에 저장된 이미지 리스트</p>
+            <br>
+            {% for image in images %}
+                <img src='{{ image.image.url }}' width="200" height="150">
+            {% endfor %}
+        </div> {% endcomment %}
+        <script>
+            const video = document.getElementById('video');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            const constraints = {
+                video: {
+                    frameRate: {
+                        ideal: 10, max: 15
+                    },
+                }
+              };
+
+            navigator.mediaDevices
+                .getUserMedia(constraints)
+                .then((mediaStream) => {
+                    video.srcObject = mediaStream;
+                })
+                .catch((err) => {
+                    console.error(`${err.name}: ${err.message}`);
+                });
+
+            function captureImage(){
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0);
+                canvas.toBlob(blob => {
+                    const formData = new FormData();
+                    formData.append('camera-image', blob);
+                    fetch('/test/', {
+                        method: 'POST',
+                        body : formData
+                    });
+                });
+            }
+        </script>
+    </main>
+    
+    <hr>
+    <footer>
+    <p>>
+        <a href="/main/privateMain/" onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+            개인정보 처리방침
+        </a>
+    </p>
+    <p>>
+        <a href="/main/policySvcMain/" onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+            이용약관
+        </a>
+    </p>
+    </footer>
+</body>
+</html>
