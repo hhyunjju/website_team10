@@ -119,7 +119,7 @@ USE_TZ = True
 
 import os 
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
@@ -128,5 +128,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #client가 업로드한 파일들이 저장되는 위치
 # MODEL_DIR = os.path.join(BASE_DIR, 'signlanguage/model')
