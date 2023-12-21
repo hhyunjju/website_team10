@@ -1,8 +1,11 @@
-from django.contrib import admin
+# main/urls.py
 from django.urls import path
 from . import views
 
+app_name = 'main'
 urlpatterns = [
+    # path('', views.index, name='index'),
+    # path('chat', views.chat, name='chat'),
     path('byhtml/', views.test),
     path('policySvcMain/', views.get_policySvcMain),
     path('privateMain/', views.get_privateMain),
