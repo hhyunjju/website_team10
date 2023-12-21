@@ -6,7 +6,7 @@ app_name = 'main'
 urlpatterns = [
     # path('', views.index, name='index'),
     # path('chat', views.chat, name='chat'),
-    path('byhtml/', views.test),
+    path('', views.test),
     path('policySvcMain/', views.get_policySvcMain),
     path('privateMain/', views.get_privateMain),
     
