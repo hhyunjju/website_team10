@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "accounts",
     "main",
     "brd",
+    "sslserver",
 ]
 
 MIDDLEWARE = [
