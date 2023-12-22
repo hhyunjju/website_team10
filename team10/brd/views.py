@@ -71,3 +71,12 @@ def post_delete(request, id):
         return redirect('brd:list')
     else:
         return render(request, 'brd/post_delete.html', {'post':post})
+    
+    
+    
+    
+def notice_board_view(request):
+    return render(request, 'notice_board.html')
+
+def faq_view(request):
+    return render(request, 'faq.html')
