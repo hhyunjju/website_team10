@@ -8,4 +8,11 @@
   <li><p>Nickname: {{ profile.nickname }}</p></li>
 </ul>
 <a href="{% url 'accounts:password_change' %}">[비밀번호 변경하기]</a>
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{message}}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
