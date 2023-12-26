@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.conf import settings
 from .models import Profile
+from django.contrib import messages
 # 회원가입 뷰 작성
 
 def signup(request):
@@ -18,3 +19,4 @@ def signup(request):
 def profile(request):
     profile = get_object_or_404(Profile, user=request.user )
     return render(request, 'registration/profile.html', {'profile':profile})
+
