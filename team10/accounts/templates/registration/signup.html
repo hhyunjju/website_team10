@@ -17,8 +17,8 @@
 						<h1><a href="index.html"><img src="static/images/logo_page.png"style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
-								<li class="menu-item-login"><a href="login.html">로그인</a></li>
-								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
+								<li class="menu-item-login"><a href="{% url 'accounts:login' %}">로그인</a></li>
+								<li class="menu-item-register"><a href="{% url 'accounts:signup' %}">회원가입</a></li>
 								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
 								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
 							</ul>
@@ -30,25 +30,13 @@
                         <!-- 회원가입 폼 -->
                             <div id="registerModal" class="modal">
                                 <div class="modal-content">
-                                <form method="post" action="register.php">
+                                <form method="post" action="">
+									{% csrf_token %}
                                     <div class="container">
-                                    <h2>회원가입</h2>
-                                    <p>아래 정보를 입력하여 계정을 생성하세요.</p>
-                                    <hr>
-                                    
-                                    <label for="name"><b>이름</b></label>
-                                    <input type="text" placeholder="이름 입력" name="name" required>
-                            
-                                    <label for="email"><b>이메일</b></label>
-                                    <input type="text" placeholder="이메일 주소 입력" name="email" required>
-                            
-                                    <label for="password"><b>비밀번호</b></label>
-                                    <input type="password" placeholder="비밀번호 입력" name="password" required>
-                            
-                                    <label for="password-repeat"><b>비밀번호 확인</b></label>
-                                    <input type="password" placeholder="비밀번호 재입력" name="password-repeat" required>
-                                    
-                                    <button type="submit">회원가입</button>
+										<table>
+											{{form.as_table}}
+										</table>
+										<input type="submit" value="회원가입"/>
                                     </div>
                                 </form>
                                 </div>

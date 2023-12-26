@@ -19,7 +19,7 @@
 						</h1>
 						<nav class="links" style="flex: 2;">
 							<ul style="list-style: none; display: flex; justify-content: flex-end; padding: 0;">
-								<li class="menu-item-login"><a href="login.html">로그인</a></li>
+								<li class="menu-item-login"><a href="{% url 'accounts:login' %}">로그인</a></li>
 								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
 								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
 								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
@@ -32,8 +32,12 @@
                         <!-- 로그인 모델 -->
 							<div id="loginModal" class="modal">
 								<div class="modal-content">
-								<form method="post" action="login.php" class="login-form">
-									<div class="form-group">
+								<form method="post" action="" class="login-form">
+									{% csrf_token %}
+									<table>
+										{{form.as_table}}
+									</table>
+									{% comment %} <div class="form-group">
 									<label for="username"><b>사용자 ID</b></label>
 									<input type="text" placeholder="사용자 ID 입력" name="username" required>
 									</div>
@@ -41,14 +45,15 @@
 									<p> </p>
 									<label for="password"><b>비밀번호</b></label>
 									<input type="password" placeholder="비밀번호 입력" name="password" required>
-									</div>
+									</div> {% endcomment %}
 									<div class="form-group">
-									<div id="error-message" style="display: none; color: #FF6B6B; background-color: #FFD6D6; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
-										아이디나 비밀번호가 틀렸습니다.
-									</div>
-									<p> </p>
-									<button type="submit" class="login-button">로그인</button>
-									<button type="submit" class="signup-button"><a href="signup.html">회원가입</button>
+										{% comment %} <div id="error-message" style="display: none; color: #FF6B6B; background-color: #FFD6D6; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+											아이디나 비밀번호가 틀렸습니다.
+										</div>
+										<p> </p>
+										<button type="submit" class="login-button">로그인</button> {% endcomment %}
+										<input type="submit" value="로그인">
+										<button type="submit" class="signup-button"><a href="signup.html">회원가입</button>
 									</div>
 									<div class="links">
 										|<a href="javascript:void(0);" onclick="window.open('idFind.html', '_blank', 'height=600,width=600');">아이디 찾기</a> | 
