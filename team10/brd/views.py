@@ -76,7 +76,7 @@ def post_delete(request, id):
     
     
 def notice_board_view(request):
-    return render(request, 'notice_board.html')
+    return render(request, 'brd/notice_board.html')
 
 def faq_view(request):
-    return render(request, 'faq.html')
+    return render(request, 'brd/faq.html')

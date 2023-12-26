@@ -18,7 +18,7 @@ def login_view(request):
             return render(request, 'login.html', {'error_message': error_message})
     else:
         # GET 요청 시 로그인 페이지를 보여줍니다.
-        return render(request, 'login.html')
+        return render(request, 'accounts/login.html')
 
 def register_view(request):
     if request.method == 'POST':
@@ -31,4 +31,14 @@ def register_view(request):
     else:
         # GET 요청 시 회원가입 페이지를 보여줍니다.
         form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'accounts/register.html', {'form': form})
+
+
+
+
+
+# 임시로 만들었습니다
+def idFind(request):
+    return render(request, 'accounts/idFind.html')
+def passwordRecovery(request):
+    return render(request, 'accounts/passwordRecovery.html')

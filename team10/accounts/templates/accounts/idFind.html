@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>아이디 찾기</title>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+      <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+      <link rel="icon" href="{% static 'images/logo_page.png' %}" type="image/x-icon" />
+  </head>
+<body>
+  <h2>아이디 찾기</h2>
+  <form action="findIDProcess.php" method="post">
+    <label for="email">등록된 이메일:</label>
+    <input type="email" id="email" name="email" required>
+    <input type="submit" value="아이디 찾기">
+  </form>
+</body>
+</html>

@@ -91,5 +91,22 @@
 			breakpoints.on('>large', function() {
 				$intro.prependTo($sidebar);
 			});
+	// login
+	// This function could be triggered when the login attempt fails
+		function showErrorMessage() {
+			document.getElementById('error-message').style.display = 'block';
+		}
+		function openPasswordRecovery() {
+			// Implement password recovery logic or link to the page
+		}
+		
+		function openIdFind() {
+		// Implement ID find logic or link to the page
+		}
+		
+		function openRegistration() {
+		// Implement registration logic or link to the page
+		}
+		  
 
 })(jQuery);
