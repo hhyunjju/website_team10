@@ -1,4 +1,9 @@
 <!DOCTYPE HTML>
+<!--
+	Future Imperfect by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html>
 	<head>
 		<title>바른자세</title>
@@ -20,12 +25,15 @@
 						<h1><a href="index.html"><img src="static/images/logo_page.png"style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
-								<li><a href="login.html">로그인</a></li>
-								<li><a href="#">회원가입</a></li>
-								<li><a href="notice_board.html">게시판</a></li>
-								<li><a href="#">문의하기</a></li>
-								<li><a href="#">회사소개</a></li>
+								<li class="menu-item-login"><a href="login.html">로그인</a></li>
+								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
+								<li class="menu-item-board"><a href="notice_board.html">게시판</a></li>
+								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
+								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
 							</ul>
+							<div class="crawling-turtle">
+								<img src="static/images/logo_page.png"style="width:45px; height:auto;" alt="Crawling Turtle" />
+							</div>
 						</nav>
 						<nav class="main">
 							<ul>
@@ -98,8 +106,8 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="service.html">자세를 실시간으로 모니터링 해보세요</a></h2>
-										<p>웹 카메라의 허용 요청을 수락해주세요</p>
+										<h2><a href="intro.html">저희의 회사를 소개합니다</a></h2>
+										<p>바쁜 일상에도 당신의 건강한 자세를 유지하도록 돕습니다</p>
 									</div>
 									<div class="meta">
 										<time class="published" id="current-time"></time>
@@ -123,7 +131,7 @@
 									</script>
 								</header>
 								<a href="service.html" class="image featured"><img src="static/images/monitor1.png" alt="설명적인 텍스트" width=auto height=auto/></a>
-								<p>모니터링 페이지 소개말 적기.</p>
+								<p>업무 시간 중 자세 교정을 희망하는 모든 직장인 및 재택근무자를 대상으로 서비스를 제공하고 있습니다</p>
 								<footer>
 									<ul class="actions">
 										<li><a href="service.html" class="button large">모니터링 해보기</a></li>
@@ -151,24 +159,35 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="#">Ultricies sed magna euismod enim vitae gravida</a></h2>
-										<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+										<h2><a href="statistics.html">통계 페이지로 이동</a></h2>
+										<p>나의 통계를 확인해보세요</p>
 									</div>
 									<div class="meta">
-										<time class="published" datetime="2015-10-25">October 25, 2015</time>
-										<a href="#" class="author"><span class="name">Jane Doe</span><img src="static/images/avatar.jpg" alt="" /></a>
+										<time class="published" id="current-time"></time>
+										<a href="https://data.kma.go.kr/cmmn/main.do" class="author"><span class="name">현재 날씨</span><img src="static/images/avatar.jpg" alt="" /></a>
 									</div>
+									<script>
+										// 현재 날짜와 시간을 가져와서 업데이트하는 함수
+										function updateTime() {
+										  var now = new Date();
+										  var months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+										  var formattedDate = months[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
+										
+										  // HTML의 time 요소를 찾아서 현재 날짜와 시간으로 설정
+										  document.getElementById('current-time').textContent = formattedDate;
+										}
+										
+										// 웹 페이지가 로드될 때 함수를 실행
+										window.onload = function() {
+										  updateTime();
+										};
+									</script>
 								</header>
-								<a href="#" class="image featured"><img src="static/images/pic02.jpg" alt="" /></a>
-								<p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper.</p>
+								<a href="statistics.html" class="image featured"><img src="static/images/statistics.png" alt="" /></a>
+								<p>당신의 일일 자세가 어떤지 시각적으로 확인해보세요.</p>
 								<footer>
 									<ul class="actions">
-										<li><a href="#" class="button large">Continue Reading</a></li>
-									</ul>
-									<ul class="stats">
-										<li><a href="#">General</a></li>
-										<li><a href="#" class="icon solid fa-heart">28</a></li>
-										<li><a href="#" class="icon solid fa-comment">128</a></li>
+										<li><a href="statistics.html" class="button large">이동하기</a></li>
 									</ul>
 								</footer>
 							</article>
@@ -177,24 +196,34 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="#">Euismod et accumsan</a></h2>
-										<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+										<h2><a href="notice_board.html">게시판</a></h2>
+										<p>다른 사람들과 함께 의견을 나누고 정보를 공유해보세요</p>
 									</div>
 									<div class="meta">
-										<time class="published" datetime="2015-10-22">October 22, 2015</time>
-										<a href="#" class="author"><span class="name">Jane Doe</span><img src="static/images/avatar.jpg" alt="" /></a>
+										<time class="published" id="current-time"></time>
+										<a href="https://data.kma.go.kr/cmmn/main.do" class="author"><span class="name">현재 날씨</span><img src="static/images/avatar.jpg" alt="" /></a>
 									</div>
+									<script>
+										// 현재 날짜와 시간을 가져와서 업데이트하는 함수
+										function updateTime() {
+										  var now = new Date();
+										  var months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+										  var formattedDate = months[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
+										
+										  // HTML의 time 요소를 찾아서 현재 날짜와 시간으로 설정
+										  document.getElementById('current-time').textContent = formattedDate;
+										}
+										
+										// 웹 페이지가 로드될 때 함수를 실행
+										window.onload = function() {
+										  updateTime();
+										};
+									</script>
 								</header>
-								<a href="#" class="image featured"><img src="static/images/pic03.jpg" alt="" /></a>
-								<p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla. Cras vehicula tellus eu ligula viverra, ac fringilla turpis suscipit. Quisque vestibulum rhoncus ligula.</p>
+								<a href="notice_board.html" class="image featured"><img src="static/images/notice_board1.png" alt="" /></a>
 								<footer>
 									<ul class="actions">
-										<li><a href="#" class="button large">Continue Reading</a></li>
-									</ul>
-									<ul class="stats">
-										<li><a href="#">General</a></li>
-										<li><a href="#" class="icon solid fa-heart">28</a></li>
-										<li><a href="#" class="icon solid fa-comment">128</a></li>
+										<li><a href="notice_board.html" class="button large">이동하기</a></li>
 									</ul>
 								</footer>
 							</article>
@@ -515,7 +544,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 						<!-- Pagination -->
 							<ul class="actions pagination">
 								<li><a href="" class="disabled button large previous">이전 페이지</a></li>
-								<li><a href="#" class="button large next">다음 페이지</a></li>
+								<li><a href="service.html" class="button large next">다음 페이지</a></li>
 							</ul>
 
 					</div>
@@ -525,7 +554,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 
 						<!-- Intro -->
 							<section id="intro">
-								<a href="#" class="logo"><img src="static/images/main_icon.png" alt="" /></a>
+								<a href="https://pokemonkorea.co.kr/" class="logo"><img src="static/images/main_icon.png" alt="" /></a>
 								<header>
 									<h2>당신의 바른자세 도우미</h2>
 									<p>카메라로 당신의 자세를 분석해보고 저희가 시각화해서 알려드릴게요</p>
@@ -539,41 +568,33 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 									<!-- Mini Post -->
 										<article class="mini-post">
 											<header>
-												<h3><a href="#">회사소개?</a></h3>
-												<time class="published" datetime="2015-10-20">October 20, 2015</time>
-												<a href="#" class="author"><img src="static/images/avatar.jpg" alt="" /></a>
+												<h3><a href="intro.html">회사소개?</a></h3>
 											</header>
-											<a href="#" class="image"><img src="static/images/pic04.jpg" alt="" /></a>
+											<a href="intro.html" class="image"><img src="static/images/intro.png" alt="" /></a>
 										</article>
 
 									<!-- Mini Post -->
 										<article class="mini-post">
 											<header>
-												<h3><a href="#">건강관리 사이트</a></h3>
-												<time class="published" datetime="2015-10-19">October 19, 2015</time>
-												<a href="#" class="author"><img src="static/images/avatar.jpg" alt="" /></a>
+												<h3><a href="https://www.amc.seoul.kr/asan/healthinfo/disease/diseaseDetail.do?contentId=31866">거북목이란?</a></h3>
 											</header>
-											<a href="#" class="image"><img src="static/images/pic05.jpg" alt="" /></a>
+											<a href="https://www.amc.seoul.kr/asan/healthinfo/disease/diseaseDetail.do?contentId=31866" class="image"><img src="static/images/Turtle neck syndrome.png" alt="" /></a>
 										</article>
 
 									<!-- Mini Post -->
 										<article class="mini-post">
 											<header>
-												<h3><a href="#">건강관리 유튜브</a></h3>
-												<time class="published" datetime="2015-10-18">October 18, 2015</time>
-												<a href="#" class="author"><img src="static/images/avatar.jpg" alt="" /></a>
+												<h3><a href="https://www.youtube.com/watch?v=-nOgOs4r6Ys">거북목 관리하는 방법</a></h3>
 											</header>
-											<a href="#" class="image"><img src="static/images/pic06.jpg" alt="" /></a>
+											<a href="https://www.youtube.com/watch?v=-nOgOs4r6Ys" class="image"><img src="static/images/turtleneck_care.png" alt="" /></a>
 										</article>
 
 									<!-- Mini Post -->
 										<article class="mini-post">
 											<header>
-												<h3><a href="#">건강관리 소개</a></h3>
-												<time class="published" datetime="2015-10-17">October 17, 2015</time>
-												<a href="#" class="author"><img src="static/images/avatar.jpg" alt="" /></a>
+												<h3><a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5972">질병관리청 거북목 위험성</a></h3>
 											</header>
-											<a href="#" class="image"><img src="static/images/pic07.jpg" alt="" /></a>
+											<a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5972" class="image"><img src="static/images/neck.png" alt="" /></a>
 										</article>
 
 								</div>
