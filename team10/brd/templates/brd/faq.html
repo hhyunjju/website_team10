@@ -10,8 +10,8 @@
 		<title>바른자세 FAQ</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-		<link rel="icon" href="/static/images/logo_page.png" type="image/x-icon" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		<link rel="icon" href="{%static 'images/logo_page.png' %}" type="image/x-icon" />
 	</head>
 	<body class="single is-preload">
 
@@ -20,7 +20,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="{% url 'home' %}"><img src="/static/images/logo_page.png"style="width:45px; height:auto;"></a></h1>
+						<h1><a href="/"><img src="{%static 'images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
 								<li class="menu-item-login"><a href="{% url 'login' %}">로그인</a></li>
@@ -59,25 +59,25 @@
 							<section>
 								<ul class="links">
 									<li>
-										<a href="service.html">
+										<a href="{% url 'service:service' %}">
 											<h3>모니터링</h3>
 											<p>당신의 자세에 대해 분석해보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="statistics.html">
+										<a href="{% url 'service:statistics' %}">
 											<h3>통계 결과</h3>
 											<p>다양한 통계 결과를 시각화 해보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="notice_board.html">
+										<a href="{% url 'brd:notice_board' %}">
 											<h3>게시판</h3>
 											<p>결과를 다른 사람들과 비교해 보고 질문해 보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="faq.html">
+										<a href="{% url 'brd:faq' %}">
 											<h3>FAQ</h3>
 											<p>저희의 ~ 알아보세요</p>
 										</a>
@@ -100,17 +100,36 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="#">Magna sed adipiscing</a></h2>
-										<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+										<h2><a href="#">저희 서비스에 대해 궁금한 점이 있으신가요?</a></h2>
+										<p>저희의 약관과 정보처리 방식에 대해 알아보세요</p>
 									</div>
 									<div class="meta">
 										<time class="published" datetime="2015-11-01">November 1, 2015</time>
-										<a href="#" class="author"><span class="name">Jane Doe</span><img src="/static/images/avatar.jpg" alt="" /></a>
+										<a href="#" class="author"><span class="name">Jane Doe</span><img src="{%static 'images/avatar.jpg' %}" alt="" /></a>
 									</div>
 								</header>
-								<span class="image featured"><img src="/static/images/pic01.jpg" alt="" /></span>
-								<p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-								<p>Nunc quis dui scelerisque, scelerisque urna ut, dapibus orci. Sed vitae condimentum lectus, ut imperdiet quam. Maecenas in justo ut nulla aliquam sodales vel at ligula. Sed blandit diam odio, sed fringilla lectus molestie sit amet. Praesent eu tortor viverra lorem mattis pulvinar feugiat in turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce ullamcorper tellus sit amet mattis dignissim. Phasellus ut metus ligula. Curabitur nec leo turpis. Ut gravida purus quis erat pretium, sed pellentesque massa elementum. Fusce vestibulum porta augue, at mattis justo. Integer sed sapien fringilla, dapibus risus id, faucibus ante. Pellentesque mattis nunc sit amet tortor pellentesque, non placerat neque viverra. </p>
+								<span class="image featured"><img src="{%static 'images/question.png' %}" alt="" /></span>
+								<p><a href="javascript:void(0);" onclick="openPrivacyPolicy();">개인정보처리방침</a></p>
+								<p><a href="javascript:void(0);" onclick="openSoftwareSecurity();">소프트웨어 개발보안</a></p>
+								<script>
+									function openPrivacyPolicy() {
+										var privacyWindow = window.open('', 'Privacy Policy', 'width=600,height=400');
+										privacyWindow.document.write('<html><head><title>개인정보처리방침</title></head><body>');
+										privacyWindow.document.write('<h1>개인정보처리방침</h1>');
+										privacyWindow.document.write('<p>여기에 개인정보처리방침 내용을 작성합니다.</p>');
+										privacyWindow.document.write('</body></html>');
+										privacyWindow.document.close(); // 중요: 문서 작성이 끝난 후에는 반드시 close() 호출
+									}
+									
+									function openSoftwareSecurity() {
+										var securityWindow = window.open('', 'Software Security', 'width=600,height=400');
+										securityWindow.document.write('<html><head><title>소프트웨어 개발보안</title></head><body>');
+										securityWindow.document.write('<h1>소프트웨어 개발보안</h1>');
+										securityWindow.document.write('<p>여기에 소프트웨어 개발보안 내용을 작성합니다.</p>');
+										securityWindow.document.write('</body></html>');
+										securityWindow.document.close(); // 중요: 문서 작성이 끝난 후에는 반드시 close() 호출
+									}
+								</script>																	
 								<footer>
 									<ul class="stats">
 										<li><a href="#">General</a></li>
@@ -125,7 +144,7 @@
 				<!-- Footer -->
 					<section id="footer">
 						<div class="footer-logo">
-							<img src="/static/images/logo_page.png" alt="바른자세 로고" />
+							<img src="{%static 'images/logo_page.png' %}" alt="바른자세 로고" />
 						</div>
 						<ul class="icons">
 							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
