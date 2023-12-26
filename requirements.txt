@@ -1,7 +1,7 @@
 mlflow
 opencv-python
 Pillow
-Django
+Django==4.2.7
 tensorflow-cpu
 openai
 imutils
