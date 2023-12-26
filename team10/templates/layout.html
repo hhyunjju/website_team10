@@ -16,34 +16,35 @@
 			<div id="wrapper">
 
 				<!-- Header -->
-					<header id="header">
-						<h1><a href="index.html"><img src="static/images/logo_page.png"style="width:45px; height:auto;"></a></h1>
-						<nav class="links">
-							<ul>
-								<li class="menu-item-login"><a href="login.html">로그인</a></li>
-								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
-								<li class="menu-item-board"><a href="notice_board.html">게시판</a></li>
-								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
-								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
-							</ul>
-							<div class="crawling-turtle">
-								<img src="static/images/logo_page.png"style="width:45px; height:auto;" alt="Crawling Turtle" />
-							</div>
-						</nav>
-						<nav class="main">
-							<ul>
-								<li class="search">
-									<a class="fa-search" href="#search">찾아보기</a>
-									<form id="search" method="get" action="#">
-										<input type="text" name="query" placeholder="찾아보기" />
-									</form>
-								</li>
-								<li class="menu">
-									<a class="fa-bars" href="#menu">메뉴</a>
-								</li>
-							</ul>
-						</nav>
-					</header>
+				<header id="header">
+					<nav class="links">
+						<ul>
+							{% if not user.is_authenticated %}
+								<li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
+								<li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
+							{% else %}
+								<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
+								<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
+							{% endif %}
+							<li><a href="{% url 'brd:list' %}">게시판</a></li>
+							<li><a href="#">문의하기</a></li>
+							<li><a href="#">회사소개</a></li>
+						</ul>
+					</nav>
+					<nav class="main">
+						<ul>
+							<li class="search">
+								<a class="fa-search" href="#search">찾아보기</a>
+								<form id="search" method="get" action="#">
+									<input type="text" name="query" placeholder="찾아보기" />
+								</form>
+							</li>
+							<li class="menu">
+								<a class="fa-bars" href="#menu">메뉴</a>
+							</li>
+						</ul>
+					</nav>
+				</header>
 
 				<!-- Menu -->
 					<section id="menu">
