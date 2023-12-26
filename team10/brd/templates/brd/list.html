@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Post 목록 보기{% endblock title %}
+
+{% block content %}
+
+    <h1>Post 목록</h1>
+    <br>
+    <form action="" method='get'>
+        {% csrf_token %}
+        검색어 : <input type='text' name='keyword' value='{{q|default:""}}'>
+        <input type='submit' value='검색'>
+    </form>
+
+    {% for post in post_all %}
+        - <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
+    {% endfor %}
+
+    <p align='right'><a href='{% url "brd:list" %}'>[목록 보기]</a></p>
+    <p align='right'><a href='{% url "brd:create" %}'>[새 글 쓰기]</a></p>
+
+
+{% endblock content %}

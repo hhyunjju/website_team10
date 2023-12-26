@@ -120,27 +120,28 @@
 								</header>
 								<a href="notice_board.html" class="image featured"><img src="static/images/notice_board1.png" alt="설명적인 텍스트" width=auto height=auto/></a>
 								<section>
-									<div class="table-wrapper">
-										<table class="alt">
-											<thead>
-												<tr>
-													<th>순번</th>
-													<th>제목</th>
-													<th>작성일자</th>
-												</tr>
-											</thead>
-											<tbody>
-												<!-- Board Content -->
-											</tbody>
-											<tfoot>
-												<tr>
-													<td colspan="3">
-														<!-- Pagination -->
-													</td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
+									<head>
+    
+                                        {% block title %}      <!-- 페이지별 타이틀 공간 -->
+                                        <title>bbs - minitutorial</title>
+                                        {% endblock title %}
+                                
+                                        {% block meta %}    <!-- 페이지별 메타 데이터 공간 -->
+                                        {% endblock meta %}
+                                
+                                        {% block scripts %}    <!-- 페이지별 스크립트 공간 -->
+                                        {% endblock scripts %}
+                                
+                                        {% block css %}        <!-- 페이지별 css -->
+                                        {% endblock css %}
+                                    </head>
+                                    <body>
+                                        {% block content %}
+                                        view: {{ view }} <!-- ctx['view'] -->
+                                        <br>
+                                        data: {{ data }}  <!-- ctx['data'] -->
+                                        {% endblock content %}
+                                    </body>
 								</section>
 
 								<footer>

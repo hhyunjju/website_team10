@@ -23,6 +23,9 @@ def test(request):
     }
     return render(request, 'main.html', context)
 
+def indexcss(request):
+    return render(request, 'layout.html')
+
 
 from django.http import StreamingHttpResponse
 from .camera import *
