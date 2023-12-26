@@ -17,10 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
-from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'), # 루트 URL에 대한 뷰 함수를 지정
     path("admin/", admin.site.urls),
     path('main/', include('main.urls')),
     path('accounts/', include('accounts.urls')),
