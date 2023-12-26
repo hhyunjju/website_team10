@@ -28,3 +28,17 @@ class MyPasswordChangeView(PasswordChangeView):
     def form_valid(self, form):
         messages.info(self.request, '비밀번호 변경이 완료되었습니다')
         return super().form_valid(form)
+    
+def cookie_test(request, code):
+    response = render(request, 'registration/cookieTest.html')
+    if code == 'add':
+        response.set_cookie('model', 'A001')
+        response.set_cookie('prod', 'EV9')
+    elif code == 'get':
+        model = request.COOKIES.get('model')
+        prod = request.COOKIES.get('prod')
+        print(model, prod)
+    elif code == 'del':
+        response.delete_cookie('model')
+        response.delete_cookie('prod')
+    return response
