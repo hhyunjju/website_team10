@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html lang="ko"> <!-- 코드언어 표시 == 웹 표준지침 준수 -->
+	<head>
+		<title>바른자세 로그인</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="static/assets/css/login.css" />
+		<link rel="icon" href="static/images/logo_page.png" type="image/x-icon" />
+	</head>
+	<body class="single is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html"><img src="static/images/logo_page.png"style="width:45px; height:auto;"></a></h1>
+						<nav class="links">
+							<ul>
+								<li class="menu-item-login"><a href="login.html">로그인</a></li>
+								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
+								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
+								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+                        <!-- 회원가입 폼 -->
+                            <div id="registerModal" class="modal">
+                                <div class="modal-content">
+                                <form method="post" action="register.php">
+                                    <div class="container">
+                                    <h2>회원가입</h2>
+                                    <p>아래 정보를 입력하여 계정을 생성하세요.</p>
+                                    <hr>
+                                    
+                                    <label for="name"><b>이름</b></label>
+                                    <input type="text" placeholder="이름 입력" name="name" required>
+                            
+                                    <label for="email"><b>이메일</b></label>
+                                    <input type="text" placeholder="이메일 주소 입력" name="email" required>
+                            
+                                    <label for="password"><b>비밀번호</b></label>
+                                    <input type="password" placeholder="비밀번호 입력" name="password" required>
+                            
+                                    <label for="password-repeat"><b>비밀번호 확인</b></label>
+                                    <input type="password" placeholder="비밀번호 재입력" name="password-repeat" required>
+                                    
+                                    <button type="submit">회원가입</button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+				<!-- Footer -->
+					<section id="footer">
+						<div class="footer-logo">
+							<img src="static/images/logo_page.png" alt="바른자세 로고" />
+						</div>
+						<ul class="icons">
+							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="https://facebook.com" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="https://instagram.com" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="mailto:your@email.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+						<div class="policy-links">
+							| <a href="javascript:void(0);" onclick="openPrivacyPolicy();">개인정보처리방침</a>
+							| <a href="javascript:void(0);" onclick="openTermsOfService();">이용약관</a>
+							| <a href="javascript:void(0);" onclick="openFaq();">자주묻는질문</a>
+							| <a href="javascript:void(0);" onclick="openDataPolicy();">데이터베이스이용약관</a> |
+						</div>
+						<script>
+							function openPrivacyPolicy() {
+								var privacyWindow = window.open('', 'Privacy Policy', 'width=600,height=400');
+								privacyWindow.document.write('<html><head><title>개인정보처리방침</title></head><body>');
+								privacyWindow.document.write('<h1>개인정보처리방침</h1>');
+								privacyWindow.document.write('<p>여기에 개인정보처리방침 내용을 작성합니다.</p>');
+								privacyWindow.document.write('</body></html>');
+								privacyWindow.document.close();
+							}
+							
+							function openTermsOfService() {
+								var termsWindow = window.open('', 'Terms of Service', 'width=600,height=400');
+								termsWindow.document.write('<html><head><title>이용약관</title></head><body>');
+								termsWindow.document.write('<h1>이용약관</h1>');
+								termsWindow.document.write('<p>여기에 이용약관 내용을 작성합니다.</p>');
+								termsWindow.document.write('</body></html>');
+								termsWindow.document.close();
+							}
+						
+							function openFaq() {
+								var faqWindow = window.open('', 'FAQ', 'width=600,height=400');
+								faqWindow.document.write('<html><head><title>자주묻는질문</title></head><body>');
+								faqWindow.document.write('<h1>자주묻는질문</h1>');
+								faqWindow.document.write('<p>여기에 자주묻는질문 내용을 작성합니다.</p>');
+								faqWindow.document.write('</body></html>');
+								faqWindow.document.close();
+							}
+							
+							function openDataPolicy() {
+								var dataPolicyWindow = window.open('', 'Data Policy', 'width=600,height=400');
+								dataPolicyWindow.document.write('<html><head><title>데이터베이스이용약관</title></head><body>');
+								dataPolicyWindow.document.write('<h1>데이터베이스이용약관</h1>');
+								dataPolicyWindow.document.write('<p>여기에 데이터베이스이용약관 내용을 작성합니다.</p>');
+								dataPolicyWindow.document.write('</body></html>');
+								dataPolicyWindow.document.close();
+							}
+						</script>						
+						<p class="copyright">
+							<a href="https://aivle.edu.kt.co.kr/home/main/goMenuPage?mcd=MC00000034">KT Aivle School</a> Designed by Aivle 4기 10조.
+						</p>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="static/assets/js/jquery.min.js"></script>
+			<script src="static/assets/js/browser.min.js"></script>
+			<script src="static/assets/js/breakpoints.min.js"></script>
+			<script src="static/assets/js/util.js"></script>
+			<script src="static/assets/js/main.js"></script>
+
+	</body>
+</html>
