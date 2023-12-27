@@ -141,6 +141,17 @@
 			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
+			<script>
+				document.addEventListener("DOMContentLoaded", function() {
+					let errorList = document.querySelector('.errorlist');
+					if (errorList && errorList.textContent.includes("Please enter a correct username and password. Note that both fields may be case-sensitive.")) {
+						errorList.textContent = "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.";
+						errorList.style.color = "red";
+					}
+				});
+			</script>
+			
+			
 
 	</body>
 </html>
