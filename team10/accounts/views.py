@@ -42,26 +42,3 @@ def cookie_test(request, code):
         response.delete_cookie('model')
         response.delete_cookie('prod')
     return response
-
-from django.contrib.sessions.backends.db import SessionStore
-
-def session_test(request, code):
-    response = render(request, 'registration/sessionTest.html')
-    session = request.session
-    if code == 1:
-        user = request.user
-        print(user, ':', session)
-    elif code == 2:
-        session['model'] = 'A001'
-        session['prod'] = 'EV9'
-        print('session 데이터 등록')
-    elif code == 3:
-        model = session.get('model')
-        prod = session.get('prod')
-        print('session 데이터 추출')
-        print(model, prod)
-    elif code == 4:
-        session.pop('model')
-        print('session 데이터 삭제')
-        session.pop('prod')
-    return response
