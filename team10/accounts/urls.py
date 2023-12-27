@@ -17,5 +17,4 @@ urlpatterns = [
     path("password_change/", views.MyPasswordChangeView.as_view(), #success_url을 view에 작성하는 것으로 바꿈
          name="password_change"),
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name="password_change_done"),
-    
 ]
