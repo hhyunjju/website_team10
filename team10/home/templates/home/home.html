@@ -18,18 +18,21 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/"><img src="{%static 'images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+						<h1><a href="/"><img src="{% static 'images/logo_page.png' %}" style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
-								<li class="menu-item-login"><a href="{% url 'login' %}">로그인</a></li>
-								<li class="menu-item-register"><a href="{% url 'register' %}">회원가입</a></li>
-								<li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
-								<li class="menu-item-contact"><a href="{% url 'brd:faq' %}">문의하기</a></li>
-								<li class="menu-item-company"><a href="{% url 'intro' %}">회사소개</a></li>
+								{% if not user.is_authenticated %}
+									<li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
+									<li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
+								{% else %}
+									<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
+									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
+								{% endif %}
+								<li><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+								<li><a href="{% url 'home:intro' %}">회사소개</a></li>
+								<li><a href="{% url 'service:service' %}">서비스</a></li>
+								<li><a href="{% url 'brd:faq' %}">FAQ</a></li>
 							</ul>
-							<div class="crawling-turtle">
-								<img src="{%static 'images/logo_page.png' %}"style="width:45px; height:auto;" alt="Crawling Turtle" />
-							</div>
 						</nav>
 						<nav class="main">
 							<ul>
@@ -89,7 +92,7 @@
 						<!-- Actions -->
 							<section>
 								<ul class="actions stacked">
-									<li><a href="{% url 'login' %}" class="button large fit">로그인</a></li>
+									<li><a href="{% url 'accounts:login' %}" class="button large fit">로그인</a></li>
 								</ul>
 							</section>
 
@@ -102,7 +105,7 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="{% url 'intro' %}">저희의 회사를 소개합니다</a></h2>
+										<h2><a href="{% url 'home:intro' %}">저희의 회사를 소개합니다</a></h2>
 										<p>바쁜 일상에도 당신의 건강한 자세를 유지하도록 돕습니다</p>
 									</div>
 									<div class="meta">
@@ -126,11 +129,11 @@
 										};
 									</script>
 								</header>
-								<a href="{% url 'intro' %}" class="image featured"><img src="{%static 'images/intro.png' %}" alt="설명적인 텍스트" width=auto height=auto/></a>
+								<a href="{% url 'home:intro' %}" class="image featured"><img src="{%static 'images/intro.png' %}" alt="설명적인 텍스트" width=auto height=auto/></a>
 								<p>업무 시간 중 자세 교정을 희망하는 모든 직장인 및 재택근무자를 대상으로 서비스를 제공하고 있습니다</p>
 								<footer>
 									<ul class="actions">
-										<li><a href="{% url 'intro' %}" class="button large">이동하기</a></li>
+										<li><a href="{% url 'home:intro' %}" class="button large">이동하기</a></li>
 									</ul>
 									<ul class="stats">
 										<li><a href="#" class="icon solid fa-heart" id="heart-link"><span id="heart-count">0</span></a></li>

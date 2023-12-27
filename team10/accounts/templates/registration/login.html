@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE HTML>
 <html lang="ko"> <!-- 코드언어 표시 == 웹 표준지침 준수 -->
 	<head>
 		<title>바른자세 로그인</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="static/assets/css/login.css" />
-		<link rel="icon" href="static/images/logo_page.png" type="image/x-icon" />
+		<link rel="stylesheet" href="{% static 'assets/css/login.css' %}" />
+		<link rel="icon" href="{% static 'images/logo_page.png' %}" type="image/x-icon" />
 	</head>
 	<body class="single is-preload">
 
@@ -15,12 +16,12 @@
 				<!-- Header -->
 					<header id="header" style="display: flex; justify-content: space-between; align-items: center; padding: 1em;">
 						<h1 style="flex: 1;">
-							<a href="index.html"><img src="static/images/logo_page.png" style="width:45px; height:auto;"></a>
+							<a href="/"><img src="{% static 'images/logo_page.png' %}" style="width:45px; height:auto;"></a>
 						</h1>
 						<nav class="links" style="flex: 2;">
 							<ul style="list-style: none; display: flex; justify-content: flex-end; padding: 0;">
 								<li class="menu-item-login"><a href="{% url 'accounts:login' %}">로그인</a></li>
-								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
+								<li class="menu-item-register"><a href="{% url 'accounts:signup' %}">회원가입</a></li>
 								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
 								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
 							</ul>
@@ -53,7 +54,7 @@
 										<p> </p>
 										<button type="submit" class="login-button">로그인</button> {% endcomment %}
 										<input type="submit" value="로그인">
-										<button type="submit" class="signup-button"><a href="signup.html">회원가입</button>
+										<button type="submit" class="signup-button"><a href="{% url 'accounts:signup' %}">회원가입</button>
 									</div>
 									<div class="links">
 										|<a href="javascript:void(0);" onclick="window.open('idFind.html', '_blank', 'height=600,width=600');">아이디 찾기</a> | 
@@ -68,7 +69,7 @@
 				<!-- Footer -->
 					<section id="footer" style="background: #f8f8f8; padding: 2em 0; text-align: center;">
 						<div class="footer-logo">
-							<img src="static/images/logo_page.png" alt="바른자세 로고" />
+							<img src="{% static 'images/logo_page.png' %}" alt="바른자세 로고" />
 						</div>
 						<ul class="icons">
 							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
@@ -127,11 +128,11 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="static/assets/js/jquery.min.js"></script>
-			<script src="static/assets/js/browser.min.js"></script>
-			<script src="static/assets/js/breakpoints.min.js"></script>
-			<script src="static/assets/js/util.js"></script>
-			<script src="static/assets/js/main.js"></script>
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
 
 	</body>
 </html>

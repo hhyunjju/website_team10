@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE HTML>
 <html>
 	<head>
 		<title>바른자세 모니터링</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<link rel="stylesheet" href="static/assets/css/main.css" />
-		<link rel="icon" href="static/images/logo_page.png" type="image/x-icon" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<link rel="icon" href="{%static 'images/logo_page.png' %}" type="image/x-icon" />
 	</head>
 	<body class="single is-preload">
 
@@ -14,14 +15,20 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="index.html"><img src="static/images/logo_page.png"style="width:45px; height:auto;"></a></h1>
+						<h1><a href="{% url 'home' %}"><img src="{% static 'images/logo_page.png' %}" style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
-								<li class="menu-item-login"><a href="login.html">로그인</a></li>
-								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
-								<li class="menu-item-board"><a href="notice_board.html">게시판</a></li>
-								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
-								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
+								{% if not user.is_authenticated %}
+									<li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
+									<li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
+								{% else %}
+									<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
+									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
+								{% endif %}
+								<li><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+								<li><a href="{% url 'home:intro' %}">회사소개</a></li>
+								<li><a href="{% url 'service:service' %}">서비스</a></li>
+								<li><a href="{% url 'brd:faq' %}">FAQ</a></li>
 							</ul>
 						</nav>
 						<nav class="main">
@@ -53,25 +60,25 @@
 							<section>
 								<ul class="links">
 									<li>
-										<a href="service.html">
+										<a href="{% url 'service:service' %}">
 											<h3>모니터링</h3>
 											<p>당신의 자세에 대해 분석해보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="statistics.html">
+										<a href="{% url 'service:statistics' %}">
 											<h3>통계 결과</h3>
 											<p>다양한 통계 결과를 시각화 해보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="notice_board.html">
+										<a href="{% url 'brd:notice_board' %}">
 											<h3>게시판</h3>
 											<p>결과를 다른 사람들과 비교해 보고 질문해 보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="faq.html">
+										<a href="{% url 'brd:faq' %}">
 											<h3>FAQ</h3>
 											<p>저희의 ~ 알아보세요</p>
 										</a>
@@ -238,11 +245,11 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="static/assets/js/jquery.min.js"></script>
-			<script src="static/assets/js/browser.min.js"></script>
-			<script src="static/assets/js/breakpoints.min.js"></script>
-			<script src="static/assets/js/util.js"></script>
-			<script src="static/assets/js/main.js"></script>
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
 
 	</body>
 </html>
