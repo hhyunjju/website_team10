@@ -15,6 +15,7 @@
 
 				<!-- Header -->
 				<header id="header">
+					<h1><a href="/main"><img src="{% static 'images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
 					<nav class="links">
 						<ul>
 							{% if not user.is_authenticated %}
@@ -24,7 +25,7 @@
 								<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
 								<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
 							{% endif %}
-							<li><a href="{% url 'brd:list' %}">게시판</a></li>
+							<li><a href="{% url 'brd:notice_board' %}">게시판</a></li>
 							<li><a href="#">문의하기</a></li>
 							<li><a href="#">회사소개</a></li>
 						</ul>
@@ -87,7 +88,7 @@
 						<!-- Actions -->
 							<section>
 								<ul class="actions stacked">
-									<li><a href="login.html" class="button large fit">로그인</a></li>
+									<li><a href="{% url 'accounts:login' %}?next={{request.path}}" class="button large fit">로그인</a></li>
 								</ul>
 							</section>
 
