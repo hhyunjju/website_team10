@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "accounts",
     "main",
     "brd",
-    "home",
+    "home", # 메인 앱
     "service"
 ]
 
