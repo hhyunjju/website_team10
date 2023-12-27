@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.signals import user_logged_in
 
+
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20)
@@ -16,20 +17,23 @@ class Profile(models.Model):
             self.nickname = self.user.username
         super().save(*args, **kwargs)
 
-class UserSession(models.Model): #중복 로그인 방지 위해 사용자의 세션 정보 저장
+class UserSession(models.Model): #사용자의 세션 정보 저장
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     session_key = models.CharField(max_length=40)
     created_at = models.DateTimeField(auto_now_add=True)
 
-#중복 로그인 방지
-def block_duplicate_login(sender, request, user, **kwargs): #사용자 로그인시 호출되는 함수
+#중복 로그인 방지  #사용자 로그인시 호출되는 함수
+def block_duplicate_login(sender, request, user, **kwargs):
     login_user_list = UserSession.objects.filter(user=user)
-    for user_session in login_user_list: #동일한 사용자에 대해 기존에 저장된 모든 세션 기록 찾아서 삭제
+    for user_session in login_user_list: #동일한 사용자에 대해 기존에 저장된 모든 세션 기록 조회
         session = SessionStore(user_session.session_key)
         # session.delete()
-        session['blocked'] = True
-        session.save()
+        session['blocked'] = True #동일한 사용자의 기존 세션을 찾아, 해당 세션에 'blocked'키 저장
+        session.save() #새로운 세션 기록 저장
         
     session_key = request.session.session_key #ㅐ로운 세션 기록 생성
     UserSession.objects.create(user=user, session_key = session_key) #UserSession기록에 추가
-user_logged_in.connect(block_duplicate_login) #사용자가 로그인할 때마다 함수 호출되도록 user_logged_in 신호에 함수 연결
+
+ #사용자가 로그인할 때마다 함수 호출되도록 user_logged_in 신호에 함수 연결
+ # 다른 창이나 탭에서 동일한 브라우저를 사용하는 경우, 일반적으로 동일한 세션을 공유
+user_logged_in.connect(block_duplicate_login)

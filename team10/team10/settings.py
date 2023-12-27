@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -149,3 +149,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #client가 업로드한 파일들�
 LOGIN_REDIRECT_URL = '/main/'
 LOGOUT_REDIRECT_URL = '/main/'
 LOGIN_URL = '/accounts/login/'
+
+# settings.py
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
