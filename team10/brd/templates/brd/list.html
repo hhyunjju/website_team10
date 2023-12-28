@@ -1,77 +1,185 @@
-{% extends "layout.html" %}
 {% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>바른자세 게시판</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		<link rel="icon" href="{% static 'images/logo_page.png' %}" type="image/x-icon" />
+	</head>
+	<body class="single is-preload">
 
-{% block title %}게시판 목록{% endblock title %}
-{% block content %}
-    <!-- Main -->
-    <div id="main">
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-        <!-- Post -->
-            <article class="post">
-                <header>
-                    <div class="title">
-                        <h2><a href="faq.html">게시판</a></h2>
-                        <p>궁금한 점을 물어보고 다른 사람들과 자세에 대해 질문해보세요</p>
-                    </div>
-                    <div class="meta">
-                        <time class="published" id="current-time"></time>
-                        <a href="https://data.kma.go.kr/cmmn/main.do" class="author"><span class="name">현재 날씨</span><img src="{%static 'images/avatar.jpg' %}" alt="" /></a>
-                    </div>
-                    <script>
-                        // 현재 날짜와 시간을 가져와서 업데이트하는 함수
-                        function updateTime() {
-                        var now = new Date();
-                        var months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
-                        var formattedDate = months[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
-                        
-                        // HTML의 time 요소를 찾아서 현재 날짜와 시간으로 설정
-                        document.getElementById('current-time').textContent = formattedDate;
-                        }
-                        
-                        // 웹 페이지가 로드될 때 함수를 실행
-                        window.onload = function() {
-                        updateTime();
-                        };
-                    </script>
-                </header>
-                <a href="{% url 'brd:notice_board' %}" class="image featured"><img src="{%static 'images/notice_board1.png' %}" alt="설명적인 텍스트" width=auto height=auto/></a>
-                <p>게시판 구상중.</p>
-                <footer>
-                    <ul class="actions">
-                        <li><a href="{% url 'brd:faq' %}" class="button large">FAQ확인하기</a></li>
-                    </ul>
-                    <ul class="stats">
-                        <li><a href="#" class="icon solid fa-heart" id="heart-link"><span id="heart-count">0</span></a></li>
-                        <li><a href="#" class="icon solid fa-comment">128</a></li>
-                    </ul>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                        // 'heart-link' ID를 가진 요소에 클릭 이벤트 리스너를 추가합니다.
-                        document.getElementById('heart-link').addEventListener('click', function(event) {
-                            event.preventDefault(); // a 태그의 기본 이동 기능을 중단합니다.
-                        
-                            // 'heart-count' ID를 가진 요소의 숫자를 증가시킵니다.
-                            var heartCountElement = document.getElementById('heart-count');
-                            var currentCount = parseInt(heartCountElement.textContent, 10);
-                            heartCountElement.textContent = currentCount + 1;
-                        });
-                        });
-                    </script>
-                </footer>
-            </article>
-    </div>
-      <h1>Post 목록</h1>
-    <form action="" method='get'>
-        {% csrf_token %}
-        검색어 : <input type='text' name='keyword' value='{{q|default:""}}'>
-        <input type='submit' value='검색'>
-    </form>
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="/"><img src="{% static 'images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+						<nav class="links">
+							<ul>
+								<li class="menu-item-login"><a href="login.html">로그인</a></li>
+								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
+								<li class="menu-item-board"><a href="notice_board.html">게시판</a></li>
+								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
+								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
+							</ul>
+						</nav>
+						<nav class="main">
+							<ul>
+								<li class="search">
+									<a class="fa-search" href="#search">Search</a>
+									<form id="search" method="get" action="#">
+										<input type="text" name="query" placeholder="Search" />
+									</form>
+								</li>
+								<li class="menu">
+									<a class="fa-bars" href="#menu">Menu</a>
+								</li>
+							</ul>
+						</nav>
+					</header>
 
-    {% for post in post_all %}
-        - <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
-    {% endfor %}
+				<!-- Menu -->
+					<section id="menu">
 
-    <p align='right'><a href='{% url "brd:notice_board" %}'>[목록 보기]</a></p>
-    <p align='right'><a href='{% url "brd:create" %}'>[새 글 쓰기]</a></p>
+						<!-- Search -->
+							<section>
+								<form class="search" method="get" action="#">
+									<input type="text" name="query" placeholder="Search" />
+								</form>
+							</section>
 
-{% endblock content %}
+						<!-- Links -->
+							<section>
+								<ul class="links">
+									<li>
+										<a href="service.html">
+											<h3>모니터링</h3>
+											<p>당신의 자세에 대해 분석해보세요</p>
+										</a>
+									</li>
+									<li>
+										<a href="statistics.html">
+											<h3>통계 결과</h3>
+											<p>다양한 통계 결과를 시각화 해보세요</p>
+										</a>
+									</li>
+									<li>
+										<a href="notice_board.html">
+											<h3>게시판</h3>
+											<p>결과를 다른 사람들과 비교해 보고 질문해 보세요</p>
+										</a>
+									</li>
+									<li>
+										<a href="faq.html">
+											<h3>FAQ</h3>
+											<p>저희의 ~ 알아보세요</p>
+										</a>
+									</li>
+								</ul>
+							</section>
+
+						<!-- Actions -->
+							<section>
+								<ul class="actions stacked">
+									<li><a href="{% url 'accounts:login' %}" class="button large fit">로그인</a></li>
+								</ul>
+							</section>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<article class="post">
+                                {% block title %}게시판 목록{% endblock title %}
+                                {% block content %}
+                                <h1>Post 목록</h1>
+                                    <form action="" method='get'>
+                                        {% csrf_token %}
+                                        검색어 : <input type='text' name='keyword' value='{{q|default:""}}'>
+                                        <input type='submit' value='검색'>
+                                    </form>
+
+                                    {% for post in post_all %}
+                                        - <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
+                                    {% endfor %}
+
+                                    <p align='right'><a href='{% url "brd:notice_board" %}'>[목록 보기]</a></p>
+                                    <p align='right'><a href='{% url "brd:create" %}'>[새 글 쓰기]</a></p>
+
+                                {% endblock content %}
+							</article>
+					</div>
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="footer-logo">
+							<img src="{% static 'images/logo_page.png' %}" alt="바른자세 로고" />
+						</div>
+						<ul class="icons">
+							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="https://facebook.com" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="https://instagram.com" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="mailto:your@email.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+						<div class="policy-links">
+							| <a href="javascript:void(0);" onclick="openPrivacyPolicy();">개인정보처리방침</a>
+							| <a href="javascript:void(0);" onclick="openTermsOfService();">이용약관</a>
+							| <a href="javascript:void(0);" onclick="openFaq();">자주묻는질문</a>
+							| <a href="javascript:void(0);" onclick="openDataPolicy();">데이터베이스이용약관</a> |
+						</div>
+						<script>
+							function openPrivacyPolicy() {
+								var privacyWindow = window.open('', 'Privacy Policy', 'width=600,height=400');
+								privacyWindow.document.write('<html><head><title>개인정보처리방침</title></head><body>');
+								privacyWindow.document.write('<h1>개인정보처리방침</h1>');
+								privacyWindow.document.write('<p>여기에 개인정보처리방침 내용을 작성합니다.</p>');
+								privacyWindow.document.write('</body></html>');
+								privacyWindow.document.close();
+							}
+							
+							function openTermsOfService() {
+								var termsWindow = window.open('', 'Terms of Service', 'width=600,height=400');
+								termsWindow.document.write('<html><head><title>이용약관</title></head><body>');
+								termsWindow.document.write('<h1>이용약관</h1>');
+								termsWindow.document.write('<p>여기에 이용약관 내용을 작성합니다.</p>');
+								termsWindow.document.write('</body></html>');
+								termsWindow.document.close();
+							}
+						
+							function openFaq() {
+								var faqWindow = window.open('', 'FAQ', 'width=600,height=400');
+								faqWindow.document.write('<html><head><title>자주묻는질문</title></head><body>');
+								faqWindow.document.write('<h1>자주묻는질문</h1>');
+								faqWindow.document.write('<p>여기에 자주묻는질문 내용을 작성합니다.</p>');
+								faqWindow.document.write('</body></html>');
+								faqWindow.document.close();
+							}
+							
+							function openDataPolicy() {
+								var dataPolicyWindow = window.open('', 'Data Policy', 'width=600,height=400');
+								dataPolicyWindow.document.write('<html><head><title>데이터베이스이용약관</title></head><body>');
+								dataPolicyWindow.document.write('<h1>데이터베이스이용약관</h1>');
+								dataPolicyWindow.document.write('<p>여기에 데이터베이스이용약관 내용을 작성합니다.</p>');
+								dataPolicyWindow.document.write('</body></html>');
+								dataPolicyWindow.document.close();
+							}
+						</script>						
+						<p class="copyright">
+							<a href="https://aivle.edu.kt.co.kr/home/main/goMenuPage?mcd=MC00000034">KT Aivle School</a> Designed by Aivle 4기 10조.
+						</p>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'js/jquery.min.js' %}"></script>
+			<script src="{% static 'js/browser.min.js' %}"></script>
+			<script src="{% static 'js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'js/util.js' %}"></script>
+			<script src="{% static 'js/main.js' %}"></script>
+
+	</body>
+</html>
