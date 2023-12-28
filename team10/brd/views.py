@@ -2,12 +2,12 @@ from django.http import HttpResponse
 
 from .models import Post
 from django.http import Http404
-from .models import User
+from .models import User, Post, Comment
 
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.shortcuts import redirect
-from .forms import PostModelForm
+from .forms import PostModelForm, CommentForm
 
 # 전체 목록 보기
 def list(request):
@@ -25,8 +25,11 @@ def list(request):
 # 상세 보기
 def detail(request, no):
     post = get_object_or_404(Post, id=no)
-    comment = post.comments.all()
-    return render(request, 'brd/post_detail.html', {'post':post, 'comment_all':comment,})
+    comment_form = CommentForm()
+    comments = post.comments.all()
+    return render(request, 'brd/post_detail.html', {'post':post, 
+                                                    'comment_form':comment_form, 
+                                                    'comments': comments})
 
 # form 기반 데이터 추가 작업
 # request.POST는 사용자가 제출한 POST 데이터
@@ -74,3 +77,20 @@ def faq_view(request):
 
     # FAQ 페이지의 템플릿을 렌더링하여 반환
     return render(request, 'brd/faq.html')
+
+def comments_create(request, pk):
+    #post가져오기
+    post = get_object_or_404(Post, id=pk)
+    #comment_form에 사용자가 입력한 데이터 채워주기: request.POST
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        #comment 객체를 수정하기 위해 Comment모델의 인스턴스 반환
+        comment = comment_form.save(commit=False)
+        comment.post = post #댓글이 어떤 포스트에 속할지 지정
+        comment.save()
+    return redirect('brd:detail', post.pk)
+
+def comments_delete(request, post_pk, comment_pk):
+        comment = get_object_or_404(Comment, id=comment_pk)
+        comment.delete()
+        return redirect('brd:detail', post_pk)

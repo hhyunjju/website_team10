@@ -14,17 +14,17 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("brd:detail", args=[self.id])
     
-
+#related_name: post.comment_set.all() -> post.comments.all()로 단순화 가능
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments') 
     author = models.CharField(max_length=200)
-    message = models.TextField()
+    content = models.CharField(max_length=300)
     created = models.DateField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
     
     def __str__(self) -> str:
-        return self.message
+        return self.content
     
     
 class User(models.Model):
