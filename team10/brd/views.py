@@ -71,11 +71,6 @@ def post_delete(request, id):
         return redirect('brd:list')
     else:
         return render(request, 'brd/post_delete.html', {'post':post})
-    
-
-# faq 요청관리하기
-def notice_board_view(request):
-    return render(request, 'brd/notice_board.html')
 
 def faq_view(request):
     # FAQ 페이지에 필요한 데이터를 처리
