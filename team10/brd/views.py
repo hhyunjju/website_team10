@@ -58,7 +58,7 @@ def post_update(request, id):
         if form.is_valid():
             # 2. 데이터를 처리한다.
             form.save()
-            return redirect('brd:list')
+            return redirect('brd:notice_board')
     else:
         form = PostModelForm(instance=post)
     return render(request, 'brd/post_update.html', {'form':form,})
@@ -68,7 +68,7 @@ def post_delete(request, id):
     post = get_object_or_404(Post, id=id)
     if request.method == 'POST':
         post.delete()
-        return redirect('brd:list')
+        return redirect('brd:notice_board')
     else:
         return render(request, 'brd/post_delete.html', {'post':post})
 
