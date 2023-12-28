@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% comment %} {% extends "layout.html" %}
 {% load static %}
 
 {% block title %}게시판 목록{% endblock title %}
@@ -74,4 +74,4 @@
     <p align='right'><a href='{% url "brd:list" %}'>[목록 보기]</a></p>
     <p align='right'><a href='{% url "brd:create" %}'>[새 글 쓰기]</a></p>
 
-{% endblock content %}
+{% endblock content %} {% endcomment %}
