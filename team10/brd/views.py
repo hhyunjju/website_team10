@@ -7,11 +7,8 @@ from .models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.shortcuts import redirect
-
-from .forms import PostForm
 from .forms import PostModelForm
 
-# Create your views here.
 # 전체 목록 보기
 def list(request):
         # 맨 처음 페이지를 요청해서 받아왔을 때
@@ -32,9 +29,10 @@ def detail(request, no):
     return render(request, 'brd/post_detail.html', {'post':post, 'comment_all':comment,})
 
 # form 기반 데이터 추가 작업
+# request.POST는 사용자가 제출한 POST 데이터
 def post_create(request):
     if request.method == 'POST':
-        form = PostModelForm(request.POST)
+        form = PostModelForm(request.POST, request.FILES)
         if form.is_valid():
             # DB에 추가
             # cleaned_data : dictionary
@@ -53,12 +51,10 @@ def post_update(request, id):
     if request.method == 'POST':
         # post로 입력 받았을 때
         # 0. 입력받은 데이터 바인딩
-        form = PostModelForm(request.POST, instance=post)
-        # 1. 유효성 검사를 한다. 입력받은 데이터가 올바르게 입력 됐는지
+        form = PostModelForm(request.POST, request.FILES, instance=post) #request.FILES로 이미지파일도 넘겨줘야한다
         if form.is_valid():
-            # 2. 데이터를 처리한다.
             form.save()
-            return redirect('brd:notice_board')
+            return redirect('brd:detail', no=post.id)
     else:
         form = PostModelForm(instance=post)
     return render(request, 'brd/post_update.html', {'form':form,})

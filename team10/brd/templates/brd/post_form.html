@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
-{% block title %} Post 등록 {% endblock %}
+{% block title %} 게시물 등록 {% endblock %}
 {% block content %}
     <h1> POST 등록</h1>
-    <form action="" method="POST">
+    {% comment %} 이미지업로드시 enctype 추가 필요 {% endcomment %}
+    <form action="" method="POST" enctype="multipart/form-data"> 
         {% csrf_token %}
         <table>
             {{form.as_table}}

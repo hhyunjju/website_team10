@@ -148,9 +148,11 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+#사용자가 업로드한 미디어 파일에 접근할 때 사용되는 URL 경로
+MEDIA_URL = '/media/'
+#미디어 파일들이 실제로 저장되는 서버 상의 디렉토리 경로
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #client가 업로드한 파일들이 저장되는 위치
 # MODEL_DIR = os.path.join(BASE_DIR, 'signlanguage/model')
 
 LOGIN_REDIRECT_URL = '/'
