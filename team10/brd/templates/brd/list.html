@@ -1,10 +1,9 @@
 {% extends "layout.html" %}
+{% load static %}
 
-{% block title %}Post 목록 보기{% endblock title %}
-
+{% block title %}게시판 목록{% endblock title %}
 {% block content %}
-
-    <h1>Post 목록</h1>
+      <h1>Post 목록</h1>
     <br>
     <form action="" method='get'>
         {% csrf_token %}
@@ -18,6 +17,5 @@
 
     <p align='right'><a href='{% url "brd:list" %}'>[목록 보기]</a></p>
     <p align='right'><a href='{% url "brd:create" %}'>[새 글 쓰기]</a></p>
-
 
 {% endblock content %}
