@@ -27,6 +27,7 @@ urlpatterns = [
     path('brd/', include('brd.urls')),
     path('', include('home.urls')),
     path('service/', include('service.urls')),
+    path('accounts/', include('allauth.urls')),
 ]
 
 
