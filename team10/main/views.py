@@ -23,10 +23,6 @@ def test(request):
     }
     return render(request, 'main.html', context)
 
-def indexcss(request):
-    return render(request, 'layout.html')
-
-
 from django.http import StreamingHttpResponse
 from .camera import *
 
@@ -54,3 +50,6 @@ def webcam_feed(request):
                     #video type
 					content_type='multipart/x-mixed-replace; boundary=frame')
 
+def indexcss(request):
+    # 로직 구현
+    return render(request, 'main/index.html')

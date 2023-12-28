@@ -17,12 +17,12 @@
 				<!-- Header -->
 					<header id="header" style="display: flex; justify-content: space-between; align-items: center; padding: 1em;">
 						<h1 style="flex: 1;">
-							<a href="/main"><img src="{% static 'images/logo_page.png' %}" style="width:45px; height:auto;"></a>
+							<a href="/"><img src="{% static 'images/logo_page.png' %}" style="width:45px; height:auto;"></a>
 						</h1>
 						<nav class="links" style="flex: 2;">
 							<ul style="list-style: none; display: flex; justify-content: flex-end; padding: 0;">
 								<li class="menu-item-login"><a href="{% url 'accounts:login' %}">로그인</a></li>
-								<li class="menu-item-register"><a href="signup.html">회원가입</a></li>
+								<li class="menu-item-register"><a href="{% url 'accounts:signup' %}">회원가입</a></li>
 								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
 								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
 							</ul>

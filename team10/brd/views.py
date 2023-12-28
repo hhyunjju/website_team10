@@ -72,11 +72,14 @@ def post_delete(request, id):
     else:
         return render(request, 'brd/post_delete.html', {'post':post})
     
-    
-    
-    
+
+# faq 요청관리하기
 def notice_board_view(request):
     return render(request, 'brd/notice_board.html')
 
 def faq_view(request):
+    # FAQ 페이지에 필요한 데이터를 처리
+    # 예시: context = {'faq_data': faq_data}
+
+    # FAQ 페이지의 템플릿을 렌더링하여 반환
     return render(request, 'brd/faq.html')
