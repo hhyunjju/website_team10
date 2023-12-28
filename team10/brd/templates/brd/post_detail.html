@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}상세 보기{% endblock title %}
+{% block title %}게시물 상세 보기{% endblock title %}
 
 {% block content %}
 
@@ -8,6 +8,9 @@
 
     제목 : {{post.title}}<br>
     <hr>
+    {% if post.photo %}
+        <img src="{{ post.photo.url }}" alt="Post Image" style="max-width: 100%; height: auto;"/><br>
+    {% endif %}
 
     내용 : <br> {{post.body}}<br>
     <br>
