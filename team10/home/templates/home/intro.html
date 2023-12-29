@@ -6,7 +6,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
-		<link rel="icon" href="{% static 'images/logo_page.png' %}" type="image/x-icon" />
+		<link rel="icon" href="{% static 'assets/images/logo_page.png' %}" type="image/x-icon" />
 	</head>
 	<body class="single is-preload">
 
@@ -15,7 +15,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="index.html"><img src="{% static 'images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+						<h1><a href="index.html"><img src="{% static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
 								{% if not user.is_authenticated %}
@@ -105,7 +105,7 @@
 										<p>저희 회사는 ~</p>
 									</div>
 								</header>
-								<span class="image featured"><img src="{% static 'images/intro.png' %}" alt="" /></span>
+								<span class="image featured"><img src="{% static 'assets/images/intro.png' %}" alt="" /></span>
 								<p>소개말1</p>
 								<p>소개말2</p>
 							</article>
@@ -115,7 +115,7 @@
 				<!-- Footer -->
 					<section id="footer">
 						<div class="footer-logo">
-							<img src="{% static 'images/logo_page.png' %}" alt="바른자세 로고" />
+							<img src="{% static 'assets/images/logo_page.png' %}" alt="바른자세 로고" />
 						</div>
 						<ul class="icons">
 							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>

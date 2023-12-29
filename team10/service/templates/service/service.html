@@ -5,8 +5,8 @@
 		<title>바른자세 모니터링</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
-		<link rel="icon" href="{% static 'images/logo_page.png' %}" type="image/x-icon" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<link rel="icon" href="{% static 'assets/images/logo_page.png' %}" type="image/x-icon" />
 	</head>
 	<body class="single is-preload">
 
@@ -15,7 +15,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/"><img src="{% static 'images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+						<h1><a href="/"><img src="{% static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
 								<li class="menu-item-login"><a href="login.html">로그인</a></li>
@@ -101,7 +101,7 @@
 									</div>
 									<div class="meta">
 										<time class="published" id="current-time"></time>
-										<a href="https://data.kma.go.kr/cmmn/main.do" class="author"><span class="name">현재 날씨</span><img src="{% static 'images/avatar.jpg' %}" alt="" /></a>
+										<a href="https://data.kma.go.kr/cmmn/main.do" class="author"><span class="name">현재 날씨</span><img src="{% static 'assets/images/avatar.jpg' %}" alt="" /></a>
 									</div>
 									<script>
 										// 현재 날짜와 시간을 가져와서 업데이트하는 함수
@@ -173,7 +173,7 @@
 				<!-- Footer -->
 					<section id="footer">
 						<div class="footer-logo">
-							<img src="{% static 'images/logo_page.png' %}" alt="바른자세 로고" />
+							<img src="{% static 'assets/images/logo_page.png' %}" alt="바른자세 로고" />
 						</div>
 						<ul class="icons">
 							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
@@ -232,11 +232,11 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="{% static 'js/jquery.min.js' %}"></script>
-			<script src="{% static 'js/browser.min.js' %}"></script>
-			<script src="{% static 'js/breakpoints.min.js' %}"></script>
-			<script src="{% static 'js/util.js' %}"></script>
-			<script src="{% static 'js/main.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>
 
 	</body>
 </html>
