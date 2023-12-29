@@ -7,7 +7,7 @@ from django.contrib.auth.signals import user_logged_in
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20)
-    address = models.CharField(max_length=50)
+    # address = models.CharField(max_length=50) ; address삭제
     nickname = models.CharField(max_length=30, blank = True, default = '')
     email = models.EmailField()
     
@@ -17,7 +17,8 @@ class Profile(models.Model):
             self.nickname = self.user.username
         super().save(*args, **kwargs)
 
-class UserSession(models.Model): #사용자의 세션 정보 저장
+# -----------------------(중복 로그인 방지 기능)--------------------
+class UserSession(models.Model): #사용자의 세션 정보 저장 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     session_key = models.CharField(max_length=40)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -37,3 +38,4 @@ def block_duplicate_login(sender, request, user, **kwargs):
  #사용자가 로그인할 때마다 함수 호출되도록 user_logged_in 신호에 함수 연결
  # 다른 창이나 탭에서 동일한 브라우저를 사용하는 경우, 일반적으로 동일한 세션을 공유
 user_logged_in.connect(block_duplicate_login)
+# -----------------------(중복 로그인 방지 기능)--------------------
