@@ -18,8 +18,6 @@
 					{% for post in post_all %}
 						- <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
 					{% endfor %}
-
-					<p align='right'><a href='{% url "brd:notice_board" %}'>[목록 보기]</a></p>
 					<p align='right'><a href='{% url "brd:create" %}'>[새 글 쓰기]</a></p>
 			</article>
 	</div>

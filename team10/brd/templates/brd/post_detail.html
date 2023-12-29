@@ -23,13 +23,25 @@
 
     <hr>
 
-    댓글 : <br>
-    {% for comment in comment_all %}
-        - {{comment.message}} <br> {{comment.author}} | {{comment.updated}} <br>
-    {% empty %}
+    댓글 달기 : <br>
+    <form action="{% url 'brd:comments_create' post.pk %}" method="POST">
+        {% csrf_token %}
+        {{comment_form.as_p}}
+        <input type="submit" value="댓글 작성">
+    </form>
+ <p><b>{{comments.count}}개의 댓글<hr></b></p>
+
+<ul>
+    {% for comment in comments %}
+        <li> {{comment.content}} <br> {{comment.author}} | {{comment.updated}} </li>
+        <form action="{% url 'brd:comments_delete' post.pk comment.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="삭제">
+        </form>
+        {% empty %}
         <p> 댓글이 존재하지 않습니다. </p>
     {% endfor %}
-
+</ul>
     <p align='right'>
         <a href="{% url 'brd:notice_board' %}">[목록보기]</a>
         <a href="{% url 'brd:update' post.id %}">[글 수정]</a>
