@@ -3644,6 +3644,11 @@ input, select, textarea {
 		}
 
 		@media screen and (max-width: 600px) {
+			.some-class {
+				display: block; /* 또는 'flex', 'grid' 등이 될 수 있음 */
+				font-size: 1rem; /* 작은 화면에서도 글자가 잘 보이도록 설정 */
+				/* 기타 필요한 스타일 */
+			}
 			#menu > * {
 				padding: 1.5em;
 			}
