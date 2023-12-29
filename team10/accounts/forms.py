@@ -4,12 +4,12 @@ from .models import Profile
 
 class SignupForm(UserCreationForm):
     phone_number = forms.CharField()
-    address = forms.CharField()
+    # address = forms.CharField()
     nickname = forms.CharField(required=False)
-    email = forms.EmailField()
+    email = forms.EmailField() #사용자 인터페이스에 이메일 입력 필드를 생성 (유효성 검사기능 포함)
 
     class Meta(UserCreationForm.Meta):
-        fields = UserCreationForm.Meta.fields + ('email',) #사용자 생성을 위한 폼에만 필드를 추가
+        fields = UserCreationForm.Meta.fields + ('email',) # 이메일 데이터가 폼 제출 시 처리되도록 하는 것
     
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -19,7 +19,7 @@ class SignupForm(UserCreationForm):
         profile = Profile.objects.create(
             user=user,
             phone_number = self.cleaned_data['phone_number'],
-            address = self.cleaned_data['address'],
+            # address = self.cleaned_data['address'],
             nickname = self.cleaned_data['nickname'],
             email=self.cleaned_data['email']
         )
