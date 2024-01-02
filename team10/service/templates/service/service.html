@@ -5,7 +5,7 @@
 		<title>바른자세 모니터링</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<link rel="stylesheet" href="{% static 'assets/css/service.css' %}" />
 		<link rel="icon" href="{% static 'assets/images/logo_page.png' %}" type="image/x-icon" />
 	</head>
 	<body class="single is-preload">
@@ -106,11 +106,25 @@
 										<p>저희의 모델을 이용해서 당신의 자세에 대해 각종 통계를 시각화해서 제공할게요</p>
 									</div>
 									<div class="meta">
+										<style>
+											.meta {
+											  position: relative; /* position context를 설정합니다. */
+											  width: 100%; /* 필요한 경우 부모 요소의 너비를 지정합니다. */
+											  height: 100%; /* 필요한 경우 부모 요소의 높이를 지정합니다. */
+											}
+										  
+											.meta img {
+											  width: 100%; /* 이미지가 부모 요소의 너비에 맞춰지도록 합니다. */
+											  height: 100%; /* 이미지가 부모 요소의 높이에 맞춰지도록 합니다. */
+											  object-fit: cover; /* 이미지가 비율을 유지하면서 부모 요소를 가득 채우도록 합니다. */
+											}
+										  </style>
 										<time class="published" id="current-time"></time>
 										<a href="https://data.kma.go.kr/cmmn/main.do" class="author">
-										<span class="name"></span>
-										<img src="{% static 'assets/images/turtle_move.gif' %}" alt="반복되는 거북이 애니메이션" /></a>
-									</div>
+										  <span class="name"></span>
+										  <img src="{% static 'assets/images/turtle_move.gif' %}" alt="반복되는 거북이 애니메이션" />
+										</a>
+									  </div>
 									<script>
 										// 현재 날짜와 시간을 가져와서 업데이트하는 함수
 										function updateTime() {
@@ -128,15 +142,27 @@
 										};
 									</script>
 								</header>
-
+								<br>
+								<div class="video-container">
+									<video id='video' controls autoplay muted playsinline style="max-width: 100%; max-height: 600px;"></video>
+									<div class="video-controls">
+										<button id="startRecording">녹화 시작</button>
+										<button id="stopRecording" disabled>녹화 중지</button>
+									</div>
+								</div>
+								<p>당신의 바른 자세를 녹화하여 통계자료로 제공합니다.</p>
 								<span class="image featured" style="display: flex; justify-content: center; align-items: center; height: 600px;">
 									<video id='video' style="max-width: 100%; height: auto;" autoplay muted playsinline></video>
 								</span>								
 								<script>
-									const video = document.getElementById('video');
+									let mediaRecorder;
+									let recordedBlobs;
 									const canvas = document.createElement('canvas');
 									const context = canvas.getContext('2d');
-		
+									const video = document.getElementById('video');
+									const startButton = document.getElementById('startRecording');
+									const stopButton = document.getElementById('stopRecording');
+									
 									const constraints = {
 										video: {
 											frameRate: {
@@ -167,6 +193,77 @@
 											});
 										});
 									}
+									startButton.addEventListener('click', () => {
+										startRecording();
+									});
+
+									stopButton.addEventListener('click', () => {
+										stopRecording();
+									});
+
+									function startRecording() {
+										recordedBlobs = [];
+										let options = { mimeType: 'video/webm;codecs=vp9' };
+										if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+											console.error(`${options.mimeType} is not supported`);
+											options = { mimeType: 'video/webm;codecs=vp8' };
+											if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+												console.error(`${options.mimeType} is not supported`);
+												options = { mimeType: 'video/webm' };
+											}
+										}
+
+										try {
+											mediaRecorder = new MediaRecorder(window.stream, options);
+										} catch (e) {
+											console.error('Exception while creating MediaRecorder:', e);
+											return;
+										}
+
+										startButton.disabled = true;
+										stopButton.disabled = false;
+
+										mediaRecorder.onstop = (event) => {
+											console.log('Recorder stopped: ', event);
+										};
+
+										mediaRecorder.ondataavailable = (event) => {
+											if (event.data && event.data.size > 0) {
+												recordedBlobs.push(event.data);
+											}
+										};
+
+										mediaRecorder.start();
+										console.log('MediaRecorder started', mediaRecorder);
+									}
+
+									function stopRecording() {
+										mediaRecorder.stop();
+										startButton.disabled = false;
+										stopButton.disabled = true;
+
+										const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+										const url = window.URL.createObjectURL(blob);
+										const a = document.createElement('a');
+										a.style.display = 'none';
+										a.href = url;
+										a.download = 'recorded_video.webm';
+										document.body.appendChild(a);
+										a.click();
+										setTimeout(() => {
+											document.body.removeChild(a);
+											window.URL.revokeObjectURL(url);
+										}, 100);
+									}
+
+									navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+										.then(stream => {
+											window.stream = stream;
+											video.srcObject = stream;
+										})
+										.catch(e => {
+											console.error('getUserMedia() error:', e);
+										});
 								</script>
 								<div>
 									<video id='video' style="max-width: 100%; height: auto;" autoplay muted playsinline></video>
