@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/main.css' %}">
 		<link rel="icon" href="{%static 'assets/images/logo_page.png' %}" type="image/x-icon" />
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	</head>
 	<body class="single is-preload">
 
@@ -101,13 +102,42 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="#">저희 회사의 모델의 성능을 소개하겠습니다</a></h2>
-										<p>저희 회사는 ~</p>
+										<h2>저희의 거북목 탐지 모델 성능</h2>
+										<p>고도로 훈련된 모델로 정확한 자세 분석을 제공합니다</p>
 									</div>
 								</header>
-								<span class="image featured"><img src="static/assets/images/model.png" alt="" /></span>
-								<p>소개말1</p>
-								<p>소개말2</p>
+								<!-- 성능 시각화를 위한 캔버스 -->
+								<canvas id="performanceChart" width="800" height="450"></canvas>
+								<script>
+									var ctx = document.getElementById('performanceChart').getContext('2d');
+									var performanceChart = new Chart(ctx, {
+										type: 'bar',
+										data: {
+											labels: ['정확도', '재현율', '정밀도', 'F1 점수'],
+											datasets: [{
+												label: '성능 지표 (%)',
+												data: [95, 90, 93, 91], // 여기에 실제 모델 성능 데이터 입력
+												backgroundColor: 'rgba(54, 162, 235, 0.2)',
+												borderColor: 'rgba(54, 162, 235, 1)',
+												borderWidth: 1
+											}]
+										},
+										options: {
+											scales: {
+												y: {
+													beginAtZero: true
+												}
+											}
+										}
+									});
+								</script>
+								<p>우리의 거북목 탐지 모델은 실시간 비디오 피드를 분석하여 거북목 위험성이 있는 자세를 탐지할 수 있습니다. 모델은 다음과 같은 성능 지표를 가지고 있습니다:</p>
+								<ul>
+									<li>정확도: 모델이 올바르게 예측한 비율입니다.</li>
+									<li>재현율: 실제 거북목 자세를 모델이 얼마나 잘 탐지하는지를 나타냅니다.</li>
+									<li>정밀도: 모델이 거북목으로 예측한 자세 중 실제로 거북목인 비율입니다.</li>
+									<li>F1 점수: 정밀도와 재현율의 조화 평균입니다.</li>
+								</ul>
 							</article>
 
 					</div>
