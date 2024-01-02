@@ -59,25 +59,25 @@
 							<section>
 								<ul class="links">
 									<li>
-										<a href="service.html">
+										<a href="{% url 'service:service' %}">
 											<h3>모니터링</h3>
 											<p>당신의 자세에 대해 분석해보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="statistics.html">
+										<a href="{% url 'service:statistics' %}">
 											<h3>통계 결과</h3>
 											<p>다양한 통계 결과를 시각화 해보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="notice_board.html">
+										<a href="{% url 'brd:notice_board' %}">
 											<h3>게시판</h3>
 											<p>결과를 다른 사람들과 비교해 보고 질문해 보세요</p>
 										</a>
 									</li>
 									<li>
-										<a href="faq.html">
+										<a href="{% url 'brd:faq' %}">
 											<h3>FAQ</h3>
 											<p>저희의 ~ 알아보세요</p>
 										</a>
@@ -106,7 +106,9 @@
 									</div>
 									<div class="meta">
 										<time class="published" id="current-time"></time>
-										<a href="https://data.kma.go.kr/cmmn/main.do" class="author"><span class="name">현재 날씨</span><img src="{% static 'assets/images/avatar.jpg' %}" alt="" /></a>
+										<a href="https://data.kma.go.kr/cmmn/main.do" class="author">
+										<span class="name"></span>
+										<img src="{% static 'assets/images/turtle_move.gif' %}" alt="반복되는 거북이 애니메이션" /></a>
 									</div>
 									<script>
 										// 현재 날짜와 시간을 가져와서 업데이트하는 함수

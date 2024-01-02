@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/main.css' %}">
 		<link rel="icon" href="{%static 'assets/images/logo_page.png' %}" type="image/x-icon" />
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	</head>
 	<body class="single is-preload">
 
@@ -100,22 +101,84 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="#">Magna sed adipiscing</a></h2>
-										<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+										<h2><a href="#">나의 일일 자세를 시각적으로 확인해보세요</a></h2>
+										<p>그래프와 각종 통계자료로 확인해보세요</p>
 									</div>
 									<div class="meta">
-										<time class="published" datetime="2015-11-01">November 1, 2015</time>
-										<a href="#" class="author"><span class="name">Jane Doe</span><img src="{%static 'assets/images/avatar.jpg' %}" alt="" /></a>
+										<time class="published" id="current-time"></time>
+										<a href="https://data.kma.go.kr/cmmn/main.do" class="author">
+										<span class="name"></span>
+										<img src="{% static 'assets/images/turtle_move.gif' %}" alt="반복되는 거북이 애니메이션" /></a>
 									</div>
+									<script>
+										// 현재 날짜와 시간을 가져와서 업데이트하는 함수
+										function updateTime() {
+										  var now = new Date();
+										  var months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+										  var formattedDate = months[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
+										
+										  // HTML의 time 요소를 찾아서 현재 날짜와 시간으로 설정
+										  document.getElementById('current-time').textContent = formattedDate;
+										}
+										
+										// 웹 페이지가 로드될 때 함수를 실행
+										window.onload = function() {
+										  updateTime();
+										};
+									</script>
 								</header>
 								<span class="image featured"><img src="{%static 'assets/images/statistics.png' %}" alt="" /></span>
-								<p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-								<p>Nunc quis dui scelerisque, scelerisque urna ut, dapibus orci. Sed vitae condimentum lectus, ut imperdiet quam. Maecenas in justo ut nulla aliquam sodales vel at ligula. Sed blandit diam odio, sed fringilla lectus molestie sit amet. Praesent eu tortor viverra lorem mattis pulvinar feugiat in turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce ullamcorper tellus sit amet mattis dignissim. Phasellus ut metus ligula. Curabitur nec leo turpis. Ut gravida purus quis erat pretium, sed pellentesque massa elementum. Fusce vestibulum porta augue, at mattis justo. Integer sed sapien fringilla, dapibus risus id, faucibus ante. Pellentesque mattis nunc sit amet tortor pellentesque, non placerat neque viverra. </p>
+								<!-- 통계 데이터 섹션 -->
+								<section id="statistics">
+									<h3>일일 자세 분석</h3>
+									<div class="statistic">
+										<h4>정확한 자세 시간</h4>
+										<p>{{ statistics.correct_posture_time }} 시간</p>
+									</div>
+									<div class="statistic">
+										<h4>부정확한 자세 시간</h4>
+										<p>{{ statistics.incorrect_posture_time }} 시간</p>
+									</div>
+									<!-- 추가 통계 데이터 -->
+									<!-- 통계 그래프를 그릴 canvas 요소를 추가 -->
+									<canvas id="myChart" width="400" height="400"></canvas>
+
+									<script>
+										// 페이지 로드 시 차트를 그리는 함수를 실행
+										window.onload = function() {
+											var ctx = document.getElementById('myChart').getContext('2d');
+											var myChart = new Chart(ctx, {
+												type: 'bar', // 'bar'는 막대 그래프를 의미합니다.
+												data: {
+													labels: ['정확한 자세', '부정확한 자세'], // X축의 레이블
+													datasets: [{
+														label: '자세 시간', // 범례
+														data: [12, 19], // 실제 데이터, Django 템플릿에서 전달받을 데이터로 대체 가능
+														backgroundColor: [
+															'rgba(255, 99, 132, 0.2)',
+															'rgba(54, 162, 235, 0.2)'
+														],
+														borderColor: [
+															'rgba(255, 99, 132, 1)',
+															'rgba(54, 162, 235, 1)'
+														],
+														borderWidth: 1
+													}]
+												},
+												options: {
+													scales: {
+														y: {
+															beginAtZero: true // Y축의 시작점을 0으로 설정
+														}
+													}
+												}
+											});
+										};
+									</script>
+								</section>
 								<footer>
 									<ul class="stats">
-										<li><a href="#">General</a></li>
-										<li><a href="#" class="icon solid fa-heart">28</a></li>
-										<li><a href="#" class="icon solid fa-comment">128</a></li>
+										
 									</ul>
 								</footer>
 							</article>
