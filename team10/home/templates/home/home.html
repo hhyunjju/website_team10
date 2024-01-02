@@ -1,11 +1,13 @@
 {% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
 <!DOCTYPE HTML>
 <html>
 	<head>
 		<title>바른자세</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/main.css' %}">
 		<link rel="icon" href="{%static 'images/logo_page.png' %}" type="image/x-icon" />
 		<!--
 		<link rel="icon" href="logo_page2.png" type="image/x-icon" />
@@ -26,7 +28,7 @@
 									<li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
 								{% else %}
 									<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
-									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
+									<li><a href="/accounts/logout/?next={{request.path}}">로그 아웃</a></li>
 								{% endif %}
 								<li><a href="{% url 'brd:notice_board' %}">게시판</a></li>
 								<li><a href="{% url 'home:intro' %}">회사소개</a></li>

@@ -3,7 +3,7 @@
 <ul>
   <li><p>Name: {{ profile.user.username }}</p></li>
   <li><p>Phone Number: {{ profile.phone_number }}</p></li>
-  <li><p>Address: {{ profile.address }}</p></li>
+  {% comment %} <li><p>Address: {{ profile.address }}</p></li> ; address삭제 {% endcomment %}
   <li><p>Email: {{ profile.email }}</p></li>
   <li><p>Nickname: {{ profile.nickname }}</p></li>
 </ul>
@@ -15,4 +15,4 @@
     {% endfor %}
   </ul>
 {% endif %}
-
+{% comment %}  {% endcomment %}
