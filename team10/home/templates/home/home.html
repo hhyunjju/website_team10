@@ -19,14 +19,12 @@
 				width: 100%;
 				height: 100%;
 				background-color: #f5f5f5; /* 흰색 계열의 배경 */
-				color: #4db6ac; /* 청록색 글자 */
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				z-index: 9999;
 				transition: visibility 0s, opacity 0.5s linear;
 			}
-	
 			.splash-text {
 				text-align: center;
 				font-size: 50px;
@@ -56,12 +54,12 @@
 									<li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
 								{% else %}
 									<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
-									<li><a href="/accounts/logout/?next={{request.path}}">로그 아웃</a></li>
+									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
 								{% endif %}
-								<li><a href="{% url 'brd:notice_board' %}">게시판</a></li>
-								<li><a href="{% url 'home:intro' %}">회사소개</a></li>
+								<li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+								<li class="menu-item-contact"><a href="{% url 'brd:faq' %}">FAQ</a></li>
+								<li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
 								<li><a href="{% url 'service:service' %}">서비스</a></li>
-								<li><a href="{% url 'brd:faq' %}">FAQ</a></li>
 							</ul>
 						</nav>
 						<nav class="main">
@@ -375,11 +373,8 @@
 									<a href="https://aivle.edu.kt.co.kr/home/main/goMenuPage?mcd=MC00000034">KT Aivle School</a> Designed by Aivle 4기 10조.
 								</p>
 							</section>
-
 					</section>
-
 			</div>
-
 		<!-- Scripts -->
 			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
 			<script src="{% static 'assets/js/browser.min.js' %}"></script>
@@ -389,12 +384,10 @@
 			<script>
 				document.addEventListener('DOMContentLoaded', () => {
 					const splashText = document.querySelector('.splash-text');
-		
 					setTimeout(() => {
 						splashText.style.opacity = '1';
 						splashText.style.transform = 'translateY(0)';
 					}, 500);
-		
 					// 스플래시 애니메이션 이후 메인 페이지로 전환
 					setTimeout(() => {
 						document.querySelector('.splash-container').style.opacity = '0';

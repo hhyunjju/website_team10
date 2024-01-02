@@ -15,7 +15,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="index.html"><img src="{% static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+						<h1><a href="/"><img src="{% static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
 								{% if not user.is_authenticated %}
@@ -25,10 +25,10 @@
 									<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
 									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
 								{% endif %}
-								<li><a href="{% url 'brd:notice_board' %}">게시판</a></li>
-								<li><a href="{% url 'home:intro' %}">회사소개</a></li>
+								<li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+								<li class="menu-item-contact"><a href="{% url 'brd:faq' %}">FAQ</a></li>
+								<li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
 								<li><a href="{% url 'service:service' %}">서비스</a></li>
-								<li><a href="{% url 'brd:faq' %}">FAQ</a></li>
 							</ul>
 						</nav>
 						<nav class="main">
