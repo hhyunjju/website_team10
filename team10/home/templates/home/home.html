@@ -12,6 +12,28 @@
 		<!--
 		<link rel="icon" href="logo_page2.png" type="image/x-icon" />
 		-->
+		<style>
+			#chat-button {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				cursor: pointer;
+				z-index: 1000; /* Make sure it's above other elements */
+			}
+	
+
+			#chatbot-iframe {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				width: 500px;
+				height: 550px;
+				border-radius: 10px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				z-index: 1000;
+				display: none; /* iframe을 기본적으로 숨깁니다. */
+			  }
+		</style>
 	</head>
 	<body class="is-preload">
 
@@ -227,7 +249,16 @@
 									</ul>
 								</footer>
 							</article>
-
+							<!-- Chatbot button -->
+								<div id="chat-button">
+									<img src="{% static 'images/chat-icon.png' %}" alt="Chatbot" />
+								</div>
+								
+								<!-- Chatbot popup window -->
+								<div id="chat-popup" class="hidden">
+									<iframe id="chatbot-iframe" src="http://127.0.0.1:7860/"></iframe>
+									<!-- Close button -->
+								</div>
 						<!-- Pagination -->
 							<ul class="actions pagination">
 								<li><a href="" class="disabled button large previous">이전 페이지</a></li>
@@ -352,12 +383,29 @@
 
 			</div>
 
+		<script>
+		// 팝업의 상태를 추적하는 변수를 선언합니다.
+		var isChatPopupOpen = false;
+
+		document.getElementById('chat-button').addEventListener('click', function() {
+		var chatIframe = document.getElementById('chatbot-iframe');
+		// 팝업의 상태에 따라 display 속성을 토글합니다.
+		if (isChatPopupOpen) {
+			chatIframe.style.display = 'none';
+		} else {
+			chatIframe.style.display = 'block';
+		}
+		// 팝업 상태를 업데이트합니다.
+		isChatPopupOpen = !isChatPopupOpen;
+		});
+			</script>
+
 		<!-- Scripts -->
 			<script src="{% static 'js/jquery.min.js' %}"></script>
 			<script src="{% static 'js/browser.min.js' %}"></script>
 			<script src="{% static 'js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'js/util.js' %}"></script>
 			<script src="{% static 'js/main.js' %}"></script>
-
+			
 	</body>
 </html>

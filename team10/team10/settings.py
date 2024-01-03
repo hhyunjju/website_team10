@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "brd",
     "home",
     "service",
+    "chatbot",
     'django.contrib.sites', #추가
     'allauth',
     'allauth.account',
