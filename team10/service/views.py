@@ -37,9 +37,11 @@ def upload(request):
     }
     return render(request, 'service/service.html', context)
 
-from django.http import JsonResponse
+from django.http import FileResponse
 from .forms import ImageUploadForm
 import numpy as np
+import pandas as pd
+
 
 num = 0
 
@@ -47,8 +49,7 @@ num = 0
 def send_image(request):
     if request.method == 'POST':
         image_file = request.FILES.get('img_file')
-        img_dict = {'img':image_file}
-        return render(request, 'service/success.html', context=img_dict)
+        return FileResponse(image_file, content_type='image/jpeg')
     
 def success(request):
     return render(request, 'service/success.html')

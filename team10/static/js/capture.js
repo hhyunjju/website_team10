@@ -94,6 +94,7 @@
       if (width && height) {
         canvas.width = width;
         canvas.height = height;
+
         context.drawImage(video, 0, 0, width, height);
       
         var data = canvas.toDataURL('image/png');
@@ -107,42 +108,45 @@
 
     function sendImage() {
       var context = canvas.getContext('2d');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      canvas.width = width;
+      canvas.height = height;
+      // console.log(width);
+      // console.log(height);
       context.drawImage(video, 0, 0, width, height);
 
-      var data = canvas.toDataURL('image/png');
-      photo.setAttribute('src', data);
+      var picdata = canvas.toDataURL('image/png');
+      photo.setAttribute('src', picdata);
 
       canvas.toBlob(blob => {
+        const jpegBlob = new Blob([blob], { type: 'image/jpeg' });
+        const fileName = 'canvas_img_' + new Date().getMilliseconds() + '.jpeg';
         // const formData = new FormData();
         // formData.append('camera-image', blob);
         var data = new FormData($('form')[0]);
         // var picdata = canvas.toDataURL('image/png');
-        var imageSrc = $("#previewImage").attr("src");
-        console.log(imageSrc);
-        data.append("img_file", imageSrc);
+        data.append("img_file", jpegBlob, fileName);
         console.log('form에 이미지 추가');
+
+        
 
         $.ajax({
           type : "POST",
           url : "/service/send_image/", // 통신할 url을 지정
-          enctype : "multipart/form-data",
+          // enctype : "multipart/form-data",
           processData : false,
           contentType : false,
           data: data,
           success: function (response) {
-            $("#reply").html(response);
             console.log('success');
           },
           error: function(e){
             console.log('error');
           }
         });
-      });
+      }, 'image/jpeg');
     }
 
-
+// var imageSrc = $("#previewImage").attr("src");
   
     // Set up our event listener to run the startup process
     // once loading is complete.
