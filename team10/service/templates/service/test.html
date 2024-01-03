@@ -45,11 +45,11 @@
 <div class="contentarea">
 
   <div class="camera">
-    <video id='video' style="max-width: 100%; height: auto;" autoplay muted playsinline></video>
-    {% comment %} <button id="startbutton">Take photo</button>  {% endcomment %}
-    <script>
-      var b = setInterval(sendImage, 300);
-    </script>
+    <video id='video' style="max-width: 100%; height: auto;"></video>
+    <br>
+    <button id="startbutton">재생</button>
+    <button id="pausebutton">일시정지</button>
+    <button id="exitbutton">종료</button>
   </div>
   <canvas id="canvas" visibility: hidden>
   </canvas>

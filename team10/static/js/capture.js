@@ -19,56 +19,94 @@
     var canvas = null;
     var photo = null;
     var startbutton = null;
+    var sendImg = null;
+    var myTracks = null;
   
     function startup() {
       video = document.getElementById('video');
       canvas = document.getElementById('canvas');
       photo = document.getElementById('photo');
       startbutton = document.getElementById('startbutton');
+      pausebutton = document.getElementById('pausebutton');
+      exitbutton = document.getElementById('exitbutton');
 
       const constraints = {
         video: {
             frameRate: {
                 ideal: 10, max: 15
             },
-        }
+        }, 
+        audio: false,
         };
-  
-      navigator.mediaDevices
+
+        navigator.mediaDevices
         .getUserMedia(constraints)
         .then((mediaStream) => {
             video.srcObject = mediaStream;
+            myTracks = video.srcObject.getTracks();
         })
         .catch((err) => {
             console.error(`${err.name}: ${err.message}`);
         });
+
+        
   
-      video.addEventListener('canplay', function(ev){
-        if (!streaming) {
-          height = video.videoHeight / (video.videoWidth/width);
-        
-          // Firefox currently has a bug where the height can't be read from
-          // the video, so we will make assumptions if this happens.
-        
-          if (isNaN(height)) {
-            height = width / (4/3);
+        video.addEventListener('canplay', function(ev){
+          if (!streaming) {
+            height = video.videoHeight / (video.videoWidth/width);
+          
+            // Firefox currently has a bug where the height can't be read from
+            // the video, so we will make assumptions if this happens.
+          
+            if (isNaN(height)) {
+              height = width / (4/3);
+            }
+          
+            video.setAttribute('width', width);
+            video.setAttribute('height', height);
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+            streaming = true;
           }
+        }, false);
+    
+        startbutton.addEventListener('click', function(ev){
+          startVideo();
+          ev.preventDefault();
+        }, false);
+
+        exitbutton.addEventListener('click', function(ev){
+          exitVideo();
+          ev.preventDefault();
+        }, false);
+
+        pausebutton.addEventListener('click', function(ev){
+          pauseVideo(myTracks);
+          ev.preventDefault();
+        }, false);
         
-          video.setAttribute('width', width);
-          video.setAttribute('height', height);
-          canvas.setAttribute('width', width);
-          canvas.setAttribute('height', height);
-          streaming = true;
-        }
-      }, false);
-  
-      startbutton.addEventListener('click', function(ev){
-        takepicture();
-        ev.preventDefault();
-      }, false);
-      
-      clearphoto();
+        clearphoto();
     }
+
+
+    function pauseVideo (track) {
+      track.enabled = !track.enabled;
+    };
+
+
+    function exitVideo() {
+      video.srcObject.getTracks().forEach( (track) => {
+        track.stop();
+        });
+      clearInterval(sendImg);
+    }
+
+    function startVideo() {
+      video.play();
+      sendImg = setInterval(sendImage, 3000);
+    }
+
+
   
     // Fill the photo with an indication that none has been
     // captured.
@@ -144,6 +182,7 @@
           }
         });
       }, 'image/jpeg');
+      console.log(streaming);
     }
 
 // var imageSrc = $("#previewImage").attr("src");
