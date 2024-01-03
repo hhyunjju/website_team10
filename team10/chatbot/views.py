@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.conf import settings
 # from django.http import HttpResponse
 # -----------
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -12,7 +13,7 @@ import dotenv
 dotenv.load_dotenv()
 import time
 
-persist_directory = './'
+persist_directory = str(settings.BASE_DIR)
 embedding = OpenAIEmbeddings()
 
 # load from disk
@@ -49,7 +50,7 @@ from langchain.prompts import MessagesPlaceholder
 
 system_message = SystemMessage(
     content=(
-        "You are a customer service agent for '바른자세 도우미' Web application. "
+        "You are a customer service agent for '바른자세 도우미' Web service. "
         "Do your best to answer the questions within the scope of our service. "
         "Please do not provide answers that deviate from the subject matter. "
         "Feel free to use any tools available to look up "
@@ -82,30 +83,32 @@ agent_executor = AgentExecutor(
 # ----------- ㄴ---여기까지: langchain model 만들기 -------------
 
 # GPT-3.5 모델과 히스토리를 기반으로 답변 생성하는 response 함수 정의------
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
-def response(message, history, additional_input_info):
-    history_langchain_format = []
-    for human, ai in history:
-        history_langchain_format.append(HumanMessage(content=human))
-        history_langchain_format.append(AIMessage(content=ai))
-    # 새로운 사용자 메시지 추가
-    history_langchain_format.append(HumanMessage(content=message))
+# from langchain.schema import AIMessage, HumanMessage, SystemMessage
+# def response(message, history, additional_input_info):
+#     history_langchain_format = []
+#     for human, ai in history:
+#         history_langchain_format.append(HumanMessage(content=human))
+#         history_langchain_format.append(AIMessage(content=ai))
+#     # 새로운 사용자 메시지 추가
+#     history_langchain_format.append(HumanMessage(content=message))
     
-    # AgentExecutor를 사용하여 응답 생성
-    result = agent_executor({"input": message, "history": history_langchain_format})
+#     # AgentExecutor를 사용하여 응답 생성
+#     result = agent_executor({"input": message, "history": history_langchain_format})
     
-    # LangChain의 출력에서 AI의 마지막 메시지 가져오기
-    ai_response = result['output']
-    return ai_response
+#     # LangChain의 출력에서 AI의 마지막 메시지 가져오기
+#     ai_response = result['output']
+#     return ai_response
 
 #-------AJAX 요청을 처리하는 뷰-----------------
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 
+
 @csrf_exempt
 @require_http_methods(["POST", "GET"])
 def chatbot_view(request):
     if request.method == "GET":
+        request.session['chat_history'] = []  # 세션에 대화 히스토리 초기화
         # GET 요청 시, 챗봇 페이지 렌더링
         return render(request, 'chatbot/chatbot.html')
 
@@ -114,9 +117,15 @@ def chatbot_view(request):
         data = json.loads(request.body)
         user_message = data['message']
 
+        # 현재 세션에서 대화 히스토리 가져오기
+        history = request.session.get('chat_history', [])
+        
         # LangChain 챗봇 응답 로직
-        ai_response = response(user_message, [], None)
-
+        ai_response = agent_executor({"input": user_message, "history": history})['output']
+        # 새 대화 내용을 히스토리에 추가
+        history.append((user_message, ai_response))
+        request.session['chat_history'] = history  # 세션에 히스토리 업데이트
+        
         # 응답 반환
         return JsonResponse({'response': ai_response})
 
