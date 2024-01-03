@@ -40,7 +40,7 @@ def upload(request):
 from django.http import FileResponse
 from .forms import ImageUploadForm
 import numpy as np
-import pandas as pd
+# from .pjmodel import realtime_estimation_1
 
 
 num = 0
@@ -50,6 +50,6 @@ def send_image(request):
     if request.method == 'POST':
         image_file = request.FILES.get('img_file')
         return FileResponse(image_file, content_type='image/jpeg')
+        
+        
     
-def success(request):
-    return render(request, 'service/success.html')

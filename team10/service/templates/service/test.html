@@ -46,9 +46,9 @@
 
   <div class="camera">
     <video id='video' style="max-width: 100%; height: auto;" autoplay muted playsinline></video>
-    <button id="startbutton">Take photo</button> 
+    {% comment %} <button id="startbutton">Take photo</button>  {% endcomment %}
     <script>
-      var b = setInterval(sendImage, 3000);
+      var b = setInterval(sendImage, 300);
     </script>
   </div>
   <canvas id="canvas" visibility: hidden>
