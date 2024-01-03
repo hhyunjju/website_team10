@@ -185,3 +185,11 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+
+# 허용 파일 형식
+ALLOWED_FILE_TYPES = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+]
