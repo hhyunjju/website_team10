@@ -1,7 +1,8 @@
 from django.shortcuts import render
-import threading
-import gradio as gr
-from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+# from django.http import HttpResponse
 # -----------
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
@@ -48,7 +49,7 @@ from langchain.prompts import MessagesPlaceholder
 
 system_message = SystemMessage(
     content=(
-        "You are a customer service agent for '바른자세 도우미'. "
+        "You are a customer service agent for '바른자세 도우미' Web application. "
         "Do your best to answer the questions within the scope of our service. "
         "Please do not provide answers that deviate from the subject matter. "
         "Feel free to use any tools available to look up "
@@ -78,12 +79,10 @@ agent_executor = AgentExecutor(
 # result = agent_executor({"input": "사용요금 조회는 어떻게 하죠"})
 # result["output"]
 
-# ---------------- ~ langchain model 만들기 -------------
-# LangChain 라이브러리에서 필요한 컴포넌트 가져오기
-from langchain.chat_models import ChatOpenAI
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
+# ----------- ㄴ---여기까지: langchain model 만들기 -------------
 
-# GPT-3.5 모델과 히스토리를 기반으로 답변 생성하는 함수 정의
+# GPT-3.5 모델과 히스토리를 기반으로 답변 생성하는 response 함수 정의------
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
 def response(message, history, additional_input_info):
     history_langchain_format = []
     for human, ai in history:
@@ -99,41 +98,25 @@ def response(message, history, additional_input_info):
     ai_response = result['output']
     return ai_response
 
-# Gradio 챗봇 인터페이스 구성 및 실행
-# gr.ChatInterface(
-#     fn=response,
-#     textbox=gr.Textbox(placeholder="여기에 메시지를 입력하세요...", container=False, scale=7),
-#     chatbot=gr.Chatbot(height=1000),  # 채팅창의 높이 조절
-#     title="바른자세 도우미 챗봇",
-#     description="고객 서비스 관련 질문에 답변합니다. 질문을 입력해주세요.",
-#     theme="monochrome",  # 인터페이스 테마 설정
-#     examples=[["안녕하세요"], ["배송 상태를 알고 싶어요"]],
-#     retry_btn="다시 입력 ↩",
-#     undo_btn="이전 메시지 삭제 ❌",
-#     clear_btn="채팅 기록 삭제 💫",
-#     additional_inputs=[
-#         gr.Textbox("", label="추가 입력 정보", placeholder="여기에 추가 정보를 입력하세요.")
-#     ]
-# ).launch(share=True)
+#-------AJAX 요청을 처리하는 뷰-----------------
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
-def launch_gradio():
-    gr.Interface(
-        fn=response,
-        textbox=gr.Textbox(placeholder="여기에 메시지를 입력하세요...", container=False, scale=7),
-        chatbot=gr.Chatbot(height=500),  # 채팅창의 높이 조절
-        description="고객 서비스 관련 질문에 답변합니다. 질문을 입력해주세요.",
-        theme="monochrome",  # 인터페이스 테마 설정
-        examples=[["안녕하세요"], ["배송 상태를 알고 싶어요"]],
-        retry_btn="다시 입력 ↩",
-        undo_btn="이전 메시지 삭제 ❌",
-        clear_btn="채팅 기록 삭제 💫",
-        additional_inputs=[
-            gr.Textbox("", label="추가 입력 정보", placeholder="여기에 추가 정보를 입력하세요.")
-        ]
-    ).launch(share=True, server_name="127.0.0.1", server_port=7860)
-# gradio 인터페이스 실행
-threading.Thread(target=launch_gradio, daemon=True).start()
-
+@csrf_exempt
+@require_http_methods(["POST", "GET"])
 def chatbot_view(request):
-    return render(request, 'chatbot/chatbot.html')
+    if request.method == "GET":
+        # GET 요청 시, 챗봇 페이지 렌더링
+        return render(request, 'chatbot/chatbot.html')
+
+    if request.method == "POST":
+        # POST 요청 처리 (AJAX 요청)
+        data = json.loads(request.body)
+        user_message = data['message']
+
+        # LangChain 챗봇 응답 로직
+        ai_response = response(user_message, [], None)
+
+        # 응답 반환
+        return JsonResponse({'response': ai_response})
 
