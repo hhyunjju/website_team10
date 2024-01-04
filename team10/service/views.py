@@ -36,6 +36,7 @@ def upload(request):
     }
     return render(request, 'service/service.html', context)
 
+from .models import PostureDetection
 from django.http import FileResponse
 import cv2
 import mediapipe as mp
@@ -44,6 +45,7 @@ import numpy as np
 import pandas as pd
 from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
 import os
+import time
 
 # num = 0
 
@@ -118,18 +120,28 @@ def send_image(request):
                     prediction = model.predict(row_df)
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
-                   
-                    if class_name == 0:
-                        message = "good posture"
-                    else:
-                        message = 'bad posture'
+                
+                    now_ymd = time.strftime('%Y.%m.%d')
+                    now_hms = time.strftime('%H:%M:%S')
+                    print("오늘 날짜 : ", now_ymd)
+                    print("현재 시간 : ", now_hms)
+                    PostureDetection.objects.create(timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+
+                    # if class_name == 0:
+                    #     message = "good posture"
+                    # else:
+                    #     message = 'bad posture'
                    
                     # 자세 정보 업데이트
-                    display_text = f'Pose: {message}'
+                    # display_text = f'Pose: {message}'
                 else:
                     # 가시성이 낮을 때는 대기 메시지 표시
                     display_text = "Waiting..."
-                   
+                    class_name = -1
+                    now_ymd = time.strftime('%Y.%m.%d')
+                    now_hms = time.strftime('%H:%M:%S')
+                    PostureDetection.objects.create(timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+
                 processed_image_path = "./media/processed_image.png"
                 cv2.imwrite(processed_image_path, frame)  # 이미지 저장
         return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
