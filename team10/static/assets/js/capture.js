@@ -99,6 +99,7 @@
         track.stop();
         });
       clearInterval(sendImg);
+      jQuery("#posture-status").html('');
     }
 
     function startVideo() {
@@ -126,6 +127,13 @@
     // drawing that to the screen, we can change its size and/or apply
     // other changes before drawing it.
 
+    function isBadPosture(num){
+      if (num==0) {
+        return 'Good Posture';
+      } else {
+        return 'Bad Posture';
+      }
+    }
 
     function sendImage() {
       var context = canvas.getContext('2d');
@@ -157,8 +165,11 @@
           processData : false,
           contentType : false,
           data: data,
-          success: function (response) {
+          datatype: 'json',
+          success: function (data) {
+            console.log(data);
             console.log('success');
+            jQuery("#posture-status").html(isBadPosture(Number(data['class_name'])));
           },
           error: function(e){
             console.log('error');

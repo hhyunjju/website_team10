@@ -38,6 +38,7 @@ def upload(request):
 
 from .models import PostureDetection
 from django.http import FileResponse
+from django.http import JsonResponse
 import cv2
 import mediapipe as mp
 import joblib
@@ -142,6 +143,8 @@ def send_image(request):
                     now_hms = time.strftime('%H:%M:%S')
                     PostureDetection.objects.create(timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
-                processed_image_path = "./media/processed_image.png"
-                cv2.imwrite(processed_image_path, frame)  # 이미지 저장
-        return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
+                # processed_image_path = "./media/processed_image.png"
+                # cv2.imwrite(processed_image_path, frame)  # 이미지 저장
+        # return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
+                context = {'class_name':str(class_name)}
+        return JsonResponse(context)
