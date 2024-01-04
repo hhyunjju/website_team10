@@ -16,18 +16,15 @@ def game(request):
     return render(request, 'service/game.html')
 
 
-def test(request):
-    return render(request, 'service/test.html')
-
-def test2(request):
-    if request.method == 'POST':
-        image = request.FILES.get('camera-image')
-        CameraImage.objects.create(image=image)
-    images = CameraImage.objects.all()
-    context = {
-        'images':images
-    }
-    return render(request, 'service/service.html', context)
+# def test2(request):
+#     if request.method == 'POST':
+#         image = request.FILES.get('camera-image')
+#         CameraImage.objects.create(image=image)
+#     images = CameraImage.objects.all()
+#     context = {
+#         'images':images
+#     }
+#     return render(request, 'service/service.html', context)
 
 def upload(request):
     if request.method == 'POST' and request.FILES['files']:
@@ -40,10 +37,6 @@ def upload(request):
     return render(request, 'service/service.html', context)
 
 from django.http import FileResponse
-from .forms import ImageUploadForm
-# from .pjmodel import realtime_estimation_1
-
-
 import cv2
 import mediapipe as mp
 import joblib

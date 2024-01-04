@@ -4,7 +4,7 @@
     // width to the value defined here, but the height will be
     // calculated based on the aspect ratio of the input stream.
   
-    var width = 320;    // We will scale the photo width to this
+    var width = 720;    // We will scale the photo width to this
     var height = 0;     // This will be computed based on the input stream
   
     // |streaming| indicates whether or not we're currently streaming
@@ -28,7 +28,7 @@
       photo = document.getElementById('photo');
       startbutton = document.getElementById('startbutton');
       pausebutton = document.getElementById('pausebutton');
-      exitbutton = document.getElementById('exitbutton');
+      stopbutton = document.getElementById('stopbutton');
 
       const constraints = {
         video: {
@@ -75,8 +75,8 @@
           ev.preventDefault();
         }, false);
 
-        exitbutton.addEventListener('click', function(ev){
-          exitVideo();
+        stopbutton.addEventListener('click', function(ev){
+          stopVideo();
           ev.preventDefault();
         }, false);
 
@@ -94,7 +94,7 @@
     };
 
 
-    function exitVideo() {
+    function stopVideo() {
       video.srcObject.getTracks().forEach( (track) => {
         track.stop();
         });
@@ -125,24 +125,7 @@
     // format data URL. By drawing it on an offscreen canvas and then
     // drawing that to the screen, we can change its size and/or apply
     // other changes before drawing it.
-  
-    var count = 0;
-    function takepicture() {
-      var context = canvas.getContext('2d');
-      if (width && height) {
-        canvas.width = width;
-        canvas.height = height;
 
-        context.drawImage(video, 0, 0, width, height);
-      
-        var data = canvas.toDataURL('image/png');
-        photo.setAttribute('src', data);
-
-      } else {
-        clearphoto();
-      }
-      count += 1;
-    }
 
     function sendImage() {
       var context = canvas.getContext('2d');
@@ -190,3 +173,116 @@
     // Set up our event listener to run the startup process
     // once loading is complete.
     window.addEventListener('load', startup, false);
+
+
+      /* 
+      let mediaRecorder;
+      let recordedBlobs;
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const video = document.getElementById('video');
+      const startButton = document.getElementById('startRecording');
+      const stopButton = document.getElementById('stopRecording');
+      
+      const constraints = {
+        video: {
+          frameRate: {
+            ideal: 10, max: 15
+          },
+        }
+      };
+
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then((mediaStream) => {
+          video.srcObject = mediaStream;
+        })
+        .catch((err) => {
+          console.error(`${err.name}: ${err.message}`);
+        });
+
+      function captureImage(){
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        canvas.toBlob(blob => {
+          const formData = new FormData();
+          formData.append('camera-image', blob);
+          fetch('../../views/test/', {
+            method: 'POST',
+            body : formData
+          });
+        });
+      }
+      startButton.addEventListener('click', () => {
+        startRecording();
+      });
+
+      stopButton.addEventListener('click', () => {
+        stopRecording();
+      });
+
+      function startRecording() {
+        recordedBlobs = [];
+        let options = { mimeType: 'video/webm;codecs=vp9' };
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+          console.error(`${options.mimeType} is not supported`);
+          options = { mimeType: 'video/webm;codecs=vp8' };
+          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            console.error(`${options.mimeType} is not supported`);
+            options = { mimeType: 'video/webm' };
+          }
+        }
+
+        try {
+          mediaRecorder = new MediaRecorder(window.stream, options);
+        } catch (e) {
+          console.error('Exception while creating MediaRecorder:', e);
+          return;
+        }
+
+        startButton.disabled = true;
+        stopButton.disabled = false;
+
+        mediaRecorder.onstop = (event) => {
+          console.log('Recorder stopped: ', event);
+        };
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data && event.data.size > 0) {
+            recordedBlobs.push(event.data);
+          }
+        };
+
+        mediaRecorder.start();
+        console.log('MediaRecorder started', mediaRecorder);
+      }
+
+      function stopRecording() {
+        mediaRecorder.stop();
+        startButton.disabled = false;
+        stopButton.disabled = true;
+
+        const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'recorded_video.webm';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 100);
+      }
+
+      navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+        .then(stream => {
+          window.stream = stream;
+          video.srcObject = stream;
+        })
+        .catch(e => {
+          console.error('getUserMedia() error:', e);
+        });
+  */
