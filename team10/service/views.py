@@ -12,6 +12,8 @@ def service(request):
     return render(request, 'service/service.html')
 def statistics(request):
     return render(request, 'service/statistics.html')
+def game(request):
+    return render(request, 'service/game.html')
 
 
 def test(request):

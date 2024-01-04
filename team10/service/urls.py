@@ -9,6 +9,7 @@ urlpatterns = [
     path('model/', views.model, name='model'),
     path('service/', views.service, name='service'),
     path('statistics/', views.statistics, name='statistics'),
+    path('game/', views.game, name='game'), 
     path('test/', views.test, name='test'),
     path('send_image/', views.send_image, name='send_image'),
 ]
