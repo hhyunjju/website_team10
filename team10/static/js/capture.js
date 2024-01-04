@@ -90,7 +90,7 @@
 
 
     function pauseVideo (track) {
-      track.enabled = !track.enabled;
+      alert('아직 공사중.. 빠질 수 있음..');
     };
 
 

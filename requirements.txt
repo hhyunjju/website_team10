@@ -6,3 +6,5 @@ tensorflow-cpu
 openai
 imutils
 django-allauth
+scikit-learn==1.2.2
+mediapipe
