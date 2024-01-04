@@ -6,3 +6,9 @@ tensorflow-cpu
 openai
 imutils
 django-allauth
+openai 
+langchain 
+python-dotenv 
+tiktoken 
+faiss-cpu 
+chromadb 
