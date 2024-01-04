@@ -156,8 +156,8 @@
       photo.setAttribute('src', picdata);
 
       canvas.toBlob(blob => {
-        const jpegBlob = new Blob([blob], { type: 'image/jpeg' });
-        const fileName = 'canvas_img_' + new Date().getMilliseconds() + '.jpeg';
+        const jpegBlob = new Blob([blob], { type: 'image/png' });
+        const fileName = 'canvas_img_' + new Date().getMilliseconds() + '.png';
         // const formData = new FormData();
         // formData.append('camera-image', blob);
         var data = new FormData($('form')[0]);
@@ -181,7 +181,7 @@
             console.log('error');
           }
         });
-      }, 'image/jpeg');
+      }, 'image/png');
       console.log(streaming);
     }
 
