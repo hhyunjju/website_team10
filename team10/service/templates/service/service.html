@@ -150,8 +150,16 @@
 									</script>
 								</header>
 								<br>
+								<style>
+									video{
+										transform: rotateY(180deg);
+										-webkit-transform:rotateY(180deg); /* Safari and Chrome */
+										-moz-transform:rotateY(180deg); /* Firefox */
+									}
+								</style>
 								<div class="video-container">
-									<video id='video' style="max-width: 100%; height: auto;"></video>
+									<video id='video' style="max-width: 100%; height: auto; position: relative;"></video>
+									<div id='posture-status' style="color: lime; position: relative; left:10px; top: -70px;"></div>
 									<br>
 									<div class="video-controls">
 										<button id="startbutton">스트리밍 시작</button>

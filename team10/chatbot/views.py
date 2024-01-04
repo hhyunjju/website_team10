@@ -107,6 +107,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 @require_http_methods(["POST", "GET"])
 def chatbot_view(request):
+
     if request.method == "GET":
         request.session['chat_history'] = []  # 세션에 대화 히스토리 초기화
         # GET 요청 시, 챗봇 페이지 렌더링
