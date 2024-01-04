@@ -6,7 +6,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{% static 'assets/css/login.css' %}" />
-		<link rel="icon" href="{% static 'images/logo_page.png' %}" type="image/x-icon" />
+		<link rel="icon" href="{% static 'assets/images/logo_page.png' %}" type="image/x-icon" />
 	</head>
 	<body class="single is-preload">
 
@@ -15,13 +15,13 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/"><img src="{% static 'images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+						<h1><a href="/"><img src="{% static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
 						<nav class="links">
 							<ul>
 								<li class="menu-item-login"><a href="{% url 'accounts:login' %}">로그인</a></li>
 								<li class="menu-item-register"><a href="{% url 'accounts:signup' %}">회원가입</a></li>
-								<li class="menu-item-contact"><a href="faq.html">문의하기</a></li>
-								<li class="menu-item-company"><a href="intro.html">회사소개</a></li>
+								<li class="menu-item-contact"><a href="{% url 'brd:faq' %}">문의하기</a></li>
+								<li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
 							</ul>
 						</nav>
 					</header>
@@ -45,7 +45,7 @@
 				<!-- Footer -->
 					<section id="footer">
 						<div class="footer-logo">
-							<img src="{% static 'images/logo_page.png' %}" alt="바른자세 로고" />
+							<img src="{% static 'assets/images/logo_page.png' %}" alt="바른자세 로고" />
 						</div>
 						<ul class="icons">
 							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
@@ -108,6 +108,6 @@
 			<script src="{% static 'assets/js/browser.min.js' %}"></script>
 			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'assets/js/util.js' %}"></script>
-			<script src="{% static 'assets/js/main.js' %}"></script>
+			<script src="{% static 'assets/js/accounts.js' %}"></script>
 	</body>
 </html>
