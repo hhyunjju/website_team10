@@ -1,72 +1,19 @@
-# service/views.py
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import CameraImage
-import joblib
-import os
-
-# Posture Classification 모델 로드
-model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
-pose_model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
-
-
-#임시로 만들었습니다
-def model(request):
-    return render(request, 'service/model.html')
-def service(request):
-    return render(request, 'service/service.html')
-def statistics(request):
-    return render(request, 'service/statistics.html')
-def game(request):
-    return render(request, 'service/game.html')
-
-
-# def test2(request):
-#     if request.method == 'POST':
-#         image = request.FILES.get('camera-image')
-#         CameraImage.objects.create(image=image)
-#     images = CameraImage.objects.all()
-#     context = {
-#         'images':images
-#     }
-#     return render(request, 'service/service.html', context)
-
-def upload(request):
-    if request.method == 'POST' and request.FILES['files']:
-        image = request.FILES.get('camera-image')
-        CameraImage.objects.create(image=image)
-    images = CameraImage.objects.all()
-    context = {
-        'images':images
-    }
-    return render(request, 'service/service.html', context)
-
-from .models import PostureDetection
-from django.http import FileResponse
-from django.http import JsonResponse
 import cv2
 import mediapipe as mp
 import joblib
 import numpy as np
 import pandas as pd
-from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
-import os
-import time
+from AI.Posture_Classification.Data_Processing.preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
+from django.http import FileResponse
 
-# num = 0
-
-# def send_image(request):
-#     if request.method == 'POST':
-#         image_file = request.FILES.get('img_file')
-#         return FileResponse(image_file, content_type='image/png')
-        
-        
 def send_image(request):
     if request.method == 'POST':
         image_file = request.FILES.get('img_file')
         mp_holistic = mp.solutions.holistic
- 
+        model = joblib.load('pose_classification_model.pkl')
+
+        display_text = "Waiting..."
+
         with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
             if image_file:
                 nparr = np.fromstring(image_file.read(), np.uint8)
@@ -120,50 +67,24 @@ def send_image(request):
                     csv_columns = [f'{landmark_description[i]}_{dim}' for i in selected_landmarks for dim in ['x', 'y', 'z', 'visibility']]
                     csv_columns += [f'distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
                     csv_columns += [f'relative_distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
-                    csv_columns += [f'relative_{landmark_description[i]}_z' for i in selected_landmarks]
                     csv_columns += [f'angle_between_{landmark_description[landmark_i]}_{landmark_description[landmark_j]}_{landmark_description[landmark_k]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1) for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1)]
                     
                     row_df = pd.DataFrame([row], columns=csv_columns) 
- 
-                    # 자세 예측
-                    prediction = pose_model.predict(row_df)
-                    class_name = prediction[0] # 여기를 DB로 넘김
-                    print("클래스 : ", class_name)
-                
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
-                    print("오늘 날짜 : ", now_ymd)
-                    print("현재 시간 : ", now_hms)
-                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+                    row_df.to_csv('test.csv')
 
-                    # if class_name == 0:
-                    #     message = "good posture"
-                    # else:
-                    #     message = 'bad posture'
-                   
-                    # 자세 정보 업데이트
-                    # display_text = f'Pose: {message}'
+                    # RandomForest 모델을 사용하여 자세 예측
+                    prediction = model.predict(row_df)
+                    class_name = prediction[0]
+                    
+                    if class_name == 0:
+                        message = "good posture"
+                    else:
+                        message = 'bad posture'
+                    
+                    display_text = f'Pose: {message}'
                 else:
-                    # 가시성이 낮을 때는 대기 메시지 표시
-                    class_name = -1
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
-                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
-
-                # processed_image_path = "./media/processed_image.png"
-                # cv2.imwrite(processed_image_path, frame)  # 이미지 저장
-        # return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
-                context = {'class_name':str(class_name)}
-        return JsonResponse(context)
-
-
-from datetime import datetime
-
-def get_statistics(dataquery, targetdate):
-    # dataquery : 특정 user의 PostureDetection 데이터 쿼리 전체
-    # targetdate : 조회 날짜 - 아마 당일로 설정할 듯. 
-    todaysposes = dataquery.filter(timeymd=targetdate)
-    today = time.strftime('%Y.%m.%d')
-    todaystotal = todaysposes.count()
-
-    today_obj = datetime.strptime(today, '%Y.%m.%d')
+                    display_text = "Waiting..."
+                    
+                processed_image_path = "path/to/save/processed_image.png"
+                cv2.imwrite(processed_image_path, frame) 
+        return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
