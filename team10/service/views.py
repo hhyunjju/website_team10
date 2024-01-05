@@ -4,6 +4,21 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import CameraImage
 
+from .models import PostureDetection
+from django.http import FileResponse
+from django.http import JsonResponse
+import cv2
+import mediapipe as mp
+import joblib
+import numpy as np
+import pandas as pd
+from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
+import os
+import time
+
+model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+globmodel = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+
 
 #임시로 만들었습니다
 def model(request):
@@ -40,17 +55,7 @@ def upload(request):
     }
     return render(request, 'service/service.html', context)
 
-from .models import PostureDetection
-from django.http import FileResponse
-from django.http import JsonResponse
-import cv2
-import mediapipe as mp
-import joblib
-import numpy as np
-import pandas as pd
-from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
-import os
-import time
+
 
 # num = 0
 
@@ -64,46 +69,52 @@ def send_image(request):
     if request.method == 'POST':
         image_file = request.FILES.get('img_file')
         mp_holistic = mp.solutions.holistic
-        model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
-        model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+        # model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+        # model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+        model = globmodel
         display_text = "Waiting..."
  
         with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
             if image_file:
-                # Convert image file to an array that OpenCV can use
                 nparr = np.fromstring(image_file.read(), np.uint8)
                 frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
- 
+
                 image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 results = holistic.process(image)
- 
+
                 visibility = [landmark.visibility for landmark in results.pose_landmarks.landmark] if results.pose_landmarks else []
                 avg_visibility = np.mean(visibility) if visibility else 0
- 
-                if avg_visibility > 0.1:  # 사람이 화면에 있을 경우
+
+                if avg_visibility > 0.4:  # 사람이 화면에 있을 경우
                     pose_landmarks = results.pose_landmarks.landmark
                     row = []
-                   
-                    # 선택된 랜드마크의 위치 및 가시성 데이터
+                    
+                    # 1. landmark positions and visibility
                     for i in selected_landmarks:
                         landmark = pose_landmarks[i]
                         row.extend([landmark.x, landmark.y, landmark.z, landmark.visibility])
-                           
-                    # 거리 계산 및 상대적인 거리 계산
-                    distances = {}  # 각 거리 값을 저장하는 딕셔너리
+                            
+                    # 2. Calculate distances
+                    distances = {}
                     for i, landmark_i in enumerate(selected_landmarks):
                         for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1):
                             distance = calculate_distance([pose_landmarks[landmark_i].x, pose_landmarks[landmark_i].y, pose_landmarks[landmark_i].z],
                                                         [pose_landmarks[landmark_j].x, pose_landmarks[landmark_j].y, pose_landmarks[landmark_j].z])
                             row.append(distance)
                             distances[(landmark_i, landmark_j)] = distance
-                   
+                    
                     reference_distance = distances.get('distance_between_left_eye_and_right_eye', 1)
- 
-                    # 상대적인 거리 계산
+
+                    # 3. Calculate relative distances
                     relative_distances = [distance / reference_distance for distance in distances.values()]
                     row.extend(relative_distances)
-                   
+                    
+                    # 4. Calculate relative landmark position(z)
+                    for i in selected_landmarks:
+                        landmark = pose_landmarks[i]    
+                        row.append(landmark.z * reference_distance)
+                    
+                    # 5. Calculate angles
                     for i, landmark_i in enumerate(selected_landmarks):
                         for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1):
                             for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1):
@@ -111,17 +122,16 @@ def send_image(request):
                                                         [pose_landmarks[landmark_j].x, pose_landmarks[landmark_j].y, pose_landmarks[landmark_j].z],
                                                         [pose_landmarks[landmark_k].x, pose_landmarks[landmark_k].y, pose_landmarks[landmark_k].z])
                                 row.append(angle)                        
- 
-                    # 컬럼명 생성 (선택된 랜드마크 기반)
+
+                    # 컬럼명 생성
                     csv_columns = [f'{landmark_description[i]}_{dim}' for i in selected_landmarks for dim in ['x', 'y', 'z', 'visibility']]
                     csv_columns += [f'distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
                     csv_columns += [f'relative_distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
                     csv_columns += [f'angle_between_{landmark_description[landmark_i]}_{landmark_description[landmark_j]}_{landmark_description[landmark_k]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1) for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1)]
-                   
-                    row_df = pd.DataFrame([row], columns=csv_columns)  # 컬럼명 적용
-                    row_df.to_csv('test.csv')
+                    
+                    row_df = pd.DataFrame([row], columns=csv_columns) 
  
-                    # RandomForest 모델을 사용하여 자세 예측
+                    # 자세 예측
                     prediction = model.predict(row_df)
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
@@ -141,7 +151,6 @@ def send_image(request):
                     # display_text = f'Pose: {message}'
                 else:
                     # 가시성이 낮을 때는 대기 메시지 표시
-                    display_text = "Waiting..."
                     class_name = -1
                     now_ymd = time.strftime('%Y.%m.%d')
                     now_hms = time.strftime('%H:%M:%S')
@@ -173,20 +182,44 @@ def statistics(request):
     # 오늘 날짜에 해당되는 데이터 전체
     todaysposes = userdata.filter(timeymd=today)
     todayposecnt = todaysposes.count()
+    
     # 바른 자세 데이터 수
     correctposecnt = todaysposes.filter(posturetype=0).count()
     # 나쁜 자세 데이터 수
     badposecnt = todaysposes.exclude(posturetype=0).count()
+    
+    # 자세 종류 개수
+    # posture_type_cnt = ?
+    
+    
+    # 자리에 있었던 데이터 수
+    inplacecnt = todaysposes.exclude(posturetype=-1).count()
+    # 자리를 비운 데이터 수
+    missedplacecnt = todaysposes.filter(posturetype=-1).count()
+    
+    
 
 
 
 
     
     context = {
+        # 'posture_type_num':posture_type_cnt,
         'correct_posture_ratio':round((correctposecnt/todayposecnt),2),
         'incorrect_posture_ratio':round((badposecnt/todayposecnt),2),
         'today_posture_cnt':todayposecnt,
         'correct_posture_cnt':correctposecnt,
         'bad_posture_cnt':badposecnt,
+        'person_in_place_ratio':round((inplacecnt/todayposecnt),2),
+        'person_missed_place_ratio':round((missedplacecnt/todayposecnt),2),
     }
     return render(request, 'service/statistics.html', context)
+
+import win32api
+
+def streching_alarm(request):
+    win32api.MessageBox(0, "스트레칭을 할 시간입니다.", "stretching", 64)
+    
+    
+def test(request):
+    return render(request, 'service/test.html')

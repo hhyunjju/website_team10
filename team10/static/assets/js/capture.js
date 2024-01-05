@@ -79,7 +79,6 @@
         stopbutton.addEventListener('click', function(ev){
           ev.preventDefault();
           stopVideo();
-          to_statistics();
         }, false);
 
         // stopbutton.addEventListener('click', function(ev){
@@ -114,6 +113,7 @@
         clearInterval(sendImg);
         jQuery("#posture-status").html('');
         streamingStatus = false;
+        to_statistics();
       }
     }
 
