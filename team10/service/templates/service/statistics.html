@@ -139,8 +139,6 @@
 										<h4>부정확한 자세 시간</h4>
 										<p>{{ statistics.incorrect_posture_time }} 시간</p>
 									</div>
-									<!-- 추가 통계 데이터 -->
-									<!-- 통계 그래프를 그릴 canvas 요소를 추가 -->
 									<!-- 통계 데이터 섹션 -->
 									<section id="statistics" style="display: flex; flex-wrap: wrap; justify-content: space-around;">
 										<!-- 막대 그래프 섹션 -->
@@ -153,6 +151,11 @@
 										<div class="graph-container" style="flex: 1; max-width: 50%; padding: 20px;">
 											<h3>주간 자세 요약 - 원형 그래프</h3>
 											<canvas id="pieChart"></canvas>
+										</div>
+										<!-- 꺾은선 그래프 섹션 -->
+										<div class="graph-container" style="flex: 1; max-width: 50%; padding: 20px;">
+											<h3>일주일 자세 변화 - 꺾은선 그래프</h3>
+											<canvas id="lineChart"></canvas>
 										</div>
 									</section>
 
@@ -197,6 +200,28 @@
 														borderColor: ['rgba(255, 205, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 159, 64, 1)'],
 														borderWidth: 1
 													}]
+												}
+											});
+											// 꺾은선 그래프
+											var lineCtx = document.getElementById('lineChart').getContext('2d');
+											var myLineChart = new Chart(lineCtx, {
+												type: 'line',
+												data: {
+													labels: ['월', '화', '수', '목', '금', '토', '일'], // x축 레이블
+													datasets: [{
+														label: '일주일간의 자세 변화',
+														data: [65, 59, 80, 81, 56, 55, 40], // 데이터는 예시입니다.
+														fill: false,
+														borderColor: 'rgb(75, 192, 192)',
+														tension: 0.1
+													}]
+												},
+												options: {
+													scales: {
+														y: {
+															beginAtZero: true
+														}
+													}
 												}
 											});
 										};
