@@ -6,7 +6,7 @@ app_name = 'main'
 urlpatterns = [
     path('', views.indexcss, name='indexcss'),
     # path('chat', views.chat, name='chat'),
-    path('byhtml/', views.test),
+    path('byhtml/', views.test), #=> main.html로 안내
     path('policySvcMain/', views.get_policySvcMain, name='policySvc'),
     path('privateMain/', views.get_privateMain, name='private'),
     

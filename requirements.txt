@@ -5,3 +5,13 @@ Django==4.2.7
 tensorflow-cpu
 openai
 imutils
+django-allauth
+openai 
+langchain 
+python-dotenv 
+tiktoken 
+faiss-cpu 
+chromadb 
+
+scikit-learn==1.2.2
+mediapipe

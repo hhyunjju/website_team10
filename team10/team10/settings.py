@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,7 +43,14 @@ INSTALLED_APPS = [
     "main",
     "brd",
     "home",
-    "service"
+    "service",
+    "chatbot",
+    'django.contrib.sites', #추가
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.naver',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +60,9 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "accounts.middleware.BlockedMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "team10.urls"
@@ -114,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -132,7 +142,6 @@ STATICFILES_DIRS = [
 ]
 # BASE_DIR : ../team10/
 # STATIC_ROOT : ../team10/static/
-
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
@@ -140,11 +149,48 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+#사용자가 업로드한 미디어 파일에 접근할 때 사용되는 URL 경로
+MEDIA_URL = '/media/'
+#미디어 파일들이 실제로 저장되는 서버 상의 디렉토리 경로
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #client가 업로드한 파일들이 저장되는 위치
 # MODEL_DIR = os.path.join(BASE_DIR, 'signlanguage/model')
 
-LOGIN_REDIRECT_URL = '/main/'
-LOGOUT_REDIRECT_URL = '/main/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
+
+# settings.py
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 3
+
+# allauth 관련 추가 설정 (옵션)
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'optional' #이메일 주소 인증 선택적사항으로 설정
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile', 
+            'email', #저는 email 주소 정보도 받아오고 싶어서 추가해줬습니다
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online'
+        }
+    }
+}
+
+
+# 허용 파일 형식
+ALLOWED_FILE_TYPES = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+]

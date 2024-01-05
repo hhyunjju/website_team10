@@ -1,23 +1,42 @@
 {% extends "layout.html" %}
+{% load static %}
 
-{% block title %}Post 목록 보기{% endblock title %}
-
+{% block title %}바른자세 게시판{% endblock title %}
 {% block content %}
+<!-- Main -->
+	<div id="main">
+		<!-- Post -->
+			<article class="post">
+				
+				<h1>Post 목록</h1>
+					<form action="" method='get'>
+						{% csrf_token %}
+						<br>
+						검색어 : <input type='text' name='keyword' value='{{q|default:""}}'>
+						<br>
+						<input type='submit' value='검색'>
+					</form>
 
-    <h1>Post 목록</h1>
-    <br>
-    <form action="" method='get'>
-        {% csrf_token %}
-        검색어 : <input type='text' name='keyword' value='{{q|default:""}}'>
-        <input type='submit' value='검색'>
-    </form>
-
-    {% for post in post_all %}
-        - <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
-    {% endfor %}
-
-    <p align='right'><a href='{% url "brd:list" %}'>[목록 보기]</a></p>
-    <p align='right'><a href='{% url "brd:create" %}'>[새 글 쓰기]</a></p>
-
-
+					{% for post in post_all %}
+						- <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
+					{% endfor %}
+					<p align='right'><a href='{% url "brd:create" %}' class="new-post-button">새 글 쓰기</a></p>
+					<style>
+						.new-post-button {
+							display: inline-block;
+							padding: 10px 15px;
+							background-color: #4CAF50; /* 버튼 색상 */
+							color: white; /* 텍스트 색상 */
+							text-decoration: none; /* 밑줄 없애기 */
+							border-radius: 5px; /* 둥근 모서리 */
+							font-weight: bold; /* 글씨 굵게 */
+							transition: background-color 0.3s; /* 호버 효과 */
+						}
+						
+						.new-post-button:hover {
+							background-color: #45a049; /* 호버 시 색상 변경 */
+						}
+					</style>
+			</article>
+	</div>
 {% endblock content %}
