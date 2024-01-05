@@ -21,6 +21,7 @@
     var startbutton = null;
     var sendImg = null;
     var myTracks = null;
+    var streamingStatus = false;
   
     function startup() {
       video = document.getElementById('video');
@@ -76,9 +77,16 @@
         }, false);
 
         stopbutton.addEventListener('click', function(ev){
-          stopVideo();
           ev.preventDefault();
+          stopVideo();
+          to_statistics();
         }, false);
+
+        // stopbutton.addEventListener('click', function(ev){
+        //   ev.preventDefault();
+        //   to_statistics();
+        //   // setTimeout(function(){window.location.href = "http://localhost:8000/service/statistics"; return false;},100);
+        // }, false);
 
         pausebutton.addEventListener('click', function(ev){
           pauseVideo(myTracks);
@@ -93,17 +101,25 @@
       alert('아직 공사중.. 빠질 수 있음..');
     };
 
+    function to_statistics(){
+      window.location.href = "http://localhost:8000/service/statistics";
+    }
+
 
     function stopVideo() {
-      video.srcObject.getTracks().forEach( (track) => {
-        track.stop();
-        });
-      clearInterval(sendImg);
-      jQuery("#posture-status").html('');
+      if(streamingStatus){
+        video.srcObject.getTracks().forEach( (track) => {
+          track.stop();
+          });
+        clearInterval(sendImg);
+        jQuery("#posture-status").html('');
+        streamingStatus = false;
+      }
     }
 
     function startVideo() {
       video.play();
+      streamingStatus = true;
       sendImg = setInterval(sendImage, 3000);
     }
 
