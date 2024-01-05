@@ -3,6 +3,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import CameraImage
+import joblib
+
+# Post Classification 모델 로드
+model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
 
 #임시로 만들었습니다
@@ -60,9 +65,6 @@ def send_image(request):
     if request.method == 'POST':
         image_file = request.FILES.get('img_file')
         mp_holistic = mp.solutions.holistic
-        model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
-        model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
-        display_text = "Waiting..."
  
         with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
             if image_file:
@@ -121,7 +123,7 @@ def send_image(request):
                     
                     row_df = pd.DataFrame([row], columns=csv_columns) 
  
-                    # RandomForest 모델을 사용하여 자세 예측
+                    # 자세 예측
                     prediction = model.predict(row_df)
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
@@ -141,7 +143,6 @@ def send_image(request):
                     # display_text = f'Pose: {message}'
                 else:
                     # 가시성이 낮을 때는 대기 메시지 표시
-                    display_text = "Waiting..."
                     class_name = -1
                     now_ymd = time.strftime('%Y.%m.%d')
                     now_hms = time.strftime('%H:%M:%S')
