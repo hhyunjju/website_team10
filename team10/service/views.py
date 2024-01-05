@@ -10,8 +10,12 @@ def model(request):
     return render(request, 'service/model.html')
 def service(request):
     return render(request, 'service/service.html')
-def statistics(request):
-    return render(request, 'service/statistics.html')
+
+
+# def statistics(request):
+#     return render(request, 'service/statistics.html')
+
+
 def game(request):
     return render(request, 'service/game.html')
 
@@ -152,11 +156,37 @@ def send_image(request):
 
 from datetime import datetime
 
-def get_statistics(dataquery, targetdate):
-    # dataquery : 특정 user의 PostureDetection 데이터 쿼리 전체
-    # targetdate : 조회 날짜 - 아마 당일로 설정할 듯. 
-    todaysposes = dataquery.filter(timeymd=targetdate)
-    today = time.strftime('%Y.%m.%d')
-    todaystotal = todaysposes.count()
+# def get_statistics(dataquery, targetdate):
+#     # dataquery : 특정 user의 PostureDetection 데이터 쿼리 전체
+#     # targetdate : 조회 날짜 - 아마 당일로 설정할 듯. 
+#     todaysposes = dataquery.filter(timeymd=targetdate)
+#     today = time.strftime('%Y.%m.%d')
+#     todaystotal = todaysposes.count()
 
-    today_obj = datetime.strptime(today, '%Y.%m.%d')
+#     today_obj = datetime.strptime(today, '%Y.%m.%d')
+    
+def statistics(request):
+    # 해당 유저의 자세 데이터 전체
+    userdata = PostureDetection.objects.filter(user_id=request.user)
+    # 오늘 날짜
+    today = time.strftime('%Y.%m.%d')
+    # 오늘 날짜에 해당되는 데이터 전체
+    todaysposes = userdata.filter(timeymd=today)
+    todayposecnt = todaysposes.count()
+    # 바른 자세 데이터 수
+    correctposecnt = todaysposes.filter(posturetype=0).count()
+    # 나쁜 자세 데이터 수
+    badposecnt = todaysposes.exclude(posturetype=0).count()
+
+
+
+
+    
+    context = {
+        'correct_posture_ratio':round((correctposecnt/todayposecnt),2),
+        'incorrect_posture_ratio':round((badposecnt/todayposecnt),2),
+        'today_posture_cnt':todayposecnt,
+        'correct_posture_cnt':correctposecnt,
+        'bad_posture_cnt':badposecnt,
+    }
+    return render(request, 'service/statistics.html', context)

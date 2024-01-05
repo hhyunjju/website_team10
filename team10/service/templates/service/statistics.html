@@ -128,33 +128,69 @@
 										};
 									</script>
 								</header>
-								<span class="image featured"><img src="{%static 'assets/images/statistics.png' %}" alt="" /></span>
+								{% comment %} <span class="image featured"><img src="{%static 'assets/images/statistics.png' %}" alt="" /></span> {% endcomment %}
 								<!-- 통계 데이터 섹션 -->
 								<section id="statistics">
 									<h3>일일 자세 분석</h3>
 									<div class="statistic">
-										<h4>정확한 자세 시간</h4>
-										<p>{{ statistics.correct_posture_time }} 시간</p>
+										<h4>정확한 자세를 지속한 시간 비율</h4>
+										<p>{{ correct_posture_ratio }}%</p>
 									</div>
 									<div class="statistic">
-										<h4>부정확한 자세 시간</h4>
-										<p>{{ statistics.incorrect_posture_time }} 시간</p>
+										<h4>부정확한 자세를 지속한 시간 비율</h4>
+										<p>{{ incorrect_posture_ratio }}%</p>
 									</div>
 									<!-- 추가 통계 데이터 -->
 									<!-- 통계 그래프를 그릴 canvas 요소를 추가 -->
-									<canvas id="myChart" width="400" height="400"></canvas>
+									<hr>
+									<div class='chart-style'>
+										<canvas id="barChart"></canvas>
+									</div>
+									<div class='chart-style'>
+										<hr>
+										<canvas id="pieChart"></canvas>
+									</div>
 
 									<script>
 										// 페이지 로드 시 차트를 그리는 함수를 실행
 										window.onload = function() {
-											var ctx = document.getElementById('myChart').getContext('2d');
-											var myChart = new Chart(ctx, {
+											var barctx = document.getElementById('barChart').getContext('2d');
+											var barChart = new Chart(barctx, {
 												type: 'bar', // 'bar'는 막대 그래프를 의미합니다.
 												data: {
 													labels: ['정확한 자세', '부정확한 자세'], // X축의 레이블
 													datasets: [{
 														label: '자세 시간', // 범례
-														data: [12, 19], // 실제 데이터, Django 템플릿에서 전달받을 데이터로 대체 가능
+														data: [{{correct_posture_ratio}}, {{incorrect_posture_ratio}}], // 실제 데이터, Django 템플릿에서 전달받을 데이터로 대체 가능
+														backgroundColor: [
+															'rgba(255, 99, 132, 0.2)',
+															'rgba(54, 162, 235, 0.2)'
+														],
+														borderColor: [
+															'rgba(255, 99, 132, 1)',
+															'rgba(54, 162, 235, 1)'
+														],
+														borderWidth: 1
+													}]
+												},
+												options: {
+													scales: {
+														y: {
+															beginAtZero: true // Y축의 시작점을 0으로 설정
+														}
+													}
+												}
+											});
+
+
+											var piectx = document.getElementById('pieChart').getContext('2d');
+											var pieChart = new Chart(piectx, {
+												type: 'doughnut',
+												data: {
+													labels: ['정확한 자세', '부정확한 자세'], // X축의 레이블
+													datasets: [{
+														label: '자세 시간', // 범례
+														data: [{{correct_posture_ratio}}, {{incorrect_posture_ratio}}], // 실제 데이터, Django 템플릿에서 전달받을 데이터로 대체 가능
 														backgroundColor: [
 															'rgba(255, 99, 132, 0.2)',
 															'rgba(54, 162, 235, 0.2)'
