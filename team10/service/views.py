@@ -66,40 +66,45 @@ def send_image(request):
  
         with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
             if image_file:
-                # Convert image file to an array that OpenCV can use
                 nparr = np.fromstring(image_file.read(), np.uint8)
                 frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
- 
+
                 image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 results = holistic.process(image)
- 
+
                 visibility = [landmark.visibility for landmark in results.pose_landmarks.landmark] if results.pose_landmarks else []
                 avg_visibility = np.mean(visibility) if visibility else 0
- 
-                if avg_visibility > 0.1:  # 사람이 화면에 있을 경우
+
+                if avg_visibility > 0.4:  # 사람이 화면에 있을 경우
                     pose_landmarks = results.pose_landmarks.landmark
                     row = []
-                   
-                    # 선택된 랜드마크의 위치 및 가시성 데이터
+                    
+                    # 1. landmark positions and visibility
                     for i in selected_landmarks:
                         landmark = pose_landmarks[i]
                         row.extend([landmark.x, landmark.y, landmark.z, landmark.visibility])
-                           
-                    # 거리 계산 및 상대적인 거리 계산
-                    distances = {}  # 각 거리 값을 저장하는 딕셔너리
+                            
+                    # 2. Calculate distances
+                    distances = {}
                     for i, landmark_i in enumerate(selected_landmarks):
                         for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1):
                             distance = calculate_distance([pose_landmarks[landmark_i].x, pose_landmarks[landmark_i].y, pose_landmarks[landmark_i].z],
                                                         [pose_landmarks[landmark_j].x, pose_landmarks[landmark_j].y, pose_landmarks[landmark_j].z])
                             row.append(distance)
                             distances[(landmark_i, landmark_j)] = distance
-                   
+                    
                     reference_distance = distances.get('distance_between_left_eye_and_right_eye', 1)
- 
-                    # 상대적인 거리 계산
+
+                    # 3. Calculate relative distances
                     relative_distances = [distance / reference_distance for distance in distances.values()]
                     row.extend(relative_distances)
-                   
+                    
+                    # 4. Calculate relative landmark position(z)
+                    for i in selected_landmarks:
+                        landmark = pose_landmarks[i]    
+                        row.append(landmark.z * reference_distance)
+                    
+                    # 5. Calculate angles
                     for i, landmark_i in enumerate(selected_landmarks):
                         for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1):
                             for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1):
@@ -107,15 +112,14 @@ def send_image(request):
                                                         [pose_landmarks[landmark_j].x, pose_landmarks[landmark_j].y, pose_landmarks[landmark_j].z],
                                                         [pose_landmarks[landmark_k].x, pose_landmarks[landmark_k].y, pose_landmarks[landmark_k].z])
                                 row.append(angle)                        
- 
-                    # 컬럼명 생성 (선택된 랜드마크 기반)
+
+                    # 컬럼명 생성
                     csv_columns = [f'{landmark_description[i]}_{dim}' for i in selected_landmarks for dim in ['x', 'y', 'z', 'visibility']]
                     csv_columns += [f'distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
                     csv_columns += [f'relative_distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
                     csv_columns += [f'angle_between_{landmark_description[landmark_i]}_{landmark_description[landmark_j]}_{landmark_description[landmark_k]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1) for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1)]
-                   
-                    row_df = pd.DataFrame([row], columns=csv_columns)  # 컬럼명 적용
-                    row_df.to_csv('test.csv')
+                    
+                    row_df = pd.DataFrame([row], columns=csv_columns) 
  
                     # RandomForest 모델을 사용하여 자세 예측
                     prediction = model.predict(row_df)
