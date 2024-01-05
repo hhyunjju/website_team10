@@ -71,7 +71,6 @@ def send_image(request):
         mp_holistic = mp.solutions.holistic
         # model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
         # model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
-        model = globmodel
         display_text = "Waiting..."
  
         with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
