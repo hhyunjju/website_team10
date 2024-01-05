@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import CameraImage
 import joblib
+import os
 
-# Post Classification 모델 로드
+# Posture Classification 모델 로드
 model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
 model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
