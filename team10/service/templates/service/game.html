@@ -123,7 +123,7 @@
             <!-- 웹캠 출력 -->
             <div class="grid-item" id="webcam">
                 <!-- 웹캠 출력을 위한 HTML 요소 -->
-                <video id="webcamVideo" autoplay playsinline width="100%" height="100%"></video>
+                <video id="video" autoplay playsinline width="100%" height="100%"></video>
             </div>
             <!-- 포인트 획득 -->
             <div class="grid-item" id="points-earned">
@@ -135,6 +135,8 @@
             </div>
         </div>
         
+
+        <script src='{% static "assets/js/capture.js" %}'></script>
         <!-- 웹캠 스트림을 가져오기 위한 JavaScript -->
         <script>
             (function() {
