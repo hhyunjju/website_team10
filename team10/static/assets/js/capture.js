@@ -77,6 +77,9 @@
 
         stopbutton.addEventListener('click', function(ev){
           stopVideo();
+          var videoElement = document.getElementById('video');
+          jQuery("#posture-status").html('');
+          video.style.border = ''
           ev.preventDefault();
         }, false);
 
@@ -99,11 +102,14 @@
         track.stop();
         });
       clearInterval(sendImg);
+      var videoElement = document.getElementById('video');
       jQuery("#posture-status").html('');
+      video.style.border = ''
     }
 
     function startVideo() {
       video.play();
+      // video.style.border = '5px solid #F4F4F4'; // 초기 테두리 색상 설정
       sendImg = setInterval(sendImage, 3000);
     }
 
@@ -128,9 +134,20 @@
     // other changes before drawing it.
 
     function isBadPosture(num){
+      let videoElement = document.getElementById('video');
       if (num==0) {
+        videoElement.style.border = '8px solid lime';
+        document.getElementById('posture-status').style.color = 'lime'; 
         return 'Good Posture';
-      } else {
+      } 
+      if(num==-1){
+        video.style.border = ''
+        document.getElementById('posture-status').style.color = 'blue';
+        return 'Unable to detect posture';
+      }
+      else {
+        videoElement.style.border = '8px solid red';
+        document.getElementById('posture-status').style.color = 'red';
         return 'Bad Posture';
       }
     }
