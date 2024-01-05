@@ -126,7 +126,7 @@ def send_image(request):
                     now_hms = time.strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
-                    PostureDetection.objects.create(timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
                     # if class_name == 0:
                     #     message = "good posture"
@@ -141,10 +141,22 @@ def send_image(request):
                     class_name = -1
                     now_ymd = time.strftime('%Y.%m.%d')
                     now_hms = time.strftime('%H:%M:%S')
-                    PostureDetection.objects.create(timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
                 # processed_image_path = "./media/processed_image.png"
                 # cv2.imwrite(processed_image_path, frame)  # 이미지 저장
         # return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
                 context = {'class_name':str(class_name)}
         return JsonResponse(context)
+
+
+from datetime import datetime
+
+def get_statistics(dataquery, targetdate):
+    # dataquery : 특정 user의 PostureDetection 데이터 쿼리 전체
+    # targetdate : 조회 날짜 - 아마 당일로 설정할 듯. 
+    todaysposes = dataquery.filter(timeymd=targetdate)
+    today = time.strftime('%Y.%m.%d')
+    todaystotal = todaysposes.count()
+
+    today_obj = datetime.strptime(today, '%Y.%m.%d')

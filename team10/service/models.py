@@ -7,7 +7,7 @@ class CameraImage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 class PostureDetection(models.Model):
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    timeymd = models.CharField(max_length=10, default='')
-    timehms = models.CharField(max_length=8, default='')
-    posturetype = models.IntegerField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=-1)
+    timeymd = models.CharField(max_length=10, null=True)
+    timehms = models.CharField(max_length=8, null=True)
+    posturetype = models.IntegerField(default=-1)
