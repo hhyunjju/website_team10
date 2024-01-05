@@ -8,7 +8,7 @@ import os
 
 # Posture Classification 모델 로드
 model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
-model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+pose_model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
 
 #임시로 만들었습니다
@@ -120,12 +120,13 @@ def send_image(request):
                     csv_columns = [f'{landmark_description[i]}_{dim}' for i in selected_landmarks for dim in ['x', 'y', 'z', 'visibility']]
                     csv_columns += [f'distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
                     csv_columns += [f'relative_distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
+                    csv_columns += [f'relative_{landmark_description[i]}_z' for i in selected_landmarks]
                     csv_columns += [f'angle_between_{landmark_description[landmark_i]}_{landmark_description[landmark_j]}_{landmark_description[landmark_k]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1) for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1)]
                     
                     row_df = pd.DataFrame([row], columns=csv_columns) 
  
                     # 자세 예측
-                    prediction = model.predict(row_df)
+                    prediction = pose_model.predict(row_df)
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
                 
