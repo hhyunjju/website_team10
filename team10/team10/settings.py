@@ -14,6 +14,7 @@ from pathlib import Path
 import os 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+#C:\Users\user\TEAM10\team10\team10(project name)(==root dir)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
