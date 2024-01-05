@@ -216,3 +216,7 @@ import win32api
 
 def streching_alarm(request):
     win32api.MessageBox(0, "스트레칭을 할 시간입니다.", "stretching", 64)
+    
+    
+def test(request):
+    return render(request, 'service/test.html')
