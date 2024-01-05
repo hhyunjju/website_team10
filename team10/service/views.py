@@ -4,6 +4,21 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import CameraImage
 
+from .models import PostureDetection
+from django.http import FileResponse
+from django.http import JsonResponse
+import cv2
+import mediapipe as mp
+import joblib
+import numpy as np
+import pandas as pd
+from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
+import os
+import time
+
+model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+globmodel = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+
 
 #임시로 만들었습니다
 def model(request):
@@ -40,17 +55,7 @@ def upload(request):
     }
     return render(request, 'service/service.html', context)
 
-from .models import PostureDetection
-from django.http import FileResponse
-from django.http import JsonResponse
-import cv2
-import mediapipe as mp
-import joblib
-import numpy as np
-import pandas as pd
-from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
-import os
-import time
+
 
 # num = 0
 
@@ -64,8 +69,9 @@ def send_image(request):
     if request.method == 'POST':
         image_file = request.FILES.get('img_file')
         mp_holistic = mp.solutions.holistic
-        model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
-        model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+        # model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+        # model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+        model = globmodel
         display_text = "Waiting..."
  
         with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
@@ -173,20 +179,40 @@ def statistics(request):
     # 오늘 날짜에 해당되는 데이터 전체
     todaysposes = userdata.filter(timeymd=today)
     todayposecnt = todaysposes.count()
+    
     # 바른 자세 데이터 수
     correctposecnt = todaysposes.filter(posturetype=0).count()
     # 나쁜 자세 데이터 수
     badposecnt = todaysposes.exclude(posturetype=0).count()
+    
+    # 자세 종류 개수
+    # posture_type_cnt = ?
+    
+    
+    # 자리에 있었던 데이터 수
+    inplacecnt = todaysposes.exclude(posturetype=-1).count()
+    # 자리를 비운 데이터 수
+    missedplacecnt = todaysposes.filter(posturetype=-1).count()
+    
+    
 
 
 
 
     
     context = {
+        # 'posture_type_num':posture_type_cnt,
         'correct_posture_ratio':round((correctposecnt/todayposecnt),2),
         'incorrect_posture_ratio':round((badposecnt/todayposecnt),2),
         'today_posture_cnt':todayposecnt,
         'correct_posture_cnt':correctposecnt,
         'bad_posture_cnt':badposecnt,
+        'person_in_place_ratio':round((inplacecnt/todayposecnt),2),
+        'person_missed_place_ratio':round((missedplacecnt/todayposecnt),2),
     }
     return render(request, 'service/statistics.html', context)
+
+import win32api
+
+def streching_alarm(request):
+    win32api.MessageBox(0, "스트레칭을 할 시간입니다.", "stretching", 64)
