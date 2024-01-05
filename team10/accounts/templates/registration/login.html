@@ -62,8 +62,8 @@
 												</div>
 												<p> </p>
 												<button type="submit" class="login-button">로그인</button> {% endcomment %}
-												<input type="submit" value="로그인">
-												<button type="submit" class="signup-button"><a href="{% url 'accounts:signup' %}">회원가입</button>
+												<input type="submit" value="로그인" class="form-button">
+												<button type="submit" class="form-button"><a href="{% url 'accounts:signup' %}">회원가입</button>
 											</div>
 												<form action="{% provider_login_url 'google' %}?next={% url 'home:home' %}" method="post">
 													{% csrf_token %}
@@ -113,6 +113,13 @@
 							padding: 10px 0; /* 버튼의 상하 내부 여백을 설정합니다. */
 							margin-top: 15px; /* 버튼 위의 외부 여백을 설정합니다. */
 						}
+							.form-button {
+								width: 100%; /* Set the width to 100% of the parent container */
+								padding: 10px 0; /* Uniform padding for top and bottom */
+								margin-top: 15px; /* Consistent margin from the top */
+								/* Add other common styles here */
+							}
+						
 						/* 소셜 로그인 및 회원가입/로그인 버튼 컨테이너 */
 						.buttons-container {
 							display: flex;
