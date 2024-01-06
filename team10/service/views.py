@@ -197,13 +197,29 @@ def statistics(request):
     inplacecnt = todaysposes.exclude(posturetype=-1).count()
     # 자리를 비운 데이터 수
     missedplacecnt = todaysposes.filter(posturetype=-1).count()
-    
-    
+    # 여기서 todayposecnt가 0인 경우를 처리해야 합니다.
+    if todayposecnt > 0:
+        correct_posture_ratio = round((correctposecnt / todayposecnt), 2)
+        incorrect_posture_ratio = round((badposecnt / todayposecnt), 2)
+        person_in_place_ratio = round((inplacecnt / todayposecnt), 2)
+        person_missed_place_ratio = round((missedplacecnt / todayposecnt), 2)
+    else:
+        # todayposecnt가 0인 경우, 모든 비율을 0으로 설정
+        correct_posture_ratio = 0
+        incorrect_posture_ratio = 0
+        person_in_place_ratio = 0
+        person_missed_place_ratio = 0
+    try:
+        correct_posture_ratio = round((correctposecnt / todayposecnt), 2)
+        incorrect_posture_ratio = round((badposecnt / todayposecnt), 2)
+        person_in_place_ratio = round((inplacecnt / todayposecnt), 2)
+        person_missed_place_ratio = round((missedplacecnt / todayposecnt), 2)
+    except ZeroDivisionError:
+        correct_posture_ratio = 0
+        incorrect_posture_ratio = 0
+        person_in_place_ratio = 0
+        person_missed_place_ratio = 0
 
-
-
-
-    
     context = {
         # 'posture_type_num':posture_type_cnt,
         'correct_posture_ratio':round((correctposecnt/todayposecnt),2),
