@@ -13,6 +13,39 @@
 		crossorigin="anonymous"></script>
 		<script src='{% static "assets/js/cookie_csrf.js" %}'></script>
 		<script src='{% static "assets/js/capture.js" %}'></script>
+		<style>
+			.video-container {
+				display: flex; /* Flexbox 컨테이너를 활성화합니다. */
+				flex-direction: column; /* 자식요소가 수직으로 쌓이도록 */
+				justify-content: center; /* 가로축 중앙 정렬을 설정합니다. */
+				align-items: center; 
+			}
+			.video-wrapper {
+				position: relative;
+				display: flex; /* 기존의 설정을 유지 */
+				flex-direction: column;
+				justify-content: center;
+			}
+			.video {
+				max-width: 100%; /* 비디오의 최대 너비를 설정합니다. */
+				height: auto; /* 비디오의 높이를 자동으로 설정합니다. */
+				width: 100%;
+			}
+			.video-controls, .video-container p {
+				display: flex; /* Flexbox를 활성화합니다. */
+				justify-content: center; /* 내부 요소들을 가로축 중앙에 정렬합니다. */
+			}
+			.video-container p {
+				margin-top: 25px;
+			}
+			#posture-status {
+				position: absolute;
+				bottom: 10px; /* 오른쪽 아래에 위치하기 위한 설정 */
+				right: 30px;
+				padding: 5px;
+				font-size: 22px;
+			}
+		</style>
 		
 	</head>
 	<body class="single is-preload">
@@ -158,9 +191,10 @@
 									}
 								</style>
 								<div class="video-container">
-									<video id='video' style="max-width: 100%; height: auto; position: relative;"></video>
-									<div id='posture-status' style="font-size:22px; position: absolute; bottom:155px; right:160px;"></div>
-									<br>
+									<div id="video-wrapper">
+										<video id='video'></video>
+										<div id='posture-status'></div>
+									</div>
 									<div class="video-controls">
 										<button id="startbutton">스트리밍 시작</button>
 										<button id="stopbutton">스트리밍 종료</button>
@@ -170,8 +204,9 @@
 									<div class="output">
 									  <img id="photo" visibility: hidden>
 									</div>
+									<p>당신의 바른 자세를 녹화하여 통계자료로 제공합니다.</p>
 								</div>
-								<p>당신의 바른 자세를 녹화하여 통계자료로 제공합니다.</p>
+								
 						
 							</article>
 					</div>

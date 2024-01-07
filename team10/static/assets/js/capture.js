@@ -58,7 +58,7 @@
             // Firefox currently has a bug where the height can't be read from
             // the video, so we will make assumptions if this happens.
           
-            if (isNaN(height)) {
+            if (isNaN(height)) { //높이가 계산되지 않는 경우 
               height = width / (4/3);
             }
           
@@ -79,7 +79,7 @@
           stopVideo();
           var videoElement = document.getElementById('video');
           jQuery("#posture-status").html('');
-          video.style.border = ''
+          videoElement.style.border = '';
           ev.preventDefault();
         }, false);
 
@@ -102,14 +102,13 @@
         track.stop();
         });
       clearInterval(sendImg);
-      var videoElement = document.getElementById('video');
-      jQuery("#posture-status").html('');
-      video.style.border = ''
+      // var videoElement = document.getElementById('video');
+      // jQuery("#posture-status").html('');
+      // videoElement.style.border = ''
     }
 
     function startVideo() {
       video.play();
-      // video.style.border = '5px solid #F4F4F4'; // 초기 테두리 색상 설정
       sendImg = setInterval(sendImage, 3000);
     }
 
@@ -141,7 +140,7 @@
         return 'Good Posture';
       } 
       if(num==-1){
-        video.style.border = ''
+        videoElement.style.border = ''
         document.getElementById('posture-status').style.color = 'blue';
         return 'Unable to detect posture';
       }
