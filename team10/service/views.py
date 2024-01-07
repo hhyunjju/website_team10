@@ -140,6 +140,7 @@ def send_image(request):
                     now_hms = time.strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
+                    print("유저 id : ", request.user.id)
                     PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
                     # if class_name == 0:
@@ -175,45 +176,52 @@ from datetime import datetime
 #     today_obj = datetime.strptime(today, '%Y.%m.%d')
     
 def statistics(request):
-    # 해당 유저의 자세 데이터 전체
-    userdata = PostureDetection.objects.filter(user_id=request.user)
-    # 오늘 날짜
-    today = time.strftime('%Y.%m.%d')
-    # 오늘 날짜에 해당되는 데이터 전체
-    todaysposes = userdata.filter(timeymd=today)
-    todayposecnt = todaysposes.count()
-    
-    # 바른 자세 데이터 수
-    correctposecnt = todaysposes.filter(posturetype=0).count()
-    # 나쁜 자세 데이터 수
-    badposecnt = todaysposes.exclude(posturetype=0).count()
-    
-    # 자세 종류 개수
-    # posture_type_cnt = ?
-    
-    
-    # 자리에 있었던 데이터 수
-    inplacecnt = todaysposes.exclude(posturetype=-1).count()
-    # 자리를 비운 데이터 수
-    missedplacecnt = todaysposes.filter(posturetype=-1).count()
-    
-    
+    if request.user.is_authenticated:
+        # 해당 유저의 자세 데이터 전체
+        # print('************************ ',request.user.id)
+        userdata = PostureDetection.objects.filter(user_id=request.user.id)
+        print(userdata)
+        # 오늘 날짜
+        today = time.strftime('%Y.%m.%d')
+        # 오늘 날짜에 해당되는 데이터 전체
+        todaysposes = userdata.filter(timeymd=today)
+        todayposecnt = todaysposes.count()
+        
+        # 바른 자세 데이터 수
+        correctposecnt = todaysposes.filter(posturetype=0).count()
+        # 나쁜 자세 데이터 수
+        badposecnt = todaysposes.exclude(posturetype=0).count()
+        
+        # 자세 종류 개수
+        # posture_type_cnt = ?
+        
+        
+        # 자리에 있었던 데이터 수
+        inplacecnt = todaysposes.exclude(posturetype=-1).count()
+        # 자리를 비운 데이터 수
+        missedplacecnt = todaysposes.filter(posturetype=-1).count()
+        
+        
 
 
 
 
-    
-    context = {
-        # 'posture_type_num':posture_type_cnt,
-        'correct_posture_ratio':round((correctposecnt/todayposecnt),2),
-        'incorrect_posture_ratio':round((badposecnt/todayposecnt),2),
-        'today_posture_cnt':todayposecnt,
-        'correct_posture_cnt':correctposecnt,
-        'bad_posture_cnt':badposecnt,
-        'person_in_place_ratio':round((inplacecnt/todayposecnt),2),
-        'person_missed_place_ratio':round((missedplacecnt/todayposecnt),2),
-    }
-    return render(request, 'service/statistics.html', context)
+        
+        context = {
+            # 'posture_type_num':posture_type_cnt,
+            'correct_posture_ratio':round((correctposecnt/todayposecnt),2),
+            'incorrect_posture_ratio':round((badposecnt/todayposecnt),2),
+            'today_posture_cnt':todayposecnt,
+            'correct_posture_cnt':correctposecnt,
+            'bad_posture_cnt':badposecnt,
+            'person_in_place_ratio':round((inplacecnt/todayposecnt),2),
+            'person_missed_place_ratio':round((missedplacecnt/todayposecnt),2),
+        }
+        return render(request, 'service/statistics.html', context)
+    else:
+        # 사용자가 인증되지 않은 경우 처리
+        # 로그인 페이지로 리디렉션하거나 다른 방식으로 처리 가능
+        return HttpResponse("사용자가 인증되지 않았습니다.")
 
 import win32api
 
