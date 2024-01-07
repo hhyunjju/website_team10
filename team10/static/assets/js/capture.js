@@ -54,6 +54,8 @@
         video.addEventListener('canplay', function(ev){
           if (!streaming) {
             height = video.videoHeight / (video.videoWidth/width);
+            // height = video.videoHeight / (video.videoWidth/width);
+            height = 412 // 원래는 396
           
             // Firefox currently has a bug where the height can't be read from
             // the video, so we will make assumptions if this happens.
