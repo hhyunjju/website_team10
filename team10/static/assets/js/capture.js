@@ -171,6 +171,7 @@ function updatePostureStatusCounts(class_name) {
     };
 
     function to_statistics(){
+      // post('/login/',{ 'userId': userId, 'csrfmiddlewaretoken': '{{ csrf_token }}'});
       window.location.href = "http://localhost:8000/service/statistics";
     }
 
