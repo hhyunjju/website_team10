@@ -45,6 +45,7 @@
         .then((mediaStream) => {
             video.srcObject = mediaStream;
             myTracks = video.srcObject.getTracks();
+            startVideo();
         })
         .catch((err) => {
             console.error(`${err.name}: ${err.message}`);
@@ -71,26 +72,6 @@
           }
         }, false);
     
-        startbutton.addEventListener('click', function(ev){
-          startVideo();
-          ev.preventDefault();
-        }, false);
-
-        stopbutton.addEventListener('click', function(ev){
-          ev.preventDefault();
-          stopVideo();
-        }, false);
-
-        // stopbutton.addEventListener('click', function(ev){
-        //   ev.preventDefault();
-        //   to_statistics();
-        //   // setTimeout(function(){window.location.href = "http://localhost:8000/service/statistics"; return false;},100);
-        // }, false);
-
-        pausebutton.addEventListener('click', function(ev){
-          pauseVideo(myTracks);
-          ev.preventDefault();
-        }, false);
         
         clearphoto();
     }
@@ -101,7 +82,6 @@
     };
 
     function to_statistics(){
-      // post('/login/',{ 'userId': userId, 'csrfmiddlewaretoken': '{{ csrf_token }}'});
       window.location.href = "http://localhost:8000/service/statistics";
     }
 
@@ -202,115 +182,3 @@
     // once loading is complete.
     window.addEventListener('load', startup, false);
 
-
-      /* 
-      let mediaRecorder;
-      let recordedBlobs;
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      const video = document.getElementById('video');
-      const startButton = document.getElementById('startRecording');
-      const stopButton = document.getElementById('stopRecording');
-      
-      const constraints = {
-        video: {
-          frameRate: {
-            ideal: 10, max: 15
-          },
-        }
-      };
-
-      navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then((mediaStream) => {
-          video.srcObject = mediaStream;
-        })
-        .catch((err) => {
-          console.error(`${err.name}: ${err.message}`);
-        });
-
-      function captureImage(){
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        canvas.toBlob(blob => {
-          const formData = new FormData();
-          formData.append('camera-image', blob);
-          fetch('../../views/test/', {
-            method: 'POST',
-            body : formData
-          });
-        });
-      }
-      startButton.addEventListener('click', () => {
-        startRecording();
-      });
-
-      stopButton.addEventListener('click', () => {
-        stopRecording();
-      });
-
-      function startRecording() {
-        recordedBlobs = [];
-        let options = { mimeType: 'video/webm;codecs=vp9' };
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-          console.error(`${options.mimeType} is not supported`);
-          options = { mimeType: 'video/webm;codecs=vp8' };
-          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.error(`${options.mimeType} is not supported`);
-            options = { mimeType: 'video/webm' };
-          }
-        }
-
-        try {
-          mediaRecorder = new MediaRecorder(window.stream, options);
-        } catch (e) {
-          console.error('Exception while creating MediaRecorder:', e);
-          return;
-        }
-
-        startButton.disabled = true;
-        stopButton.disabled = false;
-
-        mediaRecorder.onstop = (event) => {
-          console.log('Recorder stopped: ', event);
-        };
-
-        mediaRecorder.ondataavailable = (event) => {
-          if (event.data && event.data.size > 0) {
-            recordedBlobs.push(event.data);
-          }
-        };
-
-        mediaRecorder.start();
-        console.log('MediaRecorder started', mediaRecorder);
-      }
-
-      function stopRecording() {
-        mediaRecorder.stop();
-        startButton.disabled = false;
-        stopButton.disabled = true;
-
-        const blob = new Blob(recordedBlobs, { type: 'video/webm' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'recorded_video.webm';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 100);
-      }
-
-      navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-        .then(stream => {
-          window.stream = stream;
-          video.srcObject = stream;
-        })
-        .catch(e => {
-          console.error('getUserMedia() error:', e);
-        });
-  */
