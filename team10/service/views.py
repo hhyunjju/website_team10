@@ -225,10 +225,10 @@ def send_image_game(request):
 
                     # 컬럼명 생성
                     csv_columns = [f'{landmark_description[i]}_{dim}' for i in stretching_selected_landmarks for dim in ['x', 'y', 'z', 'visibility']]
-                    csv_columns += [f'distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
-                    csv_columns += [f'relative_distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
+                    csv_columns += [f'distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(stretching_selected_landmarks) for j, landmark_j in enumerate(stretching_selected_landmarks[i+1:], start=i+1)]
+                    csv_columns += [f'relative_distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(stretching_selected_landmarks) for j, landmark_j in enumerate(stretching_selected_landmarks[i+1:], start=i+1)]
                     csv_columns += [f'relative_{landmark_description[i]}_z' for i in stretching_selected_landmarks]
-                    csv_columns += [f'angle_between_{landmark_description[landmark_i]}_{landmark_description[landmark_j]}_{landmark_description[landmark_k]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1) for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1)]
+                    csv_columns += [f'angle_between_{landmark_description[landmark_i]}_{landmark_description[landmark_j]}_{landmark_description[landmark_k]}' for i, landmark_i in enumerate(stretching_selected_landmarks) for j, landmark_j in enumerate(stretching_selected_landmarks[i+1:], start=i+1) for k, landmark_k in enumerate(stretching_selected_landmarks[j+1:], start=j+1)]
                     
                     row_df = pd.DataFrame([row], columns=csv_columns) 
  
