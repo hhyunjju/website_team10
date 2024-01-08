@@ -7,7 +7,7 @@ import mediapipe as mp
 
 selected_landmarks = [0, 2, 5, 7, 8, 11, 12, 15, 16]
 
-stretching_selected_landmarks = [0, 2, 5, 7, 8, 11, 12, 15, 16]
+stretching_selected_landmarks = [0, 2, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 21,22]
 
 
 landmark_description = [
