@@ -121,24 +121,61 @@ function TIMER(time, min, sec){
     },1000); //1초마다 
 }
 
+// function changeQuery(sen){
+//   jQuery("#subscription").html(sen);
+// }
+
+// function myTimer(time, m, s){
+//   TIMER(time,m,s);
+//   setTimeout(function(){
+//       clearInterval(PLAYTIME);
+//   },time);//5초가 되면 Timer 삭제
+// }
+
+function myTimer(sen, time, m, s) {
+  return new Promise(resolve => {
+    jQuery("#timer").html(s);
+    jQuery("#subscription").html(sen);
+    TIMER(time,m,s);
+    setTimeout(() => {
+      clearInterval(PLAYTIME);
+      resolve();
+  }, time);
+  });
+}
+
+function changeQuery(sen) {
+  return new Promise(resolve => {
+     jQuery("#subscription").html(sen);
+     resolve();
+  });
+}
 
 
 window.onload=function(){
-  jQuery("#subscription").html('5초 뒤에 스트레칭이 시작됩니다.');
+  // jQuery("#subscription").html('5초 뒤에 스트레칭이 시작됩니다.');
 
-  TIMER(5000,0,5);
-  setTimeout(function(){
-      clearInterval(PLAYTIME);
-  },5000);//5초가 되면 Timer 삭제
+  // TIMER(5000,0,5);
+  // setTimeout(function(){
+  //     clearInterval(PLAYTIME);
+  // },5000);//5초가 되면 Timer 삭제
 
-  setTimeout(() => jQuery("#subscription").html('왼쪽의 동작을 10초 안에 따라해주세요'), 5000);
+  // setTimeout(() => jQuery("#subscription").html('왼쪽의 동작을 10초 안에 따라해주세요'), 5000);
 
-  TIMER(10000,0,10);
-  setTimeout(function(){
-      clearInterval(PLAYTIME);
-  },10000);//5초가 되면 Timer 삭제
+  // // TIMER(10000,0,10);
+  // // setTimeout(function(){
+  // //     clearInterval(PLAYTIME);
+  // // },10000);//5초가 되면 Timer 삭제
 
-  console.log('10초끝');
+  // console.log('10초끝');
+
+  myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
+  .then(() => {
+  	return myTimer('왼쪽의 동작을 10초 안에 따라해주세요.', 10000, 0, 10);
+  })
+  .then(() => {
+    return console.log('끝끝');
+  })
   
 }
 
