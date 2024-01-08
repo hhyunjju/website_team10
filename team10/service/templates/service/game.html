@@ -192,19 +192,5 @@
 
         <script src='{% static "assets/js/capture_game.js" %}'></script>
         <!-- 웹캠 스트림을 가져오기 위한 JavaScript -->
-        <script>
-            (function() {
-                const video = document.getElementById('webcamVideo');
-    
-                if (navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function (stream) {
-                        video.srcObject = stream;
-                    })
-                    .catch(function (error) {
-                        console.log("웹캠에 접근할 수 없습니다.");
-                    });
-                }
-            })();
-        </script>
+
     </body>

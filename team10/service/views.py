@@ -166,7 +166,7 @@ def send_image(request):
         return JsonResponse(context)
     
 
-def send_image_2(request):
+def send_image_game(request):
     if request.method == 'POST':
         image_file = request.FILES.get('img_file')
         mp_holistic = mp.solutions.holistic
@@ -232,6 +232,7 @@ def send_image_2(request):
                     
                     row_df = pd.DataFrame([row], columns=csv_columns) 
  
+                    print('여기까지는 도착')
                     # 자세 예측
                     prediction = stretching_model.predict(row_df)
                     class_name = prediction[0] # 여기를 DB로 넘김
@@ -241,7 +242,7 @@ def send_image_2(request):
                     now_hms = time.strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
-                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+                    # PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
                     # if class_name == 0:
                     #     message = "good posture"
@@ -255,14 +256,14 @@ def send_image_2(request):
                     class_name = -1
                     now_ymd = time.strftime('%Y.%m.%d')
                     now_hms = time.strftime('%H:%M:%S')
-                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+                    # PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
-                processed_image_path = "./media/processed_image.png"
-                cv2.imwrite(processed_image_path, frame)  # 이미지 저장
-        return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
-        #         print('user id: ', request.user.id)
-        #         context = {'class_name':str(class_name), 'user_id':request.user.id}
-        # return JsonResponse(context)
+        #         processed_image_path = "./media/processed_image.png"
+        #         cv2.imwrite(processed_image_path, frame)  # 이미지 저장
+        # return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
+                print('user id: ', request.user.id)
+                context = {'class_name':str(class_name), 'user_id':request.user.id}
+        return JsonResponse(context)
 
 
 from datetime import datetime

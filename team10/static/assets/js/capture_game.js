@@ -147,15 +147,16 @@
 
         $.ajax({
           type : "POST",
-          url : "/service/send_image/", // 통신할 url을 지정
+          url : "/service/send_image_game/", // 통신할 url을 지정
           // enctype : "multipart/form-data",
           processData : false,
           contentType : false,
           data: data,
           datatype: 'json',
           success: function (data) {
-            console.log(data);
+            // console.log(data);
             console.log('success');
+            console.log('stretching : '+data['class_name']);
             jQuery("#posture-status").html(isBadPosture(Number(data['class_name'])));
           },
           error: function(e){
