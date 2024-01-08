@@ -31,6 +31,11 @@
         }
     </style>
 </head>
+<script
+		src="https://code.jquery.com/jquery-3.7.1.js"
+		integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+		crossorigin="anonymous"></script>
+		<script src='{% static "assets/js/cookie_csrf.js" %}'></script>
 <body class="single is-preload">
 
 <!-- Wrapper -->
@@ -153,10 +158,26 @@
             <div class="grid-item" id="correct-posture">
                 <img src="{% static 'path/to/correct-posture-image.jpg' %}" alt="올바른 자세 예시">
             </div>
+            <style>
+                video{
+                    transform: rotateY(180deg);
+                    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+                    -moz-transform:rotateY(180deg); /* Firefox */
+                }
+            </style>
             <!-- 웹캠 출력 -->
             <div class="grid-item" id="webcam">
                 <!-- 웹캠 출력을 위한 HTML 요소 -->
-                <video id="video" autoplay playsinline width="100%" height="100%"></video>
+                <div class="video-container">
+                    <video id='video' autoplay muted playsinline style="max-width: 95%; height: auto; left:11px; top:4px; position: relative;"></video>
+                    <div id='posture-status' style="color: lime; position: relative; left:10px; top: -70px;"></div>
+
+                    <canvas id="canvas" visibility: hidden>
+                    </canvas>
+                    <div class="output">
+                      <img id="photo" visibility: hidden>
+                    </div>
+                </div>
             </div>
             <!-- 포인트 획득 -->
             <div class="grid-item" id="points-earned">
@@ -169,21 +190,7 @@
         </div>
         
 
-        <script src='{% static "assets/js/capture.js" %}'></script>
+        <script src='{% static "assets/js/capture_game.js" %}'></script>
         <!-- 웹캠 스트림을 가져오기 위한 JavaScript -->
-        <script>
-            (function() {
-                const video = document.getElementById('webcamVideo');
-    
-                if (navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function (stream) {
-                        video.srcObject = stream;
-                    })
-                    .catch(function (error) {
-                        console.log("웹캠에 접근할 수 없습니다.");
-                    });
-                }
-            })();
-        </script>
+
     </body>
