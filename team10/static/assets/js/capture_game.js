@@ -126,6 +126,8 @@
       canvas.height = height;
       // console.log(width);
       // console.log(height);
+      context.translate(video.width, 0);
+      context.scale(-1, 1);
       context.drawImage(video, 0, 0, width, height);
 
       var picdata = canvas.toDataURL('image/png');
