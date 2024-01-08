@@ -45,7 +45,7 @@
         .then((mediaStream) => {
             video.srcObject = mediaStream;
             myTracks = video.srcObject.getTracks();
-            startVideo();
+            
         })
         .catch((err) => {
             console.error(`${err.name}: ${err.message}`);
@@ -72,31 +72,19 @@
           }
         }, false);
     
-        
+        startVideo();
+
         clearphoto();
     }
 
 
-    function pauseVideo (track) {
-      alert('아직 공사중.. 빠질 수 있음..');
-    };
 
     function to_statistics(){
       window.location.href = "http://localhost:8000/service/statistics";
     }
 
 
-    function stopVideo() {
-      if(streamingStatus){
-        video.srcObject.getTracks().forEach( (track) => {
-          track.stop();
-          });
-        clearInterval(sendImg);
-        jQuery("#posture-status").html('');
-        streamingStatus = false;
-        to_statistics();
-      }
-    }
+
 
     function startVideo() {
       video.play();
