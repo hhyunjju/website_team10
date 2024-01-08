@@ -1,5 +1,8 @@
   //----------1분마다 알람 울리기-------------
-  askNotificationPermission();
+// 페이지 로드 시 알림 권한 요청
+window.onload = function() {
+    askNotificationPermission();
+};
 
 let globalNotification = null;
 
