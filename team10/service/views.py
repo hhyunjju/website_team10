@@ -12,12 +12,15 @@ import mediapipe as mp
 import joblib
 import numpy as np
 import pandas as pd
-from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description
+from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description, stretching_selected_landmarks
 import os
 import time
 
 model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
 pose_model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+
+stretching_model_path = os.path.join(os.getcwd(), 'service\pose_classification_model_stretch.pkl')
+stretching_model = joblib.load(stretching_model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
 
 #임시로 만들었습니다
@@ -140,7 +143,104 @@ def send_image(request):
                     now_hms = time.strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
-                    print("유저 id : ", request.user.id)
+                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+
+                    # if class_name == 0:
+                    #     message = "good posture"
+                    # else:
+                    #     message = 'bad posture'
+                   
+                    # 자세 정보 업데이트
+                    # display_text = f'Pose: {message}'
+                else:
+                    # 가시성이 낮을 때는 대기 메시지 표시
+                    class_name = -1
+                    now_ymd = time.strftime('%Y.%m.%d')
+                    now_hms = time.strftime('%H:%M:%S')
+                    PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
+
+                # processed_image_path = "./media/processed_image.png"
+                # cv2.imwrite(processed_image_path, frame)  # 이미지 저장
+        # return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
+                context = {'class_name':str(class_name)}
+        return JsonResponse(context)
+    
+
+def send_image_2(request):
+    if request.method == 'POST':
+        image_file = request.FILES.get('img_file')
+        mp_holistic = mp.solutions.holistic
+        # model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+        # model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+        display_text = "Waiting..."
+ 
+        with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+            if image_file:
+                nparr = np.fromstring(image_file.read(), np.uint8)
+                frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+                image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                results = holistic.process(image)
+
+                visibility = [landmark.visibility for landmark in results.pose_landmarks.landmark] if results.pose_landmarks else []
+                avg_visibility = np.mean(visibility) if visibility else 0
+
+                if avg_visibility > 0.4:  # 사람이 화면에 있을 경우
+                    pose_landmarks = results.pose_landmarks.landmark
+                    row = []
+                    
+                    # 1. landmark positions and visibility
+                    for i in stretching_selected_landmarks:
+                        landmark = pose_landmarks[i]
+                        row.extend([landmark.x, landmark.y, landmark.z, landmark.visibility])
+                            
+                    # 2. Calculate distances
+                    distances = {}
+                    for i, landmark_i in enumerate(stretching_selected_landmarks):
+                        for j, landmark_j in enumerate(stretching_selected_landmarks[i+1:], start=i+1):
+                            distance = calculate_distance([pose_landmarks[landmark_i].x, pose_landmarks[landmark_i].y, pose_landmarks[landmark_i].z],
+                                                        [pose_landmarks[landmark_j].x, pose_landmarks[landmark_j].y, pose_landmarks[landmark_j].z])
+                            row.append(distance)
+                            distances[(landmark_i, landmark_j)] = distance
+                    
+                    reference_distance = distances.get('distance_between_left_eye_and_right_eye', 1)
+
+                    # 3. Calculate relative distances
+                    relative_distances = [distance / reference_distance for distance in distances.values()]
+                    row.extend(relative_distances)
+                    
+                    # 4. Calculate relative landmark position(z)
+                    for i in stretching_selected_landmarks:
+                        landmark = pose_landmarks[i]    
+                        row.append(landmark.z * reference_distance)
+                    
+                    # 5. Calculate angles
+                    for i, landmark_i in enumerate(stretching_selected_landmarks):
+                        for j, landmark_j in enumerate(stretching_selected_landmarks[i+1:], start=i+1):
+                            for k, landmark_k in enumerate(stretching_selected_landmarks[j+1:], start=j+1):
+                                angle = calculate_angle([pose_landmarks[landmark_i].x, pose_landmarks[landmark_i].y, pose_landmarks[landmark_i].z],
+                                                        [pose_landmarks[landmark_j].x, pose_landmarks[landmark_j].y, pose_landmarks[landmark_j].z],
+                                                        [pose_landmarks[landmark_k].x, pose_landmarks[landmark_k].y, pose_landmarks[landmark_k].z])
+                                row.append(angle)                        
+
+                    # 컬럼명 생성
+                    csv_columns = [f'{landmark_description[i]}_{dim}' for i in stretching_selected_landmarks for dim in ['x', 'y', 'z', 'visibility']]
+                    csv_columns += [f'distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
+                    csv_columns += [f'relative_distance_between_{landmark_description[landmark_i]}_and_{landmark_description[landmark_j]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1)]
+                    csv_columns += [f'relative_{landmark_description[i]}_z' for i in stretching_selected_landmarks]
+                    csv_columns += [f'angle_between_{landmark_description[landmark_i]}_{landmark_description[landmark_j]}_{landmark_description[landmark_k]}' for i, landmark_i in enumerate(selected_landmarks) for j, landmark_j in enumerate(selected_landmarks[i+1:], start=i+1) for k, landmark_k in enumerate(selected_landmarks[j+1:], start=j+1)]
+                    
+                    row_df = pd.DataFrame([row], columns=csv_columns) 
+ 
+                    # 자세 예측
+                    prediction = stretching_model.predict(row_df)
+                    class_name = prediction[0] # 여기를 DB로 넘김
+                    print("클래스 : ", class_name)
+                
+                    now_ymd = time.strftime('%Y.%m.%d')
+                    now_hms = time.strftime('%H:%M:%S')
+                    print("오늘 날짜 : ", now_ymd)
+                    print("현재 시간 : ", now_hms)
                     PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
                     # if class_name == 0:
@@ -177,52 +277,92 @@ from datetime import datetime
 #     today_obj = datetime.strptime(today, '%Y.%m.%d')
     
 def statistics(request):
-    if request.user.is_authenticated:
-        # 해당 유저의 자세 데이터 전체
-        # print('************************ ',request.user.id)
-        userdata = PostureDetection.objects.filter(user_id=request.user.id)
-        print(userdata)
-        # 오늘 날짜
-        today = time.strftime('%Y.%m.%d')
-        # 오늘 날짜에 해당되는 데이터 전체
-        todaysposes = userdata.filter(timeymd=today)
-        todayposecnt = todaysposes.count()
-        
-        # 바른 자세 데이터 수
-        correctposecnt = todaysposes.filter(posturetype=0).count()
-        # 나쁜 자세 데이터 수
-        badposecnt = todaysposes.exclude(posturetype=0).count()
-        
-        # 자세 종류 개수
-        # posture_type_cnt = ?
-        
-        
-        # 자리에 있었던 데이터 수
-        inplacecnt = todaysposes.exclude(posturetype=-1).count()
-        # 자리를 비운 데이터 수
-        missedplacecnt = todaysposes.filter(posturetype=-1).count()
-        
-        
-
-
-
-
-        
-        context = {
-            # 'posture_type_num':posture_type_cnt,
-            'correct_posture_ratio':round((correctposecnt/todayposecnt),2),
-            'incorrect_posture_ratio':round((badposecnt/todayposecnt),2),
-            'today_posture_cnt':todayposecnt,
-            'correct_posture_cnt':correctposecnt,
-            'bad_posture_cnt':badposecnt,
-            'person_in_place_ratio':round((inplacecnt/todayposecnt),2),
-            'person_missed_place_ratio':round((missedplacecnt/todayposecnt),2),
-        }
-        return render(request, 'service/statistics.html', context)
+    # 해당 유저의 자세 데이터 전체
+    userdata = PostureDetection.objects.filter(user_id=request.user)
+    # 오늘 날짜
+    today = time.strftime('%Y.%m.%d')
+    # 오늘 날짜에 해당되는 데이터 전체
+    todaysposes = userdata.filter(timeymd=today)
+    todayposecnt = todaysposes.count()
+    
+    # 바른 자세 데이터 수
+    correctposecnt = todaysposes.filter(posturetype=0).count()
+    # 나쁜 자세 데이터 수
+    badposecnt = todaysposes.exclude(posturetype=0).count()
+    
+    # 자세 종류 개수
+    # posture_type_cnt = ?
+    
+    
+    # 자리에 있었던 데이터 수
+    inplacecnt = todaysposes.exclude(posturetype=-1).count()
+    # 자리를 비운 데이터 수
+    missedplacecnt = todaysposes.filter(posturetype=-1).count()
+    # 여기서 todayposecnt가 0인 경우를 처리해야 합니다.
+    if todayposecnt > 0:
+        correct_posture_ratio = round((correctposecnt / todayposecnt), 2)
+        incorrect_posture_ratio = round((badposecnt / todayposecnt), 2)
+        person_in_place_ratio = round((inplacecnt / todayposecnt), 2)
+        person_missed_place_ratio = round((missedplacecnt / todayposecnt), 2)
     else:
-        # 사용자가 인증되지 않은 경우 처리
-        # 로그인 페이지로 리디렉션하거나 다른 방식으로 처리 가능
-        return HttpResponse("사용자가 인증되지 않았습니다.")
+        # todayposecnt가 0인 경우, 모든 비율을 0으로 설정
+        correct_posture_ratio = 0
+        incorrect_posture_ratio = 0
+        person_in_place_ratio = 0
+        person_missed_place_ratio = 0
+    try:
+        correct_posture_ratio = round((correctposecnt / todayposecnt), 2)
+        incorrect_posture_ratio = round((badposecnt / todayposecnt), 2)
+        person_in_place_ratio = round((inplacecnt / todayposecnt), 2)
+        person_missed_place_ratio = round((missedplacecnt / todayposecnt), 2)
+    except ZeroDivisionError:
+        correct_posture_ratio = 0
+        incorrect_posture_ratio = 0
+        person_in_place_ratio = 0
+        person_missed_place_ratio = 0
+    # 
+    userdata = PostureDetection.objects.filter(user_id=request.user)
+    today = time.strftime('%Y.%m.%d')
+    todaysposes = userdata.filter(timeymd=today)
+    todayposecnt = todaysposes.count()
+
+    correctposecnt = todaysposes.filter(posturetype=0).count()
+    badposecnt = todaysposes.exclude(posturetype=0).count()
+    inplacecnt = todaysposes.exclude(posturetype=-1).count()
+    missedplacecnt = todaysposes.filter(posturetype=-1).count()
+
+    # 오류를 피하기 위해 todayposecnt가 0보다 큰 경우에만 나눗셈을 수행합니다.
+    if todayposecnt > 0:
+        correct_posture_ratio = round((correctposecnt / todayposecnt), 2)
+        incorrect_posture_ratio = round((badposecnt / todayposecnt), 2)
+        person_in_place_ratio = round((inplacecnt / todayposecnt), 2)
+        person_missed_place_ratio = round((missedplacecnt / todayposecnt), 2)
+    else:
+        correct_posture_ratio = 0
+        incorrect_posture_ratio = 0
+        person_in_place_ratio = 0
+        person_missed_place_ratio = 0
+        # Count for each posture type
+    posture1_cnt = todaysposes.filter(posturetype=1).count()
+    posture2_cnt = todaysposes.filter(posturetype=2).count()
+    posture3_cnt = todaysposes.filter(posturetype=3).count()
+    posture4_cnt = todaysposes.filter(posturetype=4).count()
+
+    context = {
+        # 'posture_type_num':posture_type_cnt,
+        'correct_posture_ratio': correct_posture_ratio,
+        'incorrect_posture_ratio': incorrect_posture_ratio,
+        'today_posture_cnt': todayposecnt,
+        'correct_posture_cnt': correctposecnt,
+        'bad_posture_cnt': badposecnt,
+        'person_in_place_ratio': person_in_place_ratio,
+        'person_missed_place_ratio': person_missed_place_ratio,
+        'posture1_cnt': posture1_cnt,
+        'posture2_cnt': posture2_cnt,
+        'posture3_cnt': posture3_cnt,
+        'posture4_cnt': posture4_cnt,
+    }
+    return render(request, 'service/statistics.html', context)
 
 import win32api
 

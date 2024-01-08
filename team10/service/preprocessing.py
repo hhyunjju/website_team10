@@ -7,6 +7,9 @@ import mediapipe as mp
 
 selected_landmarks = [0, 2, 5, 7, 8, 11, 12, 15, 16]
 
+stretching_selected_landmarks = [0, 2, 5, 7, 8, 11, 12, 15, 16]
+
+
 landmark_description = [
 "nose", "left_eye_inner", "left_eye", "left_eye_outer", 
 "right_eye_inner", "right_eye", "right_eye_outer", "left_ear", 
