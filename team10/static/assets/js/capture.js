@@ -52,7 +52,7 @@ function updatePostureStatusCounts(class_name) {
       notificationActive = true;
   }
 
-  // 연속된 좋은 자세 감지 => 10으로 바꾸기
+  // 연속된 좋은 자세 감지 => 4로 바꾸기 (12초)
   if (goodPostureCount === 2 && notificationActive) {
       closeNotification();  // 알림 종료
       notificationActive = false;
@@ -136,6 +136,8 @@ function updatePostureStatusCounts(class_name) {
         }, false);
     
         startbutton.addEventListener('click', function(ev){
+          // badPostureCount = 0;
+          // goodPostureCount = 0;
           startVideo();
           ev.preventDefault();
         }, false);
@@ -168,6 +170,7 @@ function updatePostureStatusCounts(class_name) {
     };
 
     function to_statistics(){
+      // post('/login/',{ 'userId': userId, 'csrfmiddlewaretoken': '{{ csrf_token }}'});
       window.location.href = "http://localhost:8000/service/statistics";
     }
 

@@ -80,3 +80,49 @@ function checkNotificationPromise() {
 //     // At last, if the user has denied notifications, and you
 //     // want to be respectful there is no need to bother them anymore.
 //   }
+
+// #################################################################################################
+
+
+// const Timer=document.getElementById('timer'); //스코어 기록창-분
+let time= 5000;
+let min=0;
+let sec=5;
+
+
+// Timer.value=min+":"+'00'; 
+// jQuery("#timer").html(min+":"+'00');
+jQuery("#timer").html('5');
+
+function TIMER(){
+    PlAYTIME=setInterval(function(){
+        time=time-1000; //1초씩 줄어듦
+        min=time/(60*1000); //초를 분으로 나눠준다.
+
+       if(sec>0){ //sec=60 에서 1씩 빼서 출력해준다.
+            sec=sec-1;
+            Timer.value=Math.floor(min)+':'+sec; //실수로 계산되기 때문에 소숫점 아래를 버리고 출력해준다.
+            jQuery("#timer").html(sec);
+           
+        }
+        if(sec===0){
+         	// 0에서 -1을 하면 -59가 출력된다.
+            // 그래서 0이 되면 바로 sec을 60으로 돌려주고 value에는 0을 출력하도록 해준다.
+            sec=60;
+            Timer.value=Math.floor(min)+':'+'00';
+            jQuery("#timer").html('0');
+        }    
+        if(Timer.value=='0:00'){
+          Timer.value='시간 종료';
+          return;
+        } 
+        
+   
+    },1000); //1초마다 
+}
+
+
+TIMER();
+setTimeout(function(){
+    clearInterval(PlAYTIME);
+},5000);//5초가 되면 Timer 삭제
