@@ -138,6 +138,7 @@ function updatePostureStatusCounts(class_name) {
         startbutton.addEventListener('click', function(ev){
           // badPostureCount = 0;
           // goodPostureCount = 0;
+          askNotificationPermission()
           startVideo();
           ev.preventDefault();
         }, false);
@@ -170,6 +171,7 @@ function updatePostureStatusCounts(class_name) {
     };
 
     function to_statistics(){
+      // post('/login/',{ 'userId': userId, 'csrfmiddlewaretoken': '{{ csrf_token }}'});
       window.location.href = "http://localhost:8000/service/statistics";
     }
 

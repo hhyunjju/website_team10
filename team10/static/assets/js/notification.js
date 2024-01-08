@@ -1,8 +1,5 @@
   //----------1분마다 알람 울리기-------------
 // 페이지 로드 시 알림 권한 요청
-window.onload = function() {
-    askNotificationPermission();
-};
 
 let globalNotification = null;
 
@@ -12,7 +9,6 @@ function makeNoti() {
     if (globalNotification) {
         return;
     }
-
     // 권한이 허용된 경우에만 알림 생성
     // 회원가입시 이름을 받으면 => 알림에 이름을 넣을 수 있음
     // 랜덤으로 문구 나가도록 수정 or 라벨 반영해서 문구 수정
@@ -28,13 +24,6 @@ function makeNoti() {
             globalNotification.close();
             globalNotification = null; // 전역 알림 객체 초기화
         });
-    } else if (Notification.permission !== "denied") {
-        // 권한 요청
-        Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-                makeNoti();
-            }
-        });
     }
 }
 
@@ -48,20 +37,41 @@ function closeNotification() {
 
 // 권한 요청 함수
 function askNotificationPermission() {
-    if (!("permission" in Notification)) {
-        Notification.requestPermission().then(permission => {
-            Notification.permission = permission;
-        });
+    // 권한을 실제로 요구하는 함수
+    function handlePermission(permission) {
+      if (!("permission" in Notification)) {
+        Notification.permission = permission;
+      }
     }
-}
-
-// 브라우저가 알림을 지원하는지 확인
-if (!("Notification" in window)) {
-    console.log("이 브라우저는 알림을 지원하지 않습니다.");
-} else {
-    askNotificationPermission();
-}
+  
+    // 브라우저가 알림을 지원하는지 확인
+    if (!("Notification" in window)) {
+      console.log("이 브라우저는 알림을 지원하지 않습니다.");
+    } else {
+      if (checkNotificationPromise()) { //프로미스 버전으로 요청
+        Notification.requestPermission().then((permission) => {
+          handlePermission(permission);
+        });
+      } else {
+        Notification.requestPermission(function (permission) {
+          handlePermission(permission); //구 버전으로 요청
+        });
+      }
+    }
+  }
 
 // 전역 스코프에서 함수 사용 가능하도록 설정
 window.makeNoti = makeNoti;
 window.closeNotification = closeNotification;
+window.askNotificationPermission = askNotificationPermission;
+
+// 브라우저가 Notification.requestPermission()의 프로미스 버전을 지원하는지 확인
+function checkNotificationPromise() {
+    try {
+      Notification.requestPermission().then();
+    } catch (e) {
+      return false;
+    }
+  
+    return true;
+  }
