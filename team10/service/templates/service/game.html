@@ -31,89 +31,86 @@
         }
     </style>
 </head>
-<script
-		src="https://code.jquery.com/jquery-3.7.1.js"
-		integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-		crossorigin="anonymous"></script>
-		<script src='{% static "assets/js/cookie_csrf.js" %}'></script>
 <body class="single is-preload">
+    <div id="posture-status-message"></div>
+    <!-- Wrapper -->
+        <div id="wrapper">
 
-<!-- Wrapper -->
-<div id="wrapper">
-    <!-- Header -->
-    <header id="header">
-        <h1><a href="/"><img src="{%static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
-        <nav class="links">
-            <ul>
-                {% if not user.is_authenticated %}
-                    <li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
-                    <li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
-                {% else %}
-                    <li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
-                    <li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
-                {% endif %}
-                <li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
-                <li class="menu-item-contact"><a href="{% url 'brd:faq' %}">FAQ</a></li>
-                <li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
-                <li><a href="{% url 'service:service' %}">서비스</a></li>
-            </ul>
-        </nav>
-        <nav class="main">
-            <ul>
-                <li class="search">
-                    <a class="fa-search" href="#search">Search</a>
-                    <form id="search" method="get" action="#">
-                        <input type="text" name="query" placeholder="Search" />
-                    </form>
-                </li>
-                <li class="menu">
-                    <a class="fa-bars" href="#menu">Menu</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <!-- Menu -->
-    <section id="menu">
+            <!-- Header -->
+                <header id="header">
+                    <h1><a href="/"><img src="{% static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+                    <nav class="links">
+                        <ul>
+                            {% if not user.is_authenticated %}
+                                <li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
+                                <li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
+                            {% else %}
+                                <li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
+                                <li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
+                            {% endif %}
+                            <li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+                            <li class="menu-item-contact"><a href="{% url 'brd:faq' %}">FAQ</a></li>
+                            <li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
+                            <li><a href="{% url 'service:service' %}">서비스</a></li>
+                        </ul>
+                    </nav>
+                    <nav class="main">
+                        <ul>
+                            <li class="search">
+                                <a class="fa-search" href="#search">Search</a>
+                                <form id="search" method="get" action="#">
+                                    <input type="text" name="query" placeholder="Search" />
+                                </form>
+                            </li>
+                            <li class="menu">
+                                <a class="fa-bars" href="#menu">Menu</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
 
-        <!-- Search -->
-            <section>
-                <form class="search" method="get" action="#">
-                    <input type="text" name="query" placeholder="Search" />
-                </form>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // 검색 폼 제출 이벤트 리스너 추가
-                        document.querySelector('.search').addEventListener('submit', function(event) {
-                            event.preventDefault(); // 기본 제출 동작 방지
-                            var query = document.querySelector('.search input[name="query"]').value; // 검색어 가져오기
-                            redirectToPageBasedOnQuery(query); // 검색 처리 함수 호출
-                        });
-                    });
-                
-                    function redirectToPageBasedOnQuery(query) {
-                        if (query.includes('통계 결과')) {
-                            window.location.href = '{% url 'service:statistics' %}';
-                        } else if (query.includes('모니터링')) {
-                            window.location.href = '{% url 'service:service' %}';
-                        } else if (query.includes('FAQ')) {
-                            window.location.href = '{% url 'brd:faq' %}';
-                        } else if (query.includes('게시판')) {
-                            window.location.href = '{% url 'brd:notice_board' %}';
-                        } else if (query.includes('회사소개')) {
-                            window.location.href = '{% url 'home:intro' %}';
-                        } else if (query.includes('회원가입')) {
-                            window.location.href = '{% url 'accounts:signup' %}';
-                        } else if (query.includes('모델성능')) {
-                            window.location.href = '{% url 'service:model' %}';
-                        } else if (query.includes('게임')) {
-                            window.location.href = '{% url 'service:game' %}';
-                        } else {
-                            // 다른 검색어에 대한 처리 (옵션)
-                            // 예: window.location.href = '/search?query=' + encodeURIComponent(query);
-                        }
-                    }
-                </script>
-            </section>
+            <!-- Menu -->
+                <section id="menu">
+
+                    <!-- Search -->
+                        <section>
+                            <form class="search" method="get" action="#">
+                                <input type="text" name="query" placeholder="Search" />
+                            </form>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // 검색 폼 제출 이벤트 리스너 추가
+                                    document.querySelector('.search').addEventListener('submit', function(event) {
+                                        event.preventDefault(); // 기본 제출 동작 방지
+                                        var query = document.querySelector('.search input[name="query"]').value; // 검색어 가져오기
+                                        redirectToPageBasedOnQuery(query); // 검색 처리 함수 호출
+                                    });
+                                });
+                            
+                                function redirectToPageBasedOnQuery(query) {
+                                    if (query.includes('통계 결과')) {
+                                        window.location.href = '{% url "service:statistics" %}';
+                                    } else if (query.includes('모니터링')) {
+                                        window.location.href = '{% url "service:service" %}';
+                                    } else if (query.includes('FAQ')) {
+                                        window.location.href = '{% url "brd:faq" %}';
+                                    } else if (query.includes('게시판')) {
+                                        window.location.href = '{% url "brd:notice_board" %}';
+                                    } else if (query.includes('회사소개')) {
+                                        window.location.href = '{% url "home:intro" %}';
+                                    } else if (query.includes('회원가입')) {
+                                        window.location.href = '{% url "accounts:signup" %}';
+                                    } else if (query.includes('모델성능')) {
+                                        window.location.href = '{% url "service:model" %}';
+                                    } else if (query.includes('게임')) {
+                                        window.location.href = '{% url "service:game" %}';
+                                    } else {
+                                        // 다른 검색어에 대한 처리 (옵션)
+                                        // 예: window.location.href = '/search?query=' + encodeURIComponent(query);
+                                    }
+                                }
+                            </script>
+                        </section>
 
         <!-- Links -->
             <section>
@@ -155,8 +152,9 @@
     <body>
         <div class="grid-container">
             <!-- 올바른 자세 예시 이미지 -->
-            <div class="grid-item" id="correct-posture">
-                <img src="{% static 'path/to/correct-posture-image.jpg' %}" alt="올바른 자세 예시">
+            <div id="image-container" class="grid-item" id="correct-posture">
+                <!-- 첫 번째 이미지를 먼저 표시합니다. 다른 이미지들은 JavaScript를 통해 변경됩니다. -->
+                <img id="posture-image" src="{% static 'assets/images/1_팔 옆으로 늘리는 스트레칭.jpg' %}" alt="올바른 자세 예시">
             </div>
             <style>
                 video{
