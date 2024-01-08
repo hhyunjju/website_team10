@@ -276,8 +276,12 @@ from datetime import datetime
 #     todaystotal = todaysposes.count()
 
 #     today_obj = datetime.strptime(today, '%Y.%m.%d')
-    
+
+
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='accounts:login')
 def statistics(request):
+    print('statistics request user : ', request.user)
     # 해당 유저의 자세 데이터 전체
     userdata = PostureDetection.objects.filter(user_id=request.user)
     # 오늘 날짜
