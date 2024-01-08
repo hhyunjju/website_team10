@@ -52,7 +52,7 @@ function updatePostureStatusCounts(class_name) {
       notificationActive = true;
   }
 
-  // 연속된 좋은 자세 감지 => 10으로 바꾸기
+  // 연속된 좋은 자세 감지 => 4로 바꾸기 (12초)
   if (goodPostureCount === 2 && notificationActive) {
       closeNotification();  // 알림 종료
       notificationActive = false;
@@ -136,6 +136,8 @@ function updatePostureStatusCounts(class_name) {
         }, false);
     
         startbutton.addEventListener('click', function(ev){
+          // badPostureCount = 0;
+          // goodPostureCount = 0;
           startVideo();
           ev.preventDefault();
         }, false);
@@ -217,19 +219,19 @@ function updatePostureStatusCounts(class_name) {
       let videoElement = document.getElementById('video');
       updatePostureStatusCounts(num);
       if (num==0) {
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount)
+        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
         videoElement.style.border = '8px solid lime';
         document.getElementById('posture-status').style.color = 'lime'; 
         return 'Good Posture';
       } 
       if(num==-1){
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount)
-        videoElement.style.border = ''
+        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
+        videoElement.style.border = '';
         document.getElementById('posture-status').style.color = 'blue';
         return 'Unable to detect posture';
       }
       else {
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount)
+        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
         videoElement.style.border = '8px solid red';
         document.getElementById('posture-status').style.color = 'red';
         return 'Bad Posture';
