@@ -138,6 +138,7 @@ function updatePostureStatusCounts(class_name) {
         startbutton.addEventListener('click', function(ev){
           // badPostureCount = 0;
           // goodPostureCount = 0;
+          askNotificationPermission()
           startVideo();
           ev.preventDefault();
         }, false);
