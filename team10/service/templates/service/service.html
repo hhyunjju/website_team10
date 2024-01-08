@@ -13,6 +13,39 @@
 		crossorigin="anonymous"></script>
 		<script src='{% static "assets/js/cookie_csrf.js" %}'></script>
 		<script src='{% static "assets/js/capture.js" %}'></script>
+		<script src='{% static "assets/js/notification.js" %}'></script>
+		<style>
+			.video-container {
+				display: flex; /* Flexbox 컨테이너를 활성화합니다. */
+				flex-direction: column; /* 자식요소가 수직으로 쌓이도록 */
+				justify-content: center; /* 가로축 중앙 정렬을 설정합니다. */
+				align-items: center; 
+			}
+			#video-wrapper {
+				position: relative;
+				display: flex; /* 기존의 설정을 유지 */
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.video-controls, .video-container p {
+				display: flex; /* Flexbox를 활성화합니다. */
+				justify-content: center; /* 내부 요소들을 가로축 중앙에 정렬합니다. */
+			}
+			.video-container p {
+				margin-top: 25px;
+			}
+			#posture-status {
+				position: absolute;
+				bottom: 10px; /* 오른쪽 아래에 위치하기 위한 설정 */
+				right: 30px;
+				padding: 5px;
+				font-size: 22px;
+			}
+			.video-controls{
+				margin-top: 30px;
+			}
+		</style>
 		
 	</head>
 	<body class="single is-preload">
@@ -61,6 +94,39 @@
 								<form class="search" method="get" action="#">
 									<input type="text" name="query" placeholder="Search" />
 								</form>
+								<script>
+									document.addEventListener('DOMContentLoaded', function() {
+										// 검색 폼 제출 이벤트 리스너 추가
+										document.querySelector('.search').addEventListener('submit', function(event) {
+											event.preventDefault(); // 기본 제출 동작 방지
+											var query = document.querySelector('.search input[name="query"]').value; // 검색어 가져오기
+											redirectToPageBasedOnQuery(query); // 검색 처리 함수 호출
+										});
+									});
+								
+									function redirectToPageBasedOnQuery(query) {
+										if (query.includes('통계 결과')) {
+											window.location.href = '{% url 'service:statistics' %}';
+										} else if (query.includes('모니터링')) {
+											window.location.href = '{% url 'service:service' %}';
+										} else if (query.includes('FAQ')) {
+											window.location.href = '{% url 'brd:faq' %}';
+										} else if (query.includes('게시판')) {
+											window.location.href = '{% url 'brd:notice_board' %}';
+										} else if (query.includes('회사소개')) {
+											window.location.href = '{% url 'home:intro' %}';
+										} else if (query.includes('회원가입')) {
+											window.location.href = '{% url 'accounts:signup' %}';
+										} else if (query.includes('모델성능')) {
+											window.location.href = '{% url 'service:model' %}';
+										} else if (query.includes('게임')) {
+											window.location.href = '{% url 'service:game' %}';
+										} else {
+											// 다른 검색어에 대한 처리 (옵션)
+											// 예: window.location.href = '/search?query=' + encodeURIComponent(query);
+										}
+									}
+								</script>
 							</section>
 
 						<!-- Links -->
@@ -158,20 +224,21 @@
 									}
 								</style>
 								<div class="video-container">
-									<video id='video' style="max-width: 100%; height: auto; position: relative;"></video>
-									<div id='posture-status' style="color: lime; position: relative; left:10px; top: -70px;"></div>
-									<br>
+									<div id="video-wrapper">
+										<video id='video' poster="{% static 'assets/images/intro.png' %}"></video>
+										<div id='posture-status'></div>
+									</div>
 									<div class="video-controls">
 										<button id="startbutton">스트리밍 시작</button>
 										<button id="stopbutton">스트리밍 종료</button>
 									</div>
-									<canvas id="canvas" visibility: hidden>
-									</canvas>
+									<canvas id="canvas" style="visibility: hidden;"></canvas>
 									<div class="output">
-									  <img id="photo" visibility: hidden>
+									  <img id="photo" style="visibility: hidden;">
 									</div>
+									<p>당신의 바른 자세를 녹화하여 통계자료로 제공합니다.</p>
 								</div>
-								<p>당신의 바른 자세를 녹화하여 통계자료로 제공합니다.</p>
+								
 						
 							</article>
 					</div>
@@ -243,6 +310,7 @@
 			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
+			<script src='{% static "assets/js/capture.js" %}'></script>
 
 	</body>
 </html>
