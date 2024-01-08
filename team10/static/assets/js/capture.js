@@ -157,19 +157,20 @@ function updatePostureStatusCounts(class_name) {
         //   // setTimeout(function(){window.location.href = "http://localhost:8000/service/statistics"; return false;},100);
         // }, false);
 
-        pausebutton.addEventListener('click', function(ev){
-          pauseVideo(myTracks);
-          ev.preventDefault();
-        }, false);
+    //--------------------pauser button-----------------------
+    //     pausebutton.addEventListener('click', function(ev){
+    //       pauseVideo(myTracks);
+    //       ev.preventDefault();
+    //     }, false);
         
-        clearphoto();
-    }
+    //     clearphoto();
+    // } //startup function
 
 
-    function pauseVideo (track) {
-      alert('아직 공사중.. 빠질 수 있음..');
-    };
-
+    // function pauseVideo (track) {
+    //   alert('아직 공사중.. 빠질 수 있음..');
+    // };
+//---------------------------------------------------------
     function to_statistics(){
       // post('/login/',{ 'userId': userId, 'csrfmiddlewaretoken': '{{ csrf_token }}'});
       window.location.href = "http://localhost:8000/service/statistics";
@@ -195,6 +196,7 @@ function updatePostureStatusCounts(class_name) {
       video.play();
       streamingStatus = true;
       sendImg = setInterval(sendImage, 3000);
+      sendGameNoti = setInterval(makeGameNoti, 5000);
     }
 
 
@@ -284,7 +286,8 @@ function updatePostureStatusCounts(class_name) {
         });
       }, 'image/png');
       console.log(streaming);
-    }
+    } 
+  }   
 
 // var imageSrc = $("#previewImage").attr("src");
   
@@ -404,4 +407,3 @@ function updatePostureStatusCounts(class_name) {
           console.error('getUserMedia() error:', e);
         });
   */
-
