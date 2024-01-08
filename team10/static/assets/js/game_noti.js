@@ -9,14 +9,15 @@ function makeGameNoti() {
     }
     // 권한이 허용된 경우에만 알림 생성
     if (Notification.permission === "granted") {
-        globalstretchingNotification = new Notification("스트레칭 알림", {
+        globalstretchingNotification = new Notification("스트레칭 알림 (바른자세 도우미)", {
             body: "스트레칭 할 시간입니다. \n찌뿌둥한 몸을 풀어보는게 어떨까요?",
+            icon: gameiconUrl,
             requireInteraction: true, // 사용자 상호작용이 필요
         });
 
         // 알림 클릭 이벤트 처리
         globalstretchingNotification.addEventListener("click", () => {
-            window.open('/game/');
+            window.open("http://localhost:8000/service/game/");
             globalstretchingNotification.close();
             globalstretchingNotification = null; // 전역 알림 객체 초기화
         });

@@ -196,7 +196,7 @@ function updatePostureStatusCounts(class_name) {
       video.play();
       streamingStatus = true;
       sendImg = setInterval(sendImage, 3000);
-      sendGameNoti = setInterval(makeGameNoti, 5000);
+      sendGameNoti = setInterval(makeGameNoti, 10000); //1시간으로 바꿀 예정
     }
 
 
