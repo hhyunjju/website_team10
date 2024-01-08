@@ -141,12 +141,11 @@ function updatePostureStatusCounts(class_name) {
         }, false);
 
         stopbutton.addEventListener('click', function(ev){
-          stopVideo();
           var videoElement = document.getElementById('video');
           jQuery("#posture-status").html('');
           videoElement.style.border = '';
           ev.preventDefault();
-          stopVideo();
+          stopVideo(); //위치 중요 //true여야 실행됨
         }, false);
 
         // stopbutton.addEventListener('click', function(ev){
@@ -179,14 +178,14 @@ function updatePostureStatusCounts(class_name) {
           track.stop();
           });
         clearInterval(sendImg);
-        var videoElement = document.getElementById('video');
-        jQuery("#posture-status").html('');
-        videoElement.style.border = ''
+        // var videoElement = document.getElementById('video');
+        // jQuery("#posture-status").html('');
+        // videoElement.style.border = ''
         streamingStatus = false;
-        to_statistics()
+        to_statistics();
       }
-
     }
+    
 
     function startVideo() {
       video.play();
