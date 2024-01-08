@@ -217,19 +217,19 @@ function updatePostureStatusCounts(class_name) {
       let videoElement = document.getElementById('video');
       updatePostureStatusCounts(num);
       if (num==0) {
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount)
+        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
         videoElement.style.border = '8px solid lime';
         document.getElementById('posture-status').style.color = 'lime'; 
         return 'Good Posture';
       } 
       if(num==-1){
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount)
-        videoElement.style.border = ''
+        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
+        videoElement.style.border = '';
         document.getElementById('posture-status').style.color = 'blue';
         return 'Unable to detect posture';
       }
       else {
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount)
+        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
         videoElement.style.border = '8px solid red';
         document.getElementById('posture-status').style.color = 'red';
         return 'Bad Posture';
