@@ -83,6 +83,7 @@ function updatePostureStatusCounts(class_name) {
     var startbutton = null;
     var sendImg = null;
     var myTracks = null;
+    var streamingStatus = false;
   
     function startup() {
       video = document.getElementById('video');
@@ -145,7 +146,14 @@ function updatePostureStatusCounts(class_name) {
           jQuery("#posture-status").html('');
           videoElement.style.border = '';
           ev.preventDefault();
+          stopVideo();
         }, false);
+
+        // stopbutton.addEventListener('click', function(ev){
+        //   ev.preventDefault();
+        //   to_statistics();
+        //   // setTimeout(function(){window.location.href = "http://localhost:8000/service/statistics"; return false;},100);
+        // }, false);
 
         pausebutton.addEventListener('click', function(ev){
           pauseVideo(myTracks);
@@ -160,19 +168,29 @@ function updatePostureStatusCounts(class_name) {
       alert('아직 공사중.. 빠질 수 있음..');
     };
 
+    function to_statistics(){
+      window.location.href = "http://localhost:8000/service/statistics";
+    }
+
 
     function stopVideo() {
-      video.srcObject.getTracks().forEach( (track) => {
-        track.stop();
-        });
-      clearInterval(sendImg);
-      // var videoElement = document.getElementById('video');
-      // jQuery("#posture-status").html('');
-      // videoElement.style.border = ''
+      if(streamingStatus){
+        video.srcObject.getTracks().forEach( (track) => {
+          track.stop();
+          });
+        clearInterval(sendImg);
+        var videoElement = document.getElementById('video');
+        jQuery("#posture-status").html('');
+        videoElement.style.border = ''
+        streamingStatus = false;
+        to_statistics()
+      }
+
     }
 
     function startVideo() {
       video.play();
+      streamingStatus = true;
       sendImg = setInterval(sendImage, 3000);
     }
 

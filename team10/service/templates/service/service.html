@@ -189,7 +189,7 @@
 								</style>
 								<div class="video-container">
 									<div id="video-wrapper">
-										<video id='video'></video>
+										<video id='video' poster="{% static 'assets/images/intro.png' %}"></video>
 										<div id='posture-status'></div>
 									</div>
 									<div class="video-controls">
@@ -275,6 +275,7 @@
 			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
+			<script src='{% static "assets/js/capture.js" %}'></script>
 
 	</body>
 </html>
