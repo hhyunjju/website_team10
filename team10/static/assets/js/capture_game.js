@@ -76,24 +76,28 @@
 
         gameOneSet();
 
-        
-
         clearphoto();
     }
 
 
-
-    function to_statistics(){
-      window.location.href = "http://localhost:8000/service/statistics";
+    function to_service(){
+      window.location.href = "http://localhost:8000/service/service";
     }
-
-
-
 
     function startVideo() {
       video.play();
       streamingStatus = true;
       // sendImg = setInterval(sendImage, 3000);
+    }
+
+    function stopVideo() {
+      if(streamingStatus){
+        video.srcObject.getTracks().forEach( (track) => {
+          track.stop();
+          });''
+        streamingStatus = false;
+        to_service();
+      }
     }
 
 
@@ -116,13 +120,7 @@
     // drawing that to the screen, we can change its size and/or apply
     // other changes before drawing it.
 
-    function isBadPosture(num){ // #################################### 수정 필요
-      if (num==0) {
-        return 'Good Posture';
-      } else {
-        return 'Bad Posture';
-      }
-    }
+    let answer = [];
 
     function sendImage() {
       var context = canvas.getContext('2d');
@@ -161,7 +159,16 @@
             // console.log(data);
             console.log('success');
             console.log('stretching : '+data['class_name']);
-            jQuery("#posture-status").html(isBadPosture(Number(data['class_name'])));
+            // jQuery("#posture-status").html(Number(data['class_name'])); // #########
+            if (jQuery("#posture-status").html()==data['class_name']) {
+              // $('#stretchingStatus').html('O');
+              answer.push(1);
+            }
+            else {
+              // $('#stretchingStatus').html('X');
+              answer.push(0);
+            }
+            console.log("현재 정답 : "+answer);
           },
           error: function(e){
             console.log('error');
@@ -201,6 +208,18 @@
         jQuery("#count").html(s);
         jQuery("#subscription").html(sen);
         TIMER(time,m,s);
+        setTimeout(() => {
+          clearInterval(PLAYTIME);
+          resolve();
+      }, time);
+      });
+    }
+
+    function myTimer2(sen, time, m, s) {
+      return new Promise(resolve => {
+        jQuery("#count").html(s);
+        jQuery("#subscription").html(sen);
+        TIMER(time,m,s);
         var sendimg = setInterval(sendImage, 1000);
         setTimeout(() => {
           clearInterval(sendimg);
@@ -228,26 +247,70 @@
       });
     }
 
+    function myStopVideo(){
+      return new Promise(resolve => {
+        setTimeout(() => {
+          stopVideo();
+          resolve();
+      }, 5000);
+        // startVideo();
+        // resolve();
+      });
+    }
+
+    function tryAgain() {
+      return new Promise(resolve => {
+        var sentence = '맞을 때까지 나갈 수 없습니다.\n 다시 해 보세요';
+        jQuery("#subscription").html(sentence);
+        failSignal();
+        resolve();
+      });
+    }
+
+    var correct = true;
+
+    function myAnswer() {
+      return new Promise(resolve => {
+        // try {
+        //   console.log('answer 호출 : '+answer);
+        //   console.log('*****************find 1 :'+answer.find(1));
+        //   answer.find(1);
+        //   $('#stretchingStatus').html('O');
+        // } catch(error) {
+        //   console.log(error);
+        //   console.log('그럼 여기로 오나?');
+        //   $('#stretchingStatus').html('X');
+        // }
+        console.log('최종 answer : '+answer);
+        if(answer.indexOf(1)==-1){
+          console.log('실패');
+          $('#stretchingStatus').html('X');
+          correct = false;
+        } else if (answer.indexOf(1)>=0){
+          correct = true;
+          console.log('성공');
+          $('#stretchingStatus').html('O');
+        }
+        resolve();
+      });
+    }
+
     function gameOneSet(){
       myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
         .then(() => {
           return myStartVideo();
         })
         .then(() => {
-          return myTimer('왼쪽의 동작을 10초 안에 따라해주세요.', 10000, 0, 10);
+          return myTimer2('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
         })
         .then(() => {
-          return console.log('끝끝');
+          return myAnswer();
+        })
+        .then(() => {
+          return myStopVideo();
         })
     }
 
 
-    
-
-
-// var imageSrc = $("#previewImage").attr("src");
-  
-    // Set up our event listener to run the startup process
-    // once loading is complete.
     window.addEventListener('load', startup, false);
 
