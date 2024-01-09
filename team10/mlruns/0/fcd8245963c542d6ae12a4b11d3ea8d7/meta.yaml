@@ -1,0 +1,16 @@
+artifact_uri: file:///c:/Users/user/big%20project/final_model/mlruns/0/fcd8245963c542d6ae12a4b11d3ea8d7/artifacts
+deleted_time: 1704812435098
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: fcd8245963c542d6ae12a4b11d3ea8d7
+run_name: colorful-penguin-85
+run_uuid: fcd8245963c542d6ae12a4b11d3ea8d7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1704788503950
+status: 1
+tags: []
+user_id: user

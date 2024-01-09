@@ -1,0 +1,16 @@
+artifact_uri: file:///c:/Users/user/big%20project/final_model/mlruns/0/797e0151c47a423fa88c59742b3370c7/artifacts
+deleted_time: 1704812691038
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 797e0151c47a423fa88c59742b3370c7
+run_name: rare-sow-544
+run_uuid: 797e0151c47a423fa88c59742b3370c7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1704812591160
+status: 1
+tags: []
+user_id: user
