@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>바른자세 게임</title>
+    <title>바른자세 스트레칭</title>
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
     <link rel="icon" href="{% static 'assets/images/logo_page.png' %}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -31,51 +31,91 @@
         }
     </style>
 </head>
+<script
+		src="https://code.jquery.com/jquery-3.7.1.js"
+		integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+		crossorigin="anonymous"></script>
+		<script src='{% static "assets/js/cookie_csrf.js" %}'></script>
 <body class="single is-preload">
+    <div id="posture-status-message"></div>
+    <!-- Wrapper -->
+        <div id="wrapper">
 
-<!-- Wrapper -->
-<div id="wrapper">
-    <!-- Header -->
-    <header id="header">
-        <h1><a href="/"><img src="{%static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
-        <nav class="links">
-            <ul>
-                {% if not user.is_authenticated %}
-                    <li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
-                    <li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
-                {% else %}
-                    <li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
-                    <li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
-                {% endif %}
-                <li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
-                <li class="menu-item-contact"><a href="{% url 'brd:faq' %}">FAQ</a></li>
-                <li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
-                <li><a href="{% url 'service:service' %}">서비스</a></li>
-            </ul>
-        </nav>
-        <nav class="main">
-            <ul>
-                <li class="search">
-                    <a class="fa-search" href="#search">Search</a>
-                    <form id="search" method="get" action="#">
-                        <input type="text" name="query" placeholder="Search" />
-                    </form>
-                </li>
-                <li class="menu">
-                    <a class="fa-bars" href="#menu">Menu</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <!-- Menu -->
-    <section id="menu">
+            <!-- Header -->
+                <header id="header">
+                    <h1><a href="/"><img src="{% static 'assets/images/logo_page.png' %}"style="width:45px; height:auto;"></a></h1>
+                    <nav class="links">
+                        <ul>
+                            {% if not user.is_authenticated %}
+                                <li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
+                                <li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
+                            {% else %}
+                                <li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
+                                <li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
+                            {% endif %}
+                            <li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+                            <li class="menu-item-contact"><a href="{% url 'brd:faq' %}">FAQ</a></li>
+                            <li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
+                            <li><a href="{% url 'service:service' %}">서비스</a></li>
+                        </ul>
+                    </nav>
+                    <nav class="main">
+                        <ul>
+                            <li class="search">
+                                <a class="fa-search" href="#search">Search</a>
+                                <form id="search" method="get" action="#">
+                                    <input type="text" name="query" placeholder="Search" />
+                                </form>
+                            </li>
+                            <li class="menu">
+                                <a class="fa-bars" href="#menu">Menu</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
 
-        <!-- Search -->
-            <section>
-                <form class="search" method="get" action="#">
-                    <input type="text" name="query" placeholder="Search" />
-                </form>
-            </section>
+            <!-- Menu -->
+                <section id="menu">
+
+                    <!-- Search -->
+                        <section>
+                            <form class="search" method="get" action="#">
+                                <input type="text" name="query" placeholder="Search" />
+                            </form>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // 검색 폼 제출 이벤트 리스너 추가
+                                    document.querySelector('.search').addEventListener('submit', function(event) {
+                                        event.preventDefault(); // 기본 제출 동작 방지
+                                        var query = document.querySelector('.search input[name="query"]').value; // 검색어 가져오기
+                                        redirectToPageBasedOnQuery(query); // 검색 처리 함수 호출
+                                    });
+                                });
+                            
+                                function redirectToPageBasedOnQuery(query) {
+                                    if (query.includes('통계 결과')) {
+                                        window.location.href = '{% url "service:statistics" %}';
+                                    } else if (query.includes('모니터링')) {
+                                        window.location.href = '{% url "service:service" %}';
+                                    } else if (query.includes('FAQ')) {
+                                        window.location.href = '{% url "brd:faq" %}';
+                                    } else if (query.includes('게시판')) {
+                                        window.location.href = '{% url "brd:notice_board" %}';
+                                    } else if (query.includes('회사소개')) {
+                                        window.location.href = '{% url "home:intro" %}';
+                                    } else if (query.includes('회원가입')) {
+                                        window.location.href = '{% url "accounts:signup" %}';
+                                    } else if (query.includes('모델성능')) {
+                                        window.location.href = '{% url "service:model" %}';
+                                    } else if (query.includes('게임')) {
+                                        window.location.href = '{% url "service:game" %}';
+                                    } else {
+                                        // 다른 검색어에 대한 처리 (옵션)
+                                        // 예: window.location.href = '/search?query=' + encodeURIComponent(query);
+                                    }
+                                }
+                            </script>
+                        </section>
 
         <!-- Links -->
             <section>
@@ -117,13 +157,32 @@
     <body>
         <div class="grid-container">
             <!-- 올바른 자세 예시 이미지 -->
-            <div class="grid-item" id="correct-posture">
-                <img src="{% static 'path/to/correct-posture-image.jpg' %}" alt="올바른 자세 예시">
+            <div id="image-container" class="grid-item" id="correct-posture">
+                <!-- 첫 번째 이미지를 먼저 표시합니다. 다른 이미지들은 JavaScript를 통해 변경됩니다. -->
+                <img id="posture-image" src="{% static 'assets/images/1_팔 옆으로 늘리는 스트레칭.jpg' %}" alt="올바른 자세 예시">
             </div>
+            <style>
+                video{
+                    transform: rotateY(180deg);
+                    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+                    -moz-transform:rotateY(180deg); /* Firefox */
+                }
+            </style>
             <!-- 웹캠 출력 -->
             <div class="grid-item" id="webcam">
                 <!-- 웹캠 출력을 위한 HTML 요소 -->
-                <video id="webcamVideo" autoplay playsinline width="100%" height="100%"></video>
+                <div class="video-container">
+                    <video id='video' poster="{% static 'assets/images/game_loading_swch.png' %}" style="max-width: 95%; height: auto; left:11px; top:4px; position: relative;"></video>
+                    <div id='posture-status' style="color: lime; position: relative; left:10px; top: -70px;"></div>
+                    <br>
+                    <div id='count'></div>
+                    <div id='subscription'></div>
+                    <canvas id="canvas" visibility: hidden>
+                    </canvas>
+                    <div class="output">
+                      <img id="photo" visibility: hidden>
+                    </div>
+                </div>
             </div>
             <!-- 포인트 획득 -->
             <div class="grid-item" id="points-earned">
@@ -134,8 +193,6 @@
                 <p>정확도: <span id="accuracy-percentage">0%</span></p>
             </div>
         </div>
-        
-        <!-- 웹캠 스트림을 가져오기 위한 JavaScript -->
         <script>
             (function() {
                 const video = document.getElementById('webcamVideo');
@@ -150,5 +207,90 @@
                     });
                 }
             })();
+            // 이미지 경로 목록입니다. 실제 이미지 경로로 교체해주세요.
+            const imageList = [
+                '{% static "assets/images/Stretching/1.gif" %}',
+                '{% static "assets/images/Stretching/2.gif" %}',
+                '{% static "assets/images/Stretching/3.gif" %}',
+                '{% static "assets/images/Stretching/4.gif" %}',
+                '{% static "assets/images/Stretching/5.gif" %}',
+                '{% static "assets/images/Stretching/6.gif" %}',
+                '{% static "assets/images/Stretching/7.gif" %}',
+            ];
+            let currentIndex = 0; // 현재 이미지 인덱스
+
+            const statusMessageElement = document.getElementById('posture-status-message');
+
+            // 'clear' 신호에 대한 처리 함수
+            function handleClear() {
+                currentIndex++;
+                if (currentIndex >= imageList.length) {
+                    currentIndex = 0; // 이미지 리스트의 끝에 도달했다면 처음으로 돌아갑니다.
+                }
+                updateImage();
+                displayStatusMessage("Clear!");
+            }
+
+            // 'fail' 신호에 대한 처리 함수
+            function handleFail() {
+                // 현재 인덱스에 있는 이미지를 다시 띄우지만, 리스트의 인덱스는 증가시키지 않습니다.
+                updateImage();
+                displayStatusMessage("Fail!");
+            }
+
+            // 이미지를 갱신하는 함수
+            function updateImage() {
+                const imgElement = document.getElementById('posture-image');
+                imgElement.src = imageList[currentIndex];
+            }
+
+            // 상태 메시지를 표시하는 함수
+            function displayStatusMessage(message) {
+                statusMessageElement.textContent = message;
+                statusMessageElement.style.display = 'block';
+
+                // 메시지를 몇 초간 보여준 후 숨깁니다.
+                setTimeout(() => {
+                    statusMessageElement.style.display = 'none';
+                }, 3000); // 3초 후에 메시지를 숨깁니다.
+            }
+
+            // 모델에서 'Clear!' 신호를 받으면 호출되는 함수
+            function onModelClearSignal() {
+                // 다음 이미지로 넘어갑니다.
+                currentIndex = (currentIndex + 1) % imageList.length;
+                updateImage();
+                displayStatusMessage("잘했습니다! 다음 동작을 해보세요!");
+            }
+
+            // 모델에서 'Fail!' 신호를 받으면 호출되는 함수
+            function onModelFailSignal() {
+                // 현재 이미지를 다시 로드합니다.
+                updateImage();
+                displayStatusMessage("다시 해보세요!");
+            }
+
+            // 모델에서 신호를 받는 가상의 함수입니다.
+            // 실제 모델에서 신호를 받는 로직으로 교체해야 합니다.
+            function receiveSignalFromModel(signal) {
+                if (signal === 'Clear!') {
+                    onModelClearSignal();
+                } else if (signal === 'Fail!') {
+                    onModelFailSignal();
+                }
+            }
+
+            // 페이지 로드 시 랜덤 이미지 표시 함수를 호출합니다.
+            window.addEventListener('DOMContentLoaded', () => {
+                // 첫 번째 이미지를 랜덤하게 설정합니다.
+                currentIndex = Math.floor(Math.random() * imageList.length);
+                updateImage();
+            });
+
         </script>
+
+        <script src='{% static "assets/js/capture_game.js" %}'></script>
+        <!-- 웹캠 스트림을 가져오기 위한 JavaScript -->
+
     </body>
+</body>   
