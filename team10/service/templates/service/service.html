@@ -225,7 +225,7 @@
 								</style>
 								<div class="video-container">
 									<div id="video-wrapper">
-										<video id='video' poster="{% static 'assets/images/intro.png' %}"></video>
+										<video id='video' poster="{% static 'assets/images/su_final_swch.png' %}"></video>
 										<div id='posture-status'></div>
 									</div>
 									<div class="video-controls">
@@ -311,7 +311,12 @@
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
 			<script src='{% static "assets/js/capture.js" %}'></script>
-			<script src='{% static "assets/js/notification.js" %}'></script>
+			<script src='{% static "assets/js/game_noti.js" %}'></script>
+			<script type="text/javascript">
+				let iconUrl = "{% static 'assets/images/icons/자세경고아이콘.png' %}";
+				let gameiconUrl = "{% static 'assets/images/icons/스트레칭아이콘1.png' %}";
+			</script>
+			
 
 	</body>
 </html>
