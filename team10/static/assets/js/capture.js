@@ -287,6 +287,8 @@ function updatePostureStatusCounts(class_name) {
       }, 'image/png');
       console.log(streaming);
     } 
+
+    clearphoto();
   }   
 
 // var imageSrc = $("#previewImage").attr("src");
