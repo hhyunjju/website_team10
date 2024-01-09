@@ -235,7 +235,6 @@ def send_image_game(request):
                     
                     row_df = pd.DataFrame([row], columns=csv_columns) 
  
-                    print('여기까지는 도착')
                     # 자세 예측
                     prediction = stretching_model.predict(row_df)
                     class_name = prediction[0] # 여기를 DB로 넘김
@@ -265,7 +264,7 @@ def send_image_game(request):
         #         cv2.imwrite(processed_image_path, frame)  # 이미지 저장
         # return FileResponse(open(processed_image_path, 'rb'), content_type='image/png')
                 print('user id: ', request.user.id)
-                context = {'class_name':str(class_name), 'user_id':request.user.id}
+                context = {'class_name':str(class_name)}
         return JsonResponse(context)
 
 
