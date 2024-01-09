@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
 pose_model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
-stretching_model_path = os.path.join(os.getcwd(), 'service\pose_classification_model_stretch.pkl')
+stretching_model_path = os.path.join(os.getcwd(), 'service\pose_classification_model_stretch_final.pkl')
 stretching_model = joblib.load(stretching_model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
 
