@@ -52,7 +52,7 @@
                 width: 400px;
                 height: 550px;
                 border: 1px solid #ddd;
-                border-radius: 10px;
+                border-radius: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 background-color: white;
                 z-index: 1000;
@@ -62,10 +62,27 @@
             /* 챗봇 닫기 버튼 스타일링 */
             #close-chat {
                 position: absolute;
-                top: 10px;
-                right: 10px;
-                cursor: pointer;
+				top: 18px; /* 상단에서 적절한 위치 설정 */
+				right: 33px; /* 우측에서 적절한 위치 설정 */
+				background-color: #73928d; /* 챗봇 창 배경색과 동일하게 설정 */
+				color: white; /* 버튼 텍스트 색상 */
+				border: none;
+				border-radius: 50%;
+				width: 25px; /* 버튼 크기 조정 */
+				height: 25px; /* 버튼 크기 조정 */
+				text-align: center;
+				line-height: 25px; /* 버튼 높이에 맞게 텍스트를 중앙에 위치 */
+				cursor: pointer;
+				font-size: 20px; /* 텍스트 크기 조정 */
+				font-weight: bold; /* 텍스트 굵기 조정 */
+				box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 버튼 그림자 효과 */
+				transition: background-color 0.2s;
             }
+			
+			#close-button:hover {
+				background-color: #5c7a6d; /* 호버 시 배경색 변경 */
+			}
+			
 		</style>
 	</head>
 	<body class="is-preload">
