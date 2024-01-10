@@ -10,42 +10,42 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 추가적인 CSS 스타일 -->
     <style>
+        .game-main{
+            display:flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+        }
         .grid-container {
             gap: 10px;
-            min-height: 60vh; /* 뷰포트 높이의 80%를 차지하도록 설정 */
-            padding: 10px;
+            min-height: 55vh; /* 뷰포트 높이의 80%를 차지하도록 설정 */
+            padding: 40px 20px 20px 20px;
             display:flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            justify-content: space-evenly;
         }
-        .grid-item {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+
         .grid-item img {
             max-width: 100%;
             max-height: 100%;
+
         }
         video{
             height:400px !important;
             transform: rotateY(180deg);
             -webkit-transform:rotateY(180deg); /* Safari and Chrome */
             -moz-transform:rotateY(180deg); /* Firefox */
+            object-fit: cover;
+            /*left:11px; 
+            top:4px; 
+            position: relative;"*/
         }
-        .game-main{
-            display:flex;
-            flex-direction: column;
-        }
+
         #progressBarContainer{
-            width: 100%; 
+            width: 88%; 
             background-color: #eee;
             border-radius: 20px; 
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-            margin-top: 10px; /* 추가된 부분 */
+            margin: 15px 20px 25px 20px; /* 추가된 부분 */
         }
         #progressBar{
             width: 0%; 
@@ -53,6 +53,50 @@
             background: linear-gradient(to right, #84fab0 0%, #8fd3f4 100%); 
             border-radius: 20px;
             transition: width 0.5s ease-in-out;
+        }
+        .video-container {
+            height:400px !important;
+            position: relative;
+            background-color: black;
+        }
+        
+        #count {
+            position: absolute;
+            top: 10px; /* 비디오 상단으로부터의 거리 */
+            right: 10px; /* 비디오 오른쪽으로부터의 거리 */
+            background-color: #000; /* 배경색 */
+            color: #fff; /* 글자색 */
+            border-radius: 50%; /* 원형 모양 */
+            width: 50px; /* 너비 */
+            height: 50px; /* 높이 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px; /* 글자 크기 */
+        }
+        #bigcount {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 5em; /* 크기는 적절하게 조정하세요 */
+        }
+        #subscription{
+            width: 100%;
+            text-align: center;
+        }
+        #subscription, #progressBarContainer {
+            align-self: center; /* Flex 아이템을 각각 중앙으로 정렬합니다. */
+        }
+        #successcount{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ff00; /* 녹색 */
+            font-size: 3em; /* 글자 크기 */
+            z-index: 10; /* 다른 요소들 위에 표시 */
         }
     </style>
 </head>
@@ -191,17 +235,19 @@
                 <div id="webcam" class="grid-item">
                     <!-- 웹캠 출력을 위한 HTML 요소 -->
                     <div class="video-container">
-                        <video id='video' poster="{% static 'assets/images/game_loading_swch.png' %}" style="left:11px; top:4px; position: relative;"></video>
-                        {% comment %} <div id='posture-status' style="color: lime; position: relative; left:10px; top: -70px;"></div> {% endcomment %}
+                        <video id='video'></video>
+                        <div id='posture-status'  style="visibility:hidden;"></div>
                         <div id='count'></div>
-                        <div id='subscription'></div>
+                        <div id='bigcount'></div>
+                        <div id='successcount'></div>
                         <canvas id="canvas" visibility: hidden></canvas>
                         <div class="output">
-                        {% comment %} <img id="photo" visibility: hidden> {% endcomment %}
+                        <img id="photo" visibility: hidden>
                         </div>
                     </div>
                 </div>
             </div>
+            <div id='subscription'></div>
             <div id="progressBarContainer">
                 <div id="progressBar">
                 </div>

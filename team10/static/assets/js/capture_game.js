@@ -88,6 +88,7 @@
     function startVideo() {
       video.play();
       streamingStatus = true;
+      jQuery("#bigcount").hide();
       // sendImg = setInterval(sendImage, 3000);
     }
 
@@ -175,7 +176,8 @@
       console.log(streaming);
     }
 
-// ######################################################## Timer
+// ----------------------- Timer ----------------------------------
+//10초에 사용하는 타이머(스트레칭)
     function TIMER(time, min, sec){
       PLAYTIME=setInterval(function(){
             time=time-1000; //1초씩 줄어듦
@@ -193,17 +195,45 @@
                 jQuery("#count").html('0');
             }    
             if($('#count').html()=='0'){
-              jQuery("#count").html('시간 종료');
+              if(!stretchingAgain){
+                jQuery("#successcount").html('SUCCESS');
+              } else{jQuery("#successcount").html('Time Out');}
             } 
         
         },1000); //1초마다 
     }
-    //myTimer함수
+
+//5초에 사용하는 타이머(대기)
+//TIMER FOR BIGCOUNT
+function BIGTIMER(time, min, sec){
+  PLAYTIME=setInterval(function(){
+        time=time-1000; //1초씩 줄어듦
+        min=time/(60*1000); //초를 분으로 나눠준다.
+
+       if(sec>0){ //sec=60 에서 1씩 빼서 출력해준다.
+            sec=sec-1;
+            jQuery("#bigcount").html(sec);//화면에 표시
+           
+        }
+        if(sec===0){
+           // 0에서 -1을 하면 -59가 출력된다.
+            // 그래서 0이 되면 바로 sec을 60으로 돌려주고 value에는 0을 출력하도록 해준다.
+            sec=60;
+            jQuery("#bigcount").html('0');
+        }    
+        if($('#bigcount').html()=='0'){
+          jQuery("#bigcount").html('START');
+        } 
+    
+    },1000); //1초마다 
+}
+
+    //5초에 사용하는 함수
     function myTimer(sen, time, m, s) {
       return new Promise(resolve => {
-        jQuery("#count").html(s);
+        jQuery("#bigcount").html(s);
         jQuery("#subscription").html(sen);
-        TIMER(time,m,s);
+        BIGTIMER(time,m,s);
         setTimeout(() => {
           clearInterval(PLAYTIME);
           resolve();
@@ -211,22 +241,26 @@
       });
     }
 
-    function myTimer2(sen, time, m, s) {
-      return new Promise(resolve => {
-        jQuery("#count").html(s);
-        jQuery("#subscription").html(sen);
-        TIMER(time,m,s);
-        var sendimg = setInterval(sendImage, 1000); //
-        setTimeout(() => {
-          clearInterval(sendimg); //
-          clearInterval(PLAYTIME);
-          resolve();
-      }, time);
-      });
-    }
-    //-------------myTimerWithProgressBar: myTimer2 수정
+    //10초에 사용하는 함수 => myTimerWithProgressBar로 대체
+    // function myTimer2(sen, time, m, s) {
+    //   return new Promise(resolve => {
+    //     jQuery("#count").html(s);
+    //     jQuery("#subscription").html(sen);
+    //     TIMER(time,m,s);
+    //     var sendimg = setInterval(sendImage, 1000); //
+    //     setTimeout(() => {
+    //       clearInterval(sendimg); //
+    //       clearInterval(PLAYTIME);
+    //       resolve();
+    //   }, time);
+    //   });
+    // }
+    
+    //------------10초에 사용하는 함수
+    //------------- myTimer2 수정(progressbar 포함 & sendimg)
     function myTimerWithProgressBar(sen, time, m, s) {
       return new Promise(resolve => {
+        jQuery("#successcount").empty();
         jQuery("#count").html(s);
         jQuery("#subscription").html(sen);
         TIMER(time, m, s);
@@ -261,7 +295,7 @@
 
 
 
-    //-------------
+    //--------------------------------------------------------
     function mySendImage(){
       return new Promise(resolve => {
         sendImage();
@@ -285,7 +319,7 @@
         setTimeout(() => {
           stopVideo();
           resolve();
-      }, 2000);
+      }, 3000);
       });
     }
 
@@ -341,7 +375,7 @@
     }
 
 
-    // //시간 경과 이벤트 함수
+    // //시간 경과 이벤트 함수 => stretchingGame() 으로 대체
     // function gameOneSet(){
     //   myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
     //     .then(() => {
@@ -362,6 +396,6 @@
 // var imageSrc = $("#previewImage").attr("src");
   
     // Set up our event listener to run the startup process
-    // once loading is complete.
+    // once loading is complete. // 위치 중요 (가장 마지막단)
     window.addEventListener('load', startup, false);
 
