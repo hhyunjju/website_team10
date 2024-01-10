@@ -3,40 +3,224 @@
 
 {% block title %}바른자세 게시판{% endblock title %}
 {% block content %}
+<!--새 글 쓰기 및 검색하기-->
+<form action="" method='get'>
+	{% csrf_token %}
+	<br>
+	검색어 : <input type='text' name='keyword' value='{{q|default:""}}'>
+	<br>
+	<input type='submit' value='검색'>
+</form>
+<p align='right'><a href='{% url "brd:create" %}' class="new-post-button">새 글 쓰기</a></p>
+<style>
+	.new-post-button {
+		display: inline-block;
+		padding: 10px 15px;
+		background-color: #4CAF50; /* 버튼 색상 */
+		color: white; /* 텍스트 색상 */
+		text-decoration: none; /* 밑줄 없애기 */
+		border-radius: 5px; /* 둥근 모서리 */
+		font-weight: bold; /* 글씨 굵게 */
+		transition: background-color 0.3s; /* 호버 효과 */
+	}
+	
+	.new-post-button:hover {
+		background-color: #45a049; /* 호버 시 색상 변경 */
+	}
+</style>
 <!-- Main -->
-	<div id="main">
-		<!-- Post -->
-			<article class="post">
-				
-				<h1>Post 목록</h1>
-					<form action="" method='get'>
-						{% csrf_token %}
-						<br>
-						검색어 : <input type='text' name='keyword' value='{{q|default:""}}'>
-						<br>
-						<input type='submit' value='검색'>
-					</form>
+<div id="main">
+	<!-- Post -->
+		<article class="post">
+			<div id="tab-container">
+				<!-- 탭 메뉴 -->
+				<div class="tab-menu">
+					<div class="tab" onclick="showContent('notice')">사용방법</div>
+					<div class="tab" onclick="showContent('faq')">FAQ</div>
+				</div>
 
-					{% for post in post_all %}
+				<!-- 공지사항 섹션 -->
+				<div id="notice" class="content">
+					<!-- 여기에 서버에서 가져온 공지사항 항목들이 들어갑니다. -->
+					<p>1. 일일 통계 결과지를 새 글 쓰기를 통해 업로드 하세요</p>
+					<p>2. 다른 사람들의 자세에 대해 확인하고 질문해보세요. 댓글 작성이 가능합니다.</p>
+					<p>3. 서로 소통하면서 꿀팁을 공유해보세요!</p>
+				</div>
+
+				<!-- FAQ 섹션 -->
+				<div id="faq" class="content">
+					<!-- 여기에 서버에서 가져온 FAQ 항목들이 들어갑니다. -->
+					<ul>
+						<p>Q 바른 자세 모니터링은 어떤 서비스인가요?</p>
+						<p>Q 통계 페이지는 어떻게 해석 하나요?</p>	
+						<p>Q 카메라가 안 켜져요?</p>
+						<p>Q 스트레칭에서 방법을 잘 모르겠어요?</p>
+						<p>Q 게시물 작성하는 법을 모르겠어요?</p>
+						<p>Q 로그인을 해야 서비스 이용이 가능한가요?</p>
+						<p>Q 제 개인 사진이나 영상이 저장되는 건가요?</p>
+						<p>Q 파일 업로드해서 어떻게 사용하나요?</p>
+					</ul>
+				</div>
+
+				<!-- 목록 리스트 섹션, 탭 아래 항상 표시 -->
+				<div id="list-section">
+					<!-- 여기에 서버에서 가져온 목록 항목들이 들어갑니다. -->
+					<ul>
+						{% for post in post_all %}
 						- <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
-					{% endfor %}
-					<p align='right'><a href='{% url "brd:create" %}' class="new-post-button">새 글 쓰기</a></p>
-					<style>
-						.new-post-button {
-							display: inline-block;
-							padding: 10px 15px;
-							background-color: #4CAF50; /* 버튼 색상 */
-							color: white; /* 텍스트 색상 */
-							text-decoration: none; /* 밑줄 없애기 */
-							border-radius: 5px; /* 둥근 모서리 */
-							font-weight: bold; /* 글씨 굵게 */
-							transition: background-color 0.3s; /* 호버 효과 */
-						}
-						
-						.new-post-button:hover {
-							background-color: #45a049; /* 호버 시 색상 변경 */
-						}
-					</style>
-			</article>
+						{% endfor %}
+					</ul>
+					 <!-- 페이징 -->
+					 <div class="page">
+						<ul class="pagination modal">
+							{% if posts.has_previous %}
+								<li><a href="?page=1" class="first">처음</a></li>
+								<li><a href="?page={{ posts.previous_page_number }}" class="arrow left"><<</a></li>
+							{% endif %}
+				
+							{% for num in posts.paginator.page_range %}
+								{% if posts.number == num %}
+									<li><a href="?page={{ num }}" class="active">{{ num }}</a></li>
+								{% else %}
+									<li><a href="?page={{ num }}">{{ num }}</a></li>
+								{% endif %}
+							{% endfor %}
+				
+							{% if posts.has_next %}
+								<li><a href="?page={{ posts.next_page_number }}" class="arrow right">>></a></li>
+								<li><a href="?page={{ posts.paginator.num_pages }}" class="last">마지막</a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			<style>
+				body {
+					font-family: Arial, sans-serif;
+					margin: 0;
+					padding: 0;
+					background-color: #f5f5f5;
+				}
+				.search-and-create {
+					text-align: right;
+					margin-bottom: 20px;
+				}
+				.tab-menu {
+					display: flex;
+					justify-content: center;
+					margin-top: 20px;
+				}
+				.tab {
+					padding: 10px 20px;
+					margin: 0 5px;
+					cursor: pointer;
+					border: 1px solid #ddd;
+					background-color: #f9f9f9;
+				}
+				.tab.active {
+					background-color: #eee;
+				}
+				.tab-contents > .content {
+					display: none;
+					/* 스타일 설정은 여기에 유지 */
+				}
+				.content {
+					width: 100%;
+					margin: 20px auto;
+					padding: 20px;
+					border: 1px solid #ddd;
+					background-color: #fff;
+					display: none;
+				}
+				.content.active {
+					display: block;
+				}
+				.pagination {
+					text-align: center;
+					margin-top: 20px;
+				}
+				.pagination span {
+					margin: 0 5px;
+					padding: 5px 10px;
+					border: 1px solid #ccc;
+					cursor: pointer;
+				}
+				.pagination li {
+					display: inline;
+				}
+				
+				.pagination li a {
+					text-decoration: none;
+					padding: 5px 10px;
+					border: 1px solid #ddd;
+					margin: 2px;
+				}
+				
+				.pagination li a.first, 
+				.pagination li a.last, 
+				.pagination li a.arrow {
+					background-color: #f4f4f4;
+				}
+				
+				.pagination li a.active {
+					background-color: #007bff;
+					color: white;
+				}
+				.new-post-button {
+					display: inline-block;
+					padding: 10px 15px;
+					background-color: #4CAF50;
+					color: white;
+					text-decoration: none;
+					border-radius: 5px;
+					font-weight: bold;
+					transition: background-color 0.3s;
+				}
+				.new-post-button:hover {
+					background-color: #45a049;
+				}
+			</style>
+			<script>
+				window.onload = function() {
+					// 탭 클릭 이벤트 핸들러
+					document.querySelectorAll('.page-tab li').forEach(function(tab) {
+						tab.addEventListener('click', function() {
+							// 모든 탭의 'on' 클래스 제거
+							document.querySelectorAll('.page-tab li').forEach(function(tab) {
+								tab.classList.remove('on');
+							});
+							// 클릭된 탭에 'on' 클래스 추가
+							this.classList.add('on');
+							
+							// 모든 섹션을 숨기고
+							document.querySelectorAll('.tab-content').forEach(function(section) {
+								section.style.display = 'none';
+							});
+							// 클릭된 탭에 해당하는 섹션을 보여줌
+							var activeTab = this.textContent.trim();
+							document.getElementById(activeTab.toLowerCase() + '-section').style.display = 'block';
+						});
+					});
+				};
+				function showContent(tabId) {
+					// 모든 탭의 내용을 비활성화
+					document.querySelectorAll('.content').forEach(function(content) {
+						content.classList.remove('active');
+					});
+			
+					// 모든 탭 메뉴를 비활성화
+					document.querySelectorAll('.tab').forEach(function(tab) {
+						tab.classList.remove('active');
+					});
+			
+					// 선택된 탭의 내용을 활성화
+					document.getElementById(tabId).classList.add('active');
+					document.querySelector('.tab[onclick="showContent(\'' + tabId + '\')"]').classList.add('active');
+				}
+			
+				function goToPage(direction) {
+					// 페이징 로직을 추가하세요. 예: AJAX를 사용하여 페이지를 로드
+				}
+			</script>					
+		</article>
 	</div>
 {% endblock content %}
