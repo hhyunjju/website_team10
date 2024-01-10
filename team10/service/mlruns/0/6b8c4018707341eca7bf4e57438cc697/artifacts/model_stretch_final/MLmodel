@@ -1,4 +1,4 @@
-artifact_path: model_pose_final
+artifact_path: model_stretch_final
 flavors:
   python_function:
     env:
@@ -14,7 +14,7 @@ flavors:
     serialization_format: cloudpickle
     sklearn_version: 1.2.2
 mlflow_version: 2.9.2
-model_size_bytes: 795244
-model_uuid: bb1be96b1c4a44deb783e4da7da5fcda
-run_id: 53155daa80eb44c9a2a22970363a7259
-utc_time_created: '2024-01-10 08:46:54.777197'
+model_size_bytes: 1292365
+model_uuid: cf13b45949e748bcb7c97fc4ab6556a9
+run_id: 6b8c4018707341eca7bf4e57438cc697
+utc_time_created: '2024-01-10 12:28:26.996448'

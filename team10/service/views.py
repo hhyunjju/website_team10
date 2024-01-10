@@ -23,7 +23,7 @@ from django.contrib.auth.decorators import login_required
 mlflow.set_tracking_uri("file:///C:/Users/user/big project/Test_final/team10/team10/service/mlruns")
 
 # run ID와 모델 이름 설정
-run_id_pose = "53155daa80eb44c9a2a22970363a7259"
+run_id_pose = "6b8c4018707341eca7bf4e57438cc697"
 model_name_pose = "model_pose_final"
 
 # 포즈 모델을 불러오는 코드
@@ -31,7 +31,7 @@ model_uri_pose = f"runs:/{run_id_pose}/{model_name_pose}"
 pose_model = mlflow.sklearn.load_model(model_uri_pose)
 
 # run ID와 모델 이름 설정
-run_id_stretch = "53155daa80eb44c9a2a22970363a7259"
+run_id_stretch = "6b8c4018707341eca7bf4e57438cc697"
 model_name_stretch = "model_stretch_final"
 
 # 스트레칭 모델을 불러오는 코드
