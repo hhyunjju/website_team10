@@ -52,7 +52,7 @@
                 width: 400px;
                 height: 550px;
                 border: 1px solid #ddd;
-                border-radius: 10px;
+                border-radius: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 background-color: white;
                 z-index: 1000;
@@ -62,10 +62,27 @@
             /* 챗봇 닫기 버튼 스타일링 */
             #close-chat {
                 position: absolute;
-                top: 10px;
-                right: 10px;
-                cursor: pointer;
+				top: 18px; /* 상단에서 적절한 위치 설정 */
+				right: 33px; /* 우측에서 적절한 위치 설정 */
+				background-color: #73928d; /* 챗봇 창 배경색과 동일하게 설정 */
+				color: white; /* 버튼 텍스트 색상 */
+				border: none;
+				border-radius: 50%;
+				width: 25px; /* 버튼 크기 조정 */
+				height: 25px; /* 버튼 크기 조정 */
+				text-align: center;
+				line-height: 25px; /* 버튼 높이에 맞게 텍스트를 중앙에 위치 */
+				cursor: pointer;
+				font-size: 20px; /* 텍스트 크기 조정 */
+				font-weight: bold; /* 텍스트 굵기 조정 */
+				box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 버튼 그림자 효과 */
+				transition: background-color 0.2s;
             }
+			
+			#close-button:hover {
+				background-color: #5c7a6d; /* 호버 시 배경색 변경 */
+			}
+			
 		</style>
 	</head>
 	<body class="is-preload">
@@ -410,41 +427,21 @@
 								</div>
 								<script>
 									function openPrivacyPolicy() {
-										var privacyWindow = window.open('', 'Privacy Policy', 'width=600,height=400');
-										privacyWindow.document.write('<html><head><title>개인정보처리방침</title></head><body>');
-										privacyWindow.document.write('<h1>개인정보처리방침</h1>');
-										privacyWindow.document.write('<p>여기에 개인정보처리방침 내용을 작성합니다.</p>');
-										privacyWindow.document.write('</body></html>');
-										privacyWindow.document.close();
+										window.open('{% url 'home:privacy_policy' %}', 'Privacy Policy', 'width=600,height=400');
 									}
 									
 									function openTermsOfService() {
-										var termsWindow = window.open('', 'Terms of Service', 'width=600,height=400');
-										termsWindow.document.write('<html><head><title>이용약관</title></head><body>');
-										termsWindow.document.write('<h1>이용약관</h1>');
-										termsWindow.document.write('<p>여기에 이용약관 내용을 작성합니다.</p>');
-										termsWindow.document.write('</body></html>');
-										termsWindow.document.close();
+										window.open('{% url 'home:terms_of_service' %}', 'Terms of Service', 'width=600,height=400');
 									}
-								
+									
 									function openFaq() {
-										var faqWindow = window.open('', 'FAQ', 'width=600,height=400');
-										faqWindow.document.write('<html><head><title>자주묻는질문</title></head><body>');
-										faqWindow.document.write('<h1>자주묻는질문</h1>');
-										faqWindow.document.write('<p>여기에 자주묻는질문 내용을 작성합니다.</p>');
-										faqWindow.document.write('</body></html>');
-										faqWindow.document.close();
+										window.open('{% url 'brd:faq' %}', 'FAQ', 'width=600,height=400');
 									}
 									
 									function openDataPolicy() {
-										var dataPolicyWindow = window.open('', 'Data Policy', 'width=600,height=400');
-										dataPolicyWindow.document.write('<html><head><title>데이터베이스이용약관</title></head><body>');
-										dataPolicyWindow.document.write('<h1>데이터베이스이용약관</h1>');
-										dataPolicyWindow.document.write('<p>여기에 데이터베이스이용약관 내용을 작성합니다.</p>');
-										dataPolicyWindow.document.write('</body></html>');
-										dataPolicyWindow.document.close();
+										window.open('{% url 'home:data_policy' %}', 'Data Policy', 'width=600,height=400');
 									}
-								</script>										
+								</script>																		
 								<p class="copyright">
 									<a href="https://aivle.edu.kt.co.kr/home/main/goMenuPage?mcd=MC00000034">KT Aivle School</a> Designed by Aivle 4기 10조.
 								</p>

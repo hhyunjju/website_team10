@@ -251,48 +251,28 @@
 							<li><a href="mailto:your@email.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
 						</ul>
 						<div class="policy-links">
-                            | <a href="javascript:void(0);" onclick="openPrivacyPolicy();">개인정보처리방침</a>
-                            | <a href="javascript:void(0);" onclick="openTermsOfService();">이용약관</a>
-                            | <a href="javascript:void(0);" onclick="openFaq();">자주묻는질문</a>
-                            | <a href="javascript:void(0);" onclick="openDataPolicy();">데이터베이스이용약관</a> |
-                        </div>
-                        <script>
-                            function openPrivacyPolicy() {
-                                var privacyWindow = window.open('', 'Privacy Policy', 'width=600,height=400');
-                                privacyWindow.document.write('<html><head><title>개인정보처리방침</title></head><body>');
-                                privacyWindow.document.write('<h1>개인정보처리방침</h1>');
-                                privacyWindow.document.write('<p>여기에 개인정보처리방침 내용을 작성합니다.</p>');
-                                privacyWindow.document.write('</body></html>');
-                                privacyWindow.document.close();
-                            }
-                            
-                            function openTermsOfService() {
-                                var termsWindow = window.open('', 'Terms of Service', 'width=600,height=400');
-                                termsWindow.document.write('<html><head><title>이용약관</title></head><body>');
-                                termsWindow.document.write('<h1>이용약관</h1>');
-                                termsWindow.document.write('<p>여기에 이용약관 내용을 작성합니다.</p>');
-                                termsWindow.document.write('</body></html>');
-                                termsWindow.document.close();
-                            }
-                        
-                            function openFaq() {
-                                var faqWindow = window.open('', 'FAQ', 'width=600,height=400');
-                                faqWindow.document.write('<html><head><title>자주묻는질문</title></head><body>');
-                                faqWindow.document.write('<h1>자주묻는질문</h1>');
-                                faqWindow.document.write('<p>여기에 자주묻는질문 내용을 작성합니다.</p>');
-                                faqWindow.document.write('</body></html>');
-                                faqWindow.document.close();
-                            }
-                            
-                            function openDataPolicy() {
-                                var dataPolicyWindow = window.open('', 'Data Policy', 'width=600,height=400');
-                                dataPolicyWindow.document.write('<html><head><title>데이터베이스이용약관</title></head><body>');
-                                dataPolicyWindow.document.write('<h1>데이터베이스이용약관</h1>');
-                                dataPolicyWindow.document.write('<p>여기에 데이터베이스이용약관 내용을 작성합니다.</p>');
-                                dataPolicyWindow.document.write('</body></html>');
-                                dataPolicyWindow.document.close();
-                            }
-                        </script>                        
+							| <a href="javascript:void(0);" onclick="openPrivacyPolicy();">개인정보처리방침</a>
+							| <a href="javascript:void(0);" onclick="openTermsOfService();">이용약관</a>
+							| <a href="javascript:void(0);" onclick="openFaq();">자주묻는질문</a>
+							| <a href="javascript:void(0);" onclick="openDataPolicy();">데이터베이스이용약관</a> |
+						</div>
+						<script>
+							function openPrivacyPolicy() {
+								window.open('{% url 'home:privacy_policy' %}', 'Privacy Policy', 'width=600,height=400');
+							}
+							
+							function openTermsOfService() {
+								window.open('{% url 'home:terms_of_service' %}', 'Terms of Service', 'width=600,height=400');
+							}
+							
+							function openFaq() {
+								window.open('{% url 'brd:faq' %}', 'FAQ', 'width=600,height=400');
+							}
+							
+							function openDataPolicy() {
+								window.open('{% url 'home:data_policy' %}', 'Data Policy', 'width=600,height=400');
+							}
+						</script>                        
 						<p class="copyright">
 							<a href="https://aivle.edu.kt.co.kr/home/main/goMenuPage?mcd=MC00000034">KT Aivle School</a> Designed by Aivle 4기 10조.
 						</p>
