@@ -42,33 +42,18 @@
 							<!-- 로그인 모델 -->
 								<div id="loginModal" class="modal">
 									<div class="modal-content">
-										<form method="post" action="" class="login-form">
-											{% csrf_token %}
-											<table>
-												{{form.as_table}}
-											</table>
-											{% comment %} <div class="form-group">
-											<label for="username"><b>사용자 ID</b></label>
-											<input type="text" placeholder="사용자 ID 입력" name="username" required>
-											</div>
-											<div class="form-group">
-											<p> </p>
-											<label for="password"><b>비밀번호</b></label>
-											<input type="password" placeholder="비밀번호 입력" name="password" required>
-											</div> {% endcomment %}
-											<div class="form-group">
-												{% comment %} <div id="error-message" style="display: none; color: #FF6B6B; background-color: #FFD6D6; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
-													아이디나 비밀번호가 틀렸습니다.
-												</div>
-												<p> </p>
-												<button type="submit" class="login-button">로그인</button> {% endcomment %}
-												<input type="submit" value="로그인" class="form-button">
-												<button type="submit" class="form-button"><a href="{% url 'accounts:signup' %}">회원가입</button>
-											</div>
+										<div class="form-group">
+											<form method="post" action="" class="login-form">
+												{% csrf_token %}
+												<table>
+													{{form.as_table}}
+												</table>
+													<input type="submit" value="로그인" class="form-button">
+											</form>
+												<button type="submit" class="form-button"><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></button>
 												<form action="{% provider_login_url 'google' %}?next={% url 'home:home' %}" method="post">
 													{% csrf_token %}
 													<button class="social_login_button" style="line-height: 0; padding:0;">
-														{% comment %} <span>Google계정으로 계속</span> {% endcomment %}
 														<img src="{% static 'assets/images/web_neutral_rd_ctn@1x.png' %}">
 													</button>
 												</form>
@@ -78,12 +63,14 @@
 														<img src="{% static 'assets/images/btnG_official.png' %}" style="height:40px;">
 													</button>
 												</form> 
-											<div class="links">
+										</div>
+
+											{% comment %} <div class="links">
 												|<a href="javascript:void(0);" onclick="window.open('idFind.html', '_blank', 'height=600,width=600');">아이디 찾기</a> | 
 												<a href="javascript:void(0);" onclick="window.open('passwordRecovery.html', '_blank', 'height=600,width=600');">비밀번호 찾기</a> | 
 												
-											</div>									  
-										</form>
+											</div>									   {% endcomment %}
+										
 									</div>
 								</div>
 						<style>
