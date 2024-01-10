@@ -35,12 +35,12 @@
 			<div id="tab-container">
 				<!-- 탭 메뉴 -->
 				<div class="tab-menu">
-					<div class="tab" onclick="showContent('notice')">사용방법</div>
-					<div class="tab" onclick="showContent('faq')">FAQ</div>
+					<div class="tab" data-target="notice-section" onclick="showContent('notice')">사용방법</div>
+					<div class="tab" data-target="faq-section" onclick="showContent('faq')">FAQ</div>
 				</div>
 
 				<!-- 공지사항 섹션 -->
-				<div id="notice" class="content">
+				<div id="notice-section" class="content">
 					<!-- 여기에 서버에서 가져온 공지사항 항목들이 들어갑니다. -->
 					<p>1. 일일 통계 결과지를 새 글 쓰기를 통해 업로드 하세요</p>
 					<p>2. 다른 사람들의 자세에 대해 확인하고 질문해보세요. 댓글 작성이 가능합니다.</p>
@@ -48,7 +48,7 @@
 				</div>
 
 				<!-- FAQ 섹션 -->
-				<div id="faq" class="content">
+				<div id="faq-section" class="content">
 					<!-- 여기에 서버에서 가져온 FAQ 항목들이 들어갑니다. -->
 					<ul>
 						<p>Q 바른 자세 모니터링은 어떤 서비스인가요?</p>
@@ -67,9 +67,10 @@
 					<!-- 여기에 서버에서 가져온 목록 항목들이 들어갑니다. -->
 					<ul>
 						{% for post in post_all %}
-						- <a href='/brd/{{post.id}}'>{{post.title}}</a><br>
+						<li>{{ forloop.counter }}. <a href='/brd/{{ post.id }}'>{{ post.title }}</a></li>
 						{% endfor %}
 					</ul>
+					
 					 <!-- 페이징 -->
 					 <div class="page">
 						<ul class="pagination modal">
@@ -106,15 +107,23 @@
 				}
 				.tab-menu {
 					display: flex;
-					justify-content: center;
-					margin-top: 20px;
+					justify-content: space-around; /* 탭 간격을 균등하게 설정 */
+					margin: 0 auto; /* 가운데 정렬 */
+					max-width: auto; /* 탭 메뉴의 최대 너비를 설정 */
 				}
 				.tab {
-					padding: 10px 20px;
-					margin: 0 5px;
+					flex-grow: 1; /* 각 탭이 사용 가능한 공간을 균등하게 차지하도록 설정 */
+					text-align: center; /* 탭 내 텍스트를 가운데 정렬 */
+					padding: 10px 0; /* 탭의 상하 패딩 설정 */
 					cursor: pointer;
 					border: 1px solid #ddd;
+					margin: 0 5px; /* 탭 사이의 마진 설정 */
 					background-color: #f9f9f9;
+					transition: background-color 0.3s; /* 배경색 변경시 트랜지션 효과 적용 */
+				}
+				.tab:hover, .tab.active {
+					background-color: #4CAF50; /* 호버 혹은 활성 탭의 배경색 */
+					color: white; /* 호버 혹은 활성 탭의 텍스트 색상 */
 				}
 				.tab.active {
 					background-color: #eee;
@@ -182,41 +191,43 @@
 			<script>
 				window.onload = function() {
 					// 탭 클릭 이벤트 핸들러
-					document.querySelectorAll('.page-tab li').forEach(function(tab) {
+					document.querySelectorAll('.tab').forEach(function(tab) {
 						tab.addEventListener('click', function() {
-							// 모든 탭의 'on' 클래스 제거
-							document.querySelectorAll('.page-tab li').forEach(function(tab) {
-								tab.classList.remove('on');
-							});
-							// 클릭된 탭에 'on' 클래스 추가
-							this.classList.add('on');
-							
-							// 모든 섹션을 숨기고
-							document.querySelectorAll('.tab-content').forEach(function(section) {
-								section.style.display = 'none';
-							});
-							// 클릭된 탭에 해당하는 섹션을 보여줌
-							var activeTab = this.textContent.trim();
-							document.getElementById(activeTab.toLowerCase() + '-section').style.display = 'block';
+							var currentContent = document.getElementById(tab.getAttribute('data-target'));
+							if (currentContent.classList.contains('active')) {
+								// 현재 활성화된 탭을 다시 클릭하면 섹션을 숨깁니다.
+								currentContent.classList.remove('active');
+								currentContent.style.display = 'none';
+								tab.classList.remove('active');
+							} else {
+								// 모든 탭의 'active' 클래스 제거
+								document.querySelectorAll('.tab').forEach(function(otherTab) {
+									otherTab.classList.remove('active');
+								});
+				
+								// 모든 섹션을 숨기고
+								document.querySelectorAll('.content').forEach(function(section) {
+									section.style.display = 'none';
+									section.classList.remove('active');
+								});
+				
+								// 클릭된 탭에 'active' 클래스 추가
+								tab.classList.add('active');
+								currentContent.classList.add('active');
+								currentContent.style.display = 'block';
+							}
 						});
 					});
 				};
-				function showContent(tabId) {
-					// 모든 탭의 내용을 비활성화
-					document.querySelectorAll('.content').forEach(function(content) {
-						content.classList.remove('active');
-					});
-			
-					// 모든 탭 메뉴를 비활성화
-					document.querySelectorAll('.tab').forEach(function(tab) {
-						tab.classList.remove('active');
-					});
-			
-					// 선택된 탭의 내용을 활성화
-					document.getElementById(tabId).classList.add('active');
-					document.querySelector('.tab[onclick="showContent(\'' + tabId + '\')"]').classList.add('active');
+				
+				function showContent(contentId) {
+					var content = document.getElementById(contentId);
+					if (content.style.display === 'block') {
+						content.style.display = 'none';
+					} else {
+						content.style.display = 'block';
+					}
 				}
-			
 				function goToPage(direction) {
 					// 페이징 로직을 추가하세요. 예: AJAX를 사용하여 페이지를 로드
 				}
