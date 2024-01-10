@@ -75,6 +75,8 @@
         // startVideo();
 
         // gameOneSet();
+        $("#timer2_d").css('visibility', 'hidden');
+        $("#subscription").css('visibility', 'hidden');
         stretchingGame();
 
         clearphoto();
@@ -176,7 +178,7 @@
     }
 
 // ######################################################## Timer
-    function TIMER(time, min, sec){
+    function TIMER(time, min, sec, count_id){
       PLAYTIME=setInterval(function(){
             time=time-1000; //1초씩 줄어듦
             min=time/(60*1000); //초를 분으로 나눠준다.
@@ -184,6 +186,7 @@
            if(sec>0){ //sec=60 에서 1씩 빼서 출력해준다.
                 sec=sec-1;
                 jQuery("#count").html(sec);
+                jQuery(count_id).html(sec);
                
             }
             if(sec===0){
@@ -191,22 +194,29 @@
                 // 그래서 0이 되면 바로 sec을 60으로 돌려주고 value에는 0을 출력하도록 해준다.
                 sec=60;
                 jQuery("#count").html('0');
+                jQuery(count_id).html('0');
             }    
             if($('#count').html()=='0'){
               jQuery("#count").html('시간 종료');
+              jQuery(count_id).html('0');
             } 
             
        
         },1000); //1초마다 
     }
 
+
+
     function myTimer(sen, time, m, s) {
       return new Promise(resolve => {
+        var count_id = '#count2'
         jQuery("#count").html(s);
-        jQuery("#subscription").html(sen);
-        TIMER(time,m,s);
+        $("#timer1_d").css('visibility', 'visible');
+        jQuery(count_id).html(s);
+        TIMER(time,m,s,count_id);
         setTimeout(() => {
           clearInterval(PLAYTIME);
+          $("#timer1_d").css('visibility', 'hidden');
           resolve();
       }, time);
       });
@@ -214,13 +224,16 @@
 
     function myTimer2(sen, time, m, s) {
       return new Promise(resolve => {
+        var count_id = '#count3'
         jQuery("#count").html(s);
-        jQuery("#subscription").html(sen);
-        TIMER(time,m,s);
+        $("#timer2_d").css('visibility', 'visible');
+        jQuery(count_id).html(s);
+        TIMER(time,m,s, count_id);
         var sendimg = setInterval(sendImage, 1000);
         setTimeout(() => {
           clearInterval(sendimg);
           clearInterval(PLAYTIME);
+          $("#timer2_d").css('visibility', 'hidden');
           resolve();
       }, time);
       });
@@ -255,8 +268,9 @@
 
     function tryAgain() {
       return new Promise(resolve => {
-        var sentence = '맞을 때까지 나갈 수 없습니다.\n 다시 해 보세요';
-        jQuery("#subscription").html(sentence);
+        // var sentence = '맞을 때까지 나갈 수 없습니다.\n 다시 해 보세요';
+        // jQuery("#subscription").html(sentence);
+        console.log("tryAgain");
         answer = [];
         failSignal();
         resolve();
@@ -286,17 +300,22 @@
     }
 
     async function stretchingGame(){
+      $("#timer1_d").css('visibility', 'visible');
       await myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5);
       console.log('5초 타이머');
       await myStartVideo();
       console.log('비디오 시작');
+      $("#timer2_d").css('visibility', 'visible');
       await myTimer2('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
       console.log('10초 타이머');
       await myAnswer();
       console.log('정답 호출');
       while(stretchingAgain){
+        $("#subscription").css('visibility', 'visible');
         await tryAgain();
         await sleep(1500);
+        $("#subscription").css('visibility', 'hidden');
+        $("#timer2_d").css('visibility', 'visible');
         await myTimer2('왼쪽의 동작을 10초 동안 다시 따라해주세요.', 10000, 0, 10);
         console.log('10초 타이머 재시작');
         await myAnswer();
