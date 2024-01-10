@@ -24,5 +24,14 @@ function makeGameNoti() {
     }
 }
 
+// 알림 닫기 함수
+function closeStretchingNotification() {
+    if (globalstretchingNotification) {
+        globalstretchingNotification.close();
+        globalstretchingNotification = null; // 전역 알림 객체 초기화
+    }
+}
+
 // 전역 스코프에서 함수 사용 가능하도록 설정
 window.makeGameNoti = makeGameNoti;
+window.closeStretchingNotification = closeStretchingNotification;
