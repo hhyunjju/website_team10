@@ -11,12 +11,12 @@
     <!-- 추가적인 CSS 스타일 -->
     <style>
         .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
             gap: 10px;
-            height: 80vh; /* 뷰포트 높이의 80%를 차지하도록 설정 */
+            height: 60vh; /* 뷰포트 높이의 80%를 차지하도록 설정 */
             padding: 10px;
+            display:flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
         .grid-item {
             border: 1px solid #ccc;
@@ -28,6 +28,30 @@
         .grid-item img {
             max-width: 100%;
             max-height: 100%;
+        }
+        video{
+            height:400px !important;
+            transform: rotateY(180deg);
+            -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+            -moz-transform:rotateY(180deg); /* Firefox */
+        }
+        .game-main{
+            display:flex;
+            flex-direction: column;
+        }
+        #progressBarContainer{
+            width: 100%; 
+            background-color: #eee;
+            border-radius: 20px; 
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+        }
+        #progressBar{
+            width: 0%; 
+            height: 30px; 
+            background: linear-gradient(to right, #84fab0 0%, #8fd3f4 100%); 
+            border-radius: 20px;
+            transition: width 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -155,44 +179,33 @@
             </section>
     </section>
     <body>
-        <div class="grid-container">
-            <!-- 올바른 자세 예시 이미지 -->
-            <div id="image-container" class="grid-item" id="correct-posture">
-                <!-- 첫 번째 이미지를 먼저 표시합니다. 다른 이미지들은 JavaScript를 통해 변경됩니다. -->
-                <img id="posture-image" src="{% static 'assets/images/1_팔 옆으로 늘리는 스트레칭.jpg' %}" alt="올바른 자세 예시">
-            </div>
-            <style>
-                video{
-                    transform: rotateY(180deg);
-                    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
-                    -moz-transform:rotateY(180deg); /* Firefox */
-                }
-            </style>
-            <!-- 웹캠 출력 -->
-            <div class="grid-item" id="webcam">
-                <!-- 웹캠 출력을 위한 HTML 요소 -->
-                <div class="video-container">
-                    <video id='video' poster="{% static 'assets/images/game_loading_swch.png' %}" style="max-width: 95%; height: auto; left:11px; top:4px; position: relative;"></video>
-                    <div id='posture-status' style="color: lime; position: relative; left:10px; top: -70px;"></div>
-                    <br>
-                    <div id='count'></div>
-                    <div id='subscription'></div>
-                    <canvas id="canvas" visibility: hidden>
-                    </canvas>
-                    <div class="output">
-                      <img id="photo" visibility: hidden>
+        <main class="game-main">
+            <div class="grid-container">
+                <!-- 올바른 자세 예시 이미지 -->
+                <div id="image-container" class=" grid-item correct-posture">
+                    <!-- 첫 번째 이미지를 먼저 표시합니다. 다른 이미지들은 JavaScript를 통해 변경됩니다. -->
+                    <img id="posture-image" src="{% static 'assets/images/1_팔 옆으로 늘리는 스트레칭.jpg' %}" alt="올바른 자세 예시">
+                </div>
+                <!-- 웹캠 출력 -->
+                <div id="webcam" class="grid-item">
+                    <!-- 웹캠 출력을 위한 HTML 요소 -->
+                    <div class="video-container">
+                        <video id='video' poster="{% static 'assets/images/game_loading_swch.png' %}" style="left:11px; top:4px; position: relative;"></video>
+                        {% comment %} <div id='posture-status' style="color: lime; position: relative; left:10px; top: -70px;"></div> {% endcomment %}
+                        <div id='count'></div>
+                        <div id='subscription'></div>
+                        <canvas id="canvas" visibility: hidden></canvas>
+                        <div class="output">
+                        {% comment %} <img id="photo" visibility: hidden> {% endcomment %}
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- 포인트 획득 -->
-            <div class="grid-item" id="points-earned">
-                <p>포인트: <span id="points">0</span></p>
+            <div id="progressBarContainer">
+                <div id="progressBar">
+                </div>
             </div>
-            <!-- 정확도 -->
-            <div class="grid-item" id="accuracy">
-                <p>정확도: <span id="accuracy-percentage">0%</span></p>
-            </div>
-        </div>
+        </main>
         <script>
             (function() {
                 const video = document.getElementById('webcamVideo');
@@ -287,10 +300,11 @@
                 updateImage();
             });
 
+
         </script>
 
         <script src='{% static "assets/js/capture_game.js" %}'></script>
         <!-- 웹캠 스트림을 가져오기 위한 JavaScript -->
-
+    
     </body>
 </body>   

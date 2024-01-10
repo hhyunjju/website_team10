@@ -47,7 +47,7 @@ function updatePostureStatusCounts(class_name) {
   }
 
   // 연속된 나쁜 자세 감지 (1분 동안 누적) => 20으로 바꾸기
-  if (badPostureCount === 2 && !notificationActive) {
+  if (badPostureCount >= 2 && !notificationActive) {
       makeNoti();  // 알림 생성
       notificationActive = true;
   }
@@ -138,7 +138,7 @@ function updatePostureStatusCounts(class_name) {
         startbutton.addEventListener('click', function(ev){
           // badPostureCount = 0;
           // goodPostureCount = 0;
-          askNotificationPermission()
+          askNotificationPermission();
           startVideo();
           ev.preventDefault();
         }, false);
@@ -147,6 +147,8 @@ function updatePostureStatusCounts(class_name) {
           var videoElement = document.getElementById('video');
           jQuery("#posture-status").html('');
           videoElement.style.border = '';
+          closeNotification();
+          closeStretchingNotification();
           ev.preventDefault();
           stopVideo(); //위치 중요 //true여야 실행됨
         }, false);
@@ -183,6 +185,7 @@ function updatePostureStatusCounts(class_name) {
           track.stop();
           });
         clearInterval(sendImg);
+        clearInterval(sendGameNoti);
         // var videoElement = document.getElementById('video');
         // jQuery("#posture-status").html('');
         // videoElement.style.border = ''

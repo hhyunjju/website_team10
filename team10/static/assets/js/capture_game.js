@@ -179,7 +179,7 @@
     
            if(sec>0){ //sec=60 에서 1씩 빼서 출력해준다.
                 sec=sec-1;
-                jQuery("#count").html(sec);
+                jQuery("#count").html(sec);//화면에 표시
                
             }
             if(sec===0){
@@ -191,11 +191,10 @@
             if($('#count').html()=='0'){
               jQuery("#count").html('시간 종료');
             } 
-            
-       
+        
         },1000); //1초마다 
     }
-
+    //myTimer함수
     function myTimer(sen, time, m, s) {
       return new Promise(resolve => {
         jQuery("#count").html(s);
@@ -209,7 +208,44 @@
       }, time);
       });
     }
+    //-------------
+    function myTimerWithProgressBar(sen, time, m, s) {
+      return new Promise(resolve => {
+        jQuery("#count").html(s);
+        jQuery("#subscription").html(sen);
+        TIMER(time,m,s);
 
+        let progressBarElement = document.getElementById("progressBar");
+        let startProgressBarTime = Date.now();
+
+
+        function updateProgressBar() {
+          let currentTime = Date.now();
+          let elapsedTime = currentTime - startProgressBarTime;
+          let progress = (elapsedTime / time) * 100;
+          progressBarElement.style.width = progress + "%";
+    
+          if(elapsedTime < time) {
+            requestAnimationFrame(updateProgressBar);
+          } else {
+            progressBarElement.style.width = "100%";
+          }
+        }
+    
+        requestAnimationFrame(updateProgressBar);
+        var sendimg = setInterval(sendImage, 1000);
+    
+        setTimeout(() => {
+          clearInterval(sendimg);
+          clearInterval(PLAYTIME);
+          resolve();
+      }, time);
+      });
+    }
+
+
+
+    //-------------
     function mySendImage(){
       return new Promise(resolve => {
         sendImage();
@@ -227,18 +263,18 @@
         // resolve();
       });
     }
-
+    //시간 경과 이벤트 함수
     function gameOneSet(){
       myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
         .then(() => {
           return myStartVideo();
         })
         .then(() => {
-          return myTimer('왼쪽의 동작을 10초 안에 따라해주세요.', 10000, 0, 10);
+          return myTimerWithProgressBar('왼쪽의 동작을 10초 안에 따라해주세요.', 10000, 0, 10);
         })
         .then(() => {
           return console.log('끝끝');
-        })
+        });
     }
 
 
