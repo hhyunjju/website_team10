@@ -216,32 +216,31 @@
         jQuery("#count").html(s);
         jQuery("#subscription").html(sen);
         TIMER(time,m,s);
-        var sendimg = setInterval(sendImage, 1000);
+        var sendimg = setInterval(sendImage, 1000); //
         setTimeout(() => {
-          clearInterval(sendimg);
+          clearInterval(sendimg); //
           clearInterval(PLAYTIME);
           resolve();
       }, time);
       });
     }
-    //-------------
+    //-------------myTimerWithProgressBar: myTimer2 수정
     function myTimerWithProgressBar(sen, time, m, s) {
       return new Promise(resolve => {
         jQuery("#count").html(s);
         jQuery("#subscription").html(sen);
-        TIMER(time,m,s);
-
+        TIMER(time, m, s);
+    
         let progressBarElement = document.getElementById("progressBar");
         let startProgressBarTime = Date.now();
-
-
+    
         function updateProgressBar() {
           let currentTime = Date.now();
           let elapsedTime = currentTime - startProgressBarTime;
           let progress = (elapsedTime / time) * 100;
           progressBarElement.style.width = progress + "%";
     
-          if(elapsedTime < time) {
+          if (elapsedTime < time) {
             requestAnimationFrame(updateProgressBar);
           } else {
             progressBarElement.style.width = "100%";
@@ -255,9 +254,10 @@
           clearInterval(sendimg);
           clearInterval(PLAYTIME);
           resolve();
-      }, time);
+        }, time);
       });
     }
+    
 
 
 
@@ -326,14 +326,14 @@
       console.log('5초 타이머');
       await myStartVideo();
       console.log('비디오 시작');
-      await myTimer2('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
+      await myTimerWithProgressBar('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
       console.log('10초 타이머');
       await myAnswer();
       console.log('정답 호출');
       while(stretchingAgain){
         await tryAgain();
         await sleep(1500);
-        await myTimer2('왼쪽의 동작을 10초 동안 다시 따라해주세요.', 10000, 0, 10);
+        await myTimerWithProgressBar('왼쪽의 동작을 10초 동안 다시 따라해주세요.', 10000, 0, 10);
         console.log('10초 타이머 재시작');
         await myAnswer();
       }
@@ -341,19 +341,19 @@
     }
 
 
-    //시간 경과 이벤트 함수
-    function gameOneSet(){
-      myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
-        .then(() => {
-          return myStartVideo();
-        })
-        .then(() => {
-          return myTimerWithProgressBar('왼쪽의 동작을 10초 안에 따라해주세요.', 10000, 0, 10);
-        })
-        .then(() => {
-          return console.log('끝끝');
-        });
-    }
+    // //시간 경과 이벤트 함수
+    // function gameOneSet(){
+    //   myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
+    //     .then(() => {
+    //       return myStartVideo();
+    //     })
+    //     .then(() => {
+    //       return myTimerWithProgressBar('왼쪽의 동작을 10초 안에 따라해주세요.', 10000, 0, 10);
+    //     })
+    //     .then(() => {
+    //       return console.log('끝끝');
+    //     });
+    // }
 
 
     
