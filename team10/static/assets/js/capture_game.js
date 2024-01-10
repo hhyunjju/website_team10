@@ -74,7 +74,8 @@
     
         // startVideo();
 
-        gameOneSet();
+        // gameOneSet();
+        stretchingGame();
 
         clearphoto();
     }
@@ -114,11 +115,7 @@
       photo.setAttribute('src', data);
     }
     
-    // Capture a photo by fetching the current contents of the video
-    // and drawing it into a canvas, then converting that to a PNG
-    // format data URL. By drawing it on an offscreen canvas and then
-    // drawing that to the screen, we can change its size and/or apply
-    // other changes before drawing it.
+
 
     let answer = [];
 
@@ -252,9 +249,7 @@
         setTimeout(() => {
           stopVideo();
           resolve();
-      }, 5000);
-        // startVideo();
-        // resolve();
+      }, 2000);
       });
     }
 
@@ -262,32 +257,23 @@
       return new Promise(resolve => {
         var sentence = '맞을 때까지 나갈 수 없습니다.\n 다시 해 보세요';
         jQuery("#subscription").html(sentence);
+        answer = [];
         failSignal();
         resolve();
       });
     }
 
-    var correct = true;
+    var stretchingAgain = false;
 
     function myAnswer() {
       return new Promise(resolve => {
-        // try {
-        //   console.log('answer 호출 : '+answer);
-        //   console.log('*****************find 1 :'+answer.find(1));
-        //   answer.find(1);
-        //   $('#stretchingStatus').html('O');
-        // } catch(error) {
-        //   console.log(error);
-        //   console.log('그럼 여기로 오나?');
-        //   $('#stretchingStatus').html('X');
-        // }
         console.log('최종 answer : '+answer);
         if(answer.indexOf(1)==-1){
           console.log('실패');
           $('#stretchingStatus').html('X');
-          correct = false;
+          stretchingAgain = true;
         } else if (answer.indexOf(1)>=0){
-          correct = true;
+          stretchingAgain = false;
           console.log('성공');
           $('#stretchingStatus').html('O');
         }
@@ -295,20 +281,27 @@
       });
     }
 
-    function gameOneSet(){
-      myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
-        .then(() => {
-          return myStartVideo();
-        })
-        .then(() => {
-          return myTimer2('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
-        })
-        .then(() => {
-          return myAnswer();
-        })
-        .then(() => {
-          return myStopVideo();
-        })
+    function sleep(ms){
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function stretchingGame(){
+      await myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5);
+      console.log('5초 타이머');
+      await myStartVideo();
+      console.log('비디오 시작');
+      await myTimer2('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
+      console.log('10초 타이머');
+      await myAnswer();
+      console.log('정답 호출');
+      while(stretchingAgain){
+        await tryAgain();
+        await sleep(1500);
+        await myTimer2('왼쪽의 동작을 10초 동안 다시 따라해주세요.', 10000, 0, 10);
+        console.log('10초 타이머 재시작');
+        await myAnswer();
+      }
+      await myStopVideo();
     }
 
 
