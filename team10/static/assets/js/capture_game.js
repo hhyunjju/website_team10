@@ -74,26 +74,31 @@
     
         // startVideo();
 
-        gameOneSet();
-
-        
+        // gameOneSet();
+        stretchingGame();
 
         clearphoto();
     }
 
 
-
-    function to_statistics(){
-      window.location.href = "http://localhost:8000/service/statistics";
+    function to_service(){
+      window.location.href = "http://localhost:8000/service/service";
     }
-
-
-
 
     function startVideo() {
       video.play();
       streamingStatus = true;
       // sendImg = setInterval(sendImage, 3000);
+    }
+
+    function stopVideo() {
+      if(streamingStatus){
+        video.srcObject.getTracks().forEach( (track) => {
+          track.stop();
+          });''
+        streamingStatus = false;
+        to_service();
+      }
     }
 
 
@@ -110,19 +115,9 @@
       photo.setAttribute('src', data);
     }
     
-    // Capture a photo by fetching the current contents of the video
-    // and drawing it into a canvas, then converting that to a PNG
-    // format data URL. By drawing it on an offscreen canvas and then
-    // drawing that to the screen, we can change its size and/or apply
-    // other changes before drawing it.
 
-    function isBadPosture(num){ // #################################### 수정 필요
-      if (num==0) {
-        return 'Good Posture';
-      } else {
-        return 'Bad Posture';
-      }
-    }
+
+    let answer = [];
 
     function sendImage() {
       var context = canvas.getContext('2d');
@@ -161,7 +156,16 @@
             // console.log(data);
             console.log('success');
             console.log('stretching : '+data['class_name']);
-            jQuery("#posture-status").html(isBadPosture(Number(data['class_name'])));
+            // jQuery("#posture-status").html(Number(data['class_name'])); // #########
+            if (jQuery("#posture-status").html()==data['class_name']) {
+              // $('#stretchingStatus').html('O');
+              answer.push(1);
+            }
+            else {
+              // $('#stretchingStatus').html('X');
+              answer.push(0);
+            }
+            console.log("현재 정답 : "+answer);
           },
           error: function(e){
             console.log('error');
@@ -196,6 +200,18 @@
     }
     //myTimer함수
     function myTimer(sen, time, m, s) {
+      return new Promise(resolve => {
+        jQuery("#count").html(s);
+        jQuery("#subscription").html(sen);
+        TIMER(time,m,s);
+        setTimeout(() => {
+          clearInterval(PLAYTIME);
+          resolve();
+      }, time);
+      });
+    }
+
+    function myTimer2(sen, time, m, s) {
       return new Promise(resolve => {
         jQuery("#count").html(s);
         jQuery("#subscription").html(sen);
@@ -263,6 +279,68 @@
         // resolve();
       });
     }
+
+    function myStopVideo(){
+      return new Promise(resolve => {
+        setTimeout(() => {
+          stopVideo();
+          resolve();
+      }, 2000);
+      });
+    }
+
+    function tryAgain() {
+      return new Promise(resolve => {
+        var sentence = '맞을 때까지 나갈 수 없습니다.\n 다시 해 보세요';
+        jQuery("#subscription").html(sentence);
+        answer = [];
+        failSignal();
+        resolve();
+      });
+    }
+
+    var stretchingAgain = false;
+
+    function myAnswer() {
+      return new Promise(resolve => {
+        console.log('최종 answer : '+answer);
+        if(answer.indexOf(1)==-1){
+          console.log('실패');
+          $('#stretchingStatus').html('X');
+          stretchingAgain = true;
+        } else if (answer.indexOf(1)>=0){
+          stretchingAgain = false;
+          console.log('성공');
+          $('#stretchingStatus').html('O');
+        }
+        resolve();
+      });
+    }
+
+    function sleep(ms){
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function stretchingGame(){
+      await myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5);
+      console.log('5초 타이머');
+      await myStartVideo();
+      console.log('비디오 시작');
+      await myTimer2('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
+      console.log('10초 타이머');
+      await myAnswer();
+      console.log('정답 호출');
+      while(stretchingAgain){
+        await tryAgain();
+        await sleep(1500);
+        await myTimer2('왼쪽의 동작을 10초 동안 다시 따라해주세요.', 10000, 0, 10);
+        console.log('10초 타이머 재시작');
+        await myAnswer();
+      }
+      await myStopVideo();
+    }
+
+
     //시간 경과 이벤트 함수
     function gameOneSet(){
       myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5)
