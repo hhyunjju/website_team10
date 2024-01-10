@@ -344,7 +344,10 @@
 									</ul>
 									<ul class="actions">
 										<!-- 게임화된 통계 페이지로 가는 링크를 추가합니다 -->
-										<li><a href="{% url 'service:game' %}" class="button large">자세 교정 게임하기</a></li>
+										<li>
+											<a href="{% url 'service:game' %}" class="button large">자세 교정 게임하기</a>
+											<button onclick="downloadAllCharts()" class="button large">통계 결과 다운로드</button>
+										</li>
 									</ul>
 								</footer>
 							</article>
@@ -418,5 +421,57 @@
 			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
+			<script>
+				function downloadAllCharts() {
+					// 각 차트의 이미지 URL을 가져오는 함수
+					function getImageUrl(chartId) {
+						var chart = Chart.getChart(chartId);
+						return chart ? chart.toBase64Image() : '';
+					}
+				
+					// 모든 차트의 이미지 URL을 배열로 생성
+					var chartImages = [
+						getImageUrl('barChart'),
+						getImageUrl('lineChart'),
+						getImageUrl('pieChart'),
+						getImageUrl('radarChart')
+					];
+				
+					// 캔버스 생성 및 크기 설정
+					var canvas = document.createElement('canvas');
+					var ctx = canvas.getContext('2d');
+					var chartWidth = 400; // 각 차트의 너비
+					var chartHeight = 400; // 각 차트의 높이
+					canvas.width = chartWidth * 2; // 2개 차트 너비
+					canvas.height = chartHeight * 2; // 2개 차트 높이
+				
+					// 이미지를 캔버스에 그리는 함수
+					function drawImageOnCanvas(imageUrl, index) {
+						return new Promise((resolve, reject) => {
+							var img = new Image();
+							img.onload = function() {
+								var x = (index % 2) * chartWidth; // x 위치 (0 또는 chartWidth)
+								var y = Math.floor(index / 2) * chartHeight; // y 위치 (0 또는 chartHeight)
+								ctx.drawImage(img, x, y, chartWidth, chartHeight); // 이미지 그리기
+								resolve();
+							};
+							img.onerror = reject;
+							img.src = imageUrl;
+						});
+					}
+				
+					// 모든 차트 이미지를 순서대로 캔버스에 그린 후 이미지로 다운로드
+					Promise.all(chartImages.map(drawImageOnCanvas)).then(() => {
+						var finalImage = canvas.toDataURL("image/png");
+						var link = document.createElement('a');
+						link.href = finalImage;
+						link.download = 'allCharts.png';
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+					});
+				}
+				
+			</script>
 	</body>
 </html>
