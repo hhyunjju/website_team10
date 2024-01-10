@@ -75,8 +75,6 @@
         // startVideo();
 
         // gameOneSet();
-        $("#timer2_d").css('visibility', 'hidden');
-        $("#subscription").css('visibility', 'hidden');
         stretchingGame();
 
         clearphoto();
@@ -195,7 +193,6 @@
                 // 그래서 0이 되면 바로 sec을 60으로 돌려주고 value에는 0을 출력하도록 해준다.
                 sec=60;
                 jQuery("#count").html('0');
-                jQuery(count_id).html('0');
             }    
             if($('#count').html()=='0'){
               if(!stretchingAgain){
@@ -205,8 +202,6 @@
         
         },1000); //1초마다 
     }
-
-
 
 //5초에 사용하는 타이머(대기)
 //TIMER FOR BIGCOUNT
@@ -241,7 +236,6 @@ function BIGTIMER(time, min, sec){
         BIGTIMER(time,m,s);
         setTimeout(() => {
           clearInterval(PLAYTIME);
-          $("#timer1_d").css('visibility', 'hidden');
           resolve();
       }, time);
       });
@@ -293,7 +287,6 @@ function BIGTIMER(time, min, sec){
         setTimeout(() => {
           clearInterval(sendimg);
           clearInterval(PLAYTIME);
-          $("#timer2_d").css('visibility', 'hidden');
           resolve();
         }, time);
       });
@@ -365,7 +358,6 @@ function BIGTIMER(time, min, sec){
     }
 
     async function stretchingGame(){
-      $("#timer1_d").css('visibility', 'visible');
       await myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5);
       console.log('5초 타이머');
       await myStartVideo();
@@ -375,7 +367,6 @@ function BIGTIMER(time, min, sec){
       await myAnswer();
       console.log('정답 호출');
       while(stretchingAgain){
-        $("#subscription").css('visibility', 'visible');
         await tryAgain();
         await sleep(1500);
         await myTimerWithProgressBar('왼쪽의 동작을 10초 동안 다시 따라해주세요.', 10000, 0, 10);
