@@ -198,7 +198,7 @@
 										
 										<!-- 꺾은선 그래프 섹션 -->
 										<div class="graph-container">
-											<h3>일주일 자세 변화 - 꺾은선 그래프</h3>
+											<h3>지난 7일 자세 비율 - 꺾은선 그래프</h3>
 											<canvas id="lineChart"></canvas>
 										</div>
 										
@@ -235,6 +235,21 @@
 											var incorrectPostureRatio = parseFloat("{{ incorrect_posture_ratio }}");
 											var postureCounts = [parseFloat("{{ posture1_cnt }}"), parseFloat("{{ posture2_cnt }}"), parseFloat("{{ posture3_cnt }}"), parseFloat("{{ posture4_cnt }}")];
 
+
+											// 일주일 데이터 배열 변환
+											let correct = "{{correct_week}}".split(',');
+											let bad = "{{bad_week}}".split(',');
+											let weekdate = "{{week_date}}".split(',');
+
+											// 일주일 데이터 배열 원소 : 문자열 -> 숫자
+											correct = correct.map(Number);
+											bad = bad.map(Number);
+
+											console.log('바른 자세 비율 : '+correct);
+											console.log('나쁜 자세 비율 : '+bad);
+											console.log('날짜 : '+weekdate);
+
+
 											// 막대 그래프 생성
 											var barCtx = document.getElementById('barChart').getContext('2d');
 											var barChart = new Chart(barCtx, {
@@ -244,8 +259,8 @@
 													datasets: [{
 														label: '자세 비율',
 														data: [correctPostureRatio, incorrectPostureRatio],
-														backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-														borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+														backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+														borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
 														borderWidth: 1
 													}]
 												},
@@ -282,11 +297,19 @@
 											var lineChart = new Chart(lineCtx, {
 												type: 'line',
 												data: {
-													labels: ['월', '화', '수', '목', '금', '토', '일'],
+													// labels: ['월', '화', '수', '목', '금', '토', '일'],
+													labels: weekdate,
 													datasets: [{
-														label: '일주일간의 자세 변화',
-														data: [65, 59, 80, 81, 56, 55, 40], // 예시 데이터, 실제 데이터로 대체 필요
-														borderColor: 'rgb(75, 192, 192)',
+														label: '바른 자세 비율',
+														// data: [65, 59, 80, 81, 56, 55, 40], // 예시 데이터, 실제 데이터로 대체 필요
+														data:correct,
+														borderColor: 'rgba(54, 162, 235, 1)',
+														tension: 0.1
+													},{
+														label: '바르지 않은 자세 비율',
+														// data: [65, 59, 80, 81, 56, 55, 40], // 예시 데이터, 실제 데이터로 대체 필요
+														data:bad,
+														borderColor: 'rgba(255, 99, 132, 1)',
 														tension: 0.1
 													}]
 												},
