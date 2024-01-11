@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description, stretching_selected_landmarks
 import os
-from datetime import datetime, date, time, timedelta
+from datetime import datetime, timedelta
 import mlflow
 
 from django.contrib.auth.decorators import login_required
@@ -161,8 +161,8 @@ def send_image(request):
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
                 
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
                     PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
@@ -177,8 +177,8 @@ def send_image(request):
                 else:
                     # 가시성이 낮을 때는 대기 메시지 표시
                     class_name = -1
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
                 # processed_image_path = "./media/processed_image.png"
@@ -259,8 +259,8 @@ def send_image_game(request):
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
                 
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
                     # PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
@@ -275,8 +275,8 @@ def send_image_game(request):
                 else:
                     # 가시성이 낮을 때는 대기 메시지 표시
                     class_name = -1
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     # PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
         #         processed_image_path = "./media/processed_image.png"
