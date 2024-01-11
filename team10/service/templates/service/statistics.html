@@ -199,7 +199,7 @@
 								<section id="statistics">
 									<div class="statistic">
 										<h4>총 이용 시간</h4>
-										<p>{{ correct_posture_ratio }}+{{ incorrect_posture_ratio }} 시간</p>
+										<p id="totalRatio"></p>
 									</div>
 									<div class="statistic">
 										<h4>정확한 자세 지속 시간 비율</h4>
@@ -350,6 +350,11 @@
 					var correctPostureRatio = parseFloat("{{ correct_posture_ratio }}");
 					var incorrectPostureRatio = parseFloat("{{ incorrect_posture_ratio }}");
 					var postureCounts = [parseFloat("{{ posture1_cnt }}"), parseFloat("{{ posture2_cnt }}"), parseFloat("{{ posture3_cnt }}"), parseFloat("{{ posture4_cnt }}")];
+
+					// 합산 계산
+					var totalRatio = correctPostureRatio + incorrectPostureRatio;
+					// 결과 출력 (예: 결과를 HTML의 특정 요소에 표시)
+					document.getElementById('totalRatio').innerText = totalRatio + "시간";
 
 					// 막대 그래프 생성
 					var barCtx = document.getElementById('barChart').getContext('2d');
