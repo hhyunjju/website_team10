@@ -381,7 +381,7 @@ def weekData(data):
     badWeek = []
     correctWeek = []
     weekDate = []
-    for i in range(1,8):
+    for i in range(0, 7):
         day = today - timedelta(days=i) # 1-7일 전
         day2 = day.strftime('%Y.%m.%d')
         posesData = data.filter(timeymd=day2) # 해당 날짜 데이터 전체
