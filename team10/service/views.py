@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 from .preprocessing import calculate_angle, calculate_distance, selected_landmarks, landmark_description, stretching_selected_landmarks
 import os
-import time
+from datetime import datetime, timedelta
 import mlflow
 
 from django.contrib.auth.decorators import login_required
@@ -161,8 +161,8 @@ def send_image(request):
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
                 
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
                     PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
@@ -177,8 +177,8 @@ def send_image(request):
                 else:
                     # 가시성이 낮을 때는 대기 메시지 표시
                     class_name = -1
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
                 # processed_image_path = "./media/processed_image.png"
@@ -259,8 +259,8 @@ def send_image_game(request):
                     class_name = prediction[0] # 여기를 DB로 넘김
                     print("클래스 : ", class_name)
                 
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     print("오늘 날짜 : ", now_ymd)
                     print("현재 시간 : ", now_hms)
                     # PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
@@ -275,8 +275,8 @@ def send_image_game(request):
                 else:
                     # 가시성이 낮을 때는 대기 메시지 표시
                     class_name = -1
-                    now_ymd = time.strftime('%Y.%m.%d')
-                    now_hms = time.strftime('%H:%M:%S')
+                    now_ymd = datetime.now().strftime('%Y.%m.%d')
+                    now_hms = datetime.now().strftime('%H:%M:%S')
                     # PostureDetection.objects.create(user=request.user, timeymd=now_ymd, timehms=now_hms, posturetype=class_name)
 
         #         processed_image_path = "./media/processed_image.png"
@@ -305,7 +305,7 @@ def statistics(request):
     # 해당 유저의 자세 데이터 전체
     userdata = PostureDetection.objects.filter(user_id=request.user)
     # 오늘 날짜
-    today = time.strftime('%Y.%m.%d')
+    today = datetime.now().strftime('%Y.%m.%d')
     # 오늘 날짜에 해당되는 데이터 전체
     todaysposes = userdata.filter(timeymd=today)
     todayposecnt = todaysposes.count()
@@ -314,10 +314,6 @@ def statistics(request):
     correctposecnt = todaysposes.filter(posturetype=0).count()
     # 나쁜 자세 데이터 수
     badposecnt = todaysposes.exclude(posturetype=0).count()
-    
-    # 자세 종류 개수
-    # posture_type_cnt = ?
-    
     
     # 자리에 있었던 데이터 수
     inplacecnt = todaysposes.exclude(posturetype=-1).count()
@@ -335,43 +331,24 @@ def statistics(request):
         incorrect_posture_ratio = 0
         person_in_place_ratio = 0
         person_missed_place_ratio = 0
-    try:
-        correct_posture_ratio = round((correctposecnt / todayposecnt), 2)
-        incorrect_posture_ratio = round((badposecnt / todayposecnt), 2)
-        person_in_place_ratio = round((inplacecnt / todayposecnt), 2)
-        person_missed_place_ratio = round((missedplacecnt / todayposecnt), 2)
-    except ZeroDivisionError:
-        correct_posture_ratio = 0
-        incorrect_posture_ratio = 0
-        person_in_place_ratio = 0
-        person_missed_place_ratio = 0
-    # 
-    userdata = PostureDetection.objects.filter(user_id=request.user)
-    today = time.strftime('%Y.%m.%d')
-    todaysposes = userdata.filter(timeymd=today)
-    todayposecnt = todaysposes.count()
-
-    correctposecnt = todaysposes.filter(posturetype=0).count()
-    badposecnt = todaysposes.exclude(posturetype=0).count()
-    inplacecnt = todaysposes.exclude(posturetype=-1).count()
-    missedplacecnt = todaysposes.filter(posturetype=-1).count()
-
-    # 오류를 피하기 위해 todayposecnt가 0보다 큰 경우에만 나눗셈을 수행합니다.
-    if todayposecnt > 0:
-        correct_posture_ratio = round((correctposecnt / todayposecnt), 2)
-        incorrect_posture_ratio = round((badposecnt / todayposecnt), 2)
-        person_in_place_ratio = round((inplacecnt / todayposecnt), 2)
-        person_missed_place_ratio = round((missedplacecnt / todayposecnt), 2)
-    else:
-        correct_posture_ratio = 0
-        incorrect_posture_ratio = 0
-        person_in_place_ratio = 0
-        person_missed_place_ratio = 0
-        # Count for each posture type
+    
+    # Count for each posture type
     posture1_cnt = todaysposes.filter(posturetype=1).count()
     posture2_cnt = todaysposes.filter(posturetype=2).count()
     posture3_cnt = todaysposes.filter(posturetype=3).count()
     posture4_cnt = todaysposes.filter(posturetype=4).count()
+    
+    
+    # 오늘 기준 지난 일주일 데이터
+    correctWeek, badWeek, weekDate = weekData(userdata)
+    correctWeek = list(map(str, correctWeek))
+    badWeek = list(map(str, badWeek))
+    
+    # 리스트 - 문자열 변환
+    correctWeek = ','.join(correctWeek)
+    badWeek = ','.join(badWeek)
+    weekDate = ','.join(weekDate)
+    
 
     context = {
         # 'posture_type_num':posture_type_cnt,
@@ -386,6 +363,9 @@ def statistics(request):
         'posture2_cnt': posture2_cnt,
         'posture3_cnt': posture3_cnt,
         'posture4_cnt': posture4_cnt,
+        'correct_week' : correctWeek,
+        'bad_week' : badWeek,
+        'week_date' : weekDate,
     }
     return render(request, 'service/statistics.html', context)
 
@@ -393,3 +373,36 @@ def statistics(request):
     
 def test(request):
     return render(request, 'service/test.html')
+
+def weekData(data):
+    # today = datetime.now().strftime('%Y.%m.%d')
+    today = datetime.now()
+    badWeek = []
+    correctWeek = []
+    weekDate = []
+    for i in range(1,8):
+        day = today - timedelta(days=i) # 1-7일 전
+        day2 = day.strftime('%Y.%m.%d')
+        posesData = data.filter(timeymd=day2) # 해당 날짜 데이터 전체
+        
+        # 해당 날짜 데이터 전체 개수
+        posesDataCnt = posesData.count()
+        # 바른 자세 데이터 수
+        correctposecnt = posesData.filter(posturetype=0).count()
+        # 나쁜 자세 데이터 수
+        badposecnt = posesData.exclude(posturetype=0).count()
+        
+        if posesDataCnt > 0:
+            correct_posture_ratio = round((correctposecnt / posesDataCnt), 2)
+            incorrect_posture_ratio = round((badposecnt / posesDataCnt), 2)
+        else:
+            # todayposecnt가 0인 경우, 모든 비율을 0으로 설정
+            correct_posture_ratio = 0
+            incorrect_posture_ratio = 0
+        
+        # 리스트에 데이터 추가
+        correctWeek.insert(0, correct_posture_ratio)
+        badWeek.insert(0, incorrect_posture_ratio)
+        weekDate.insert(0,day.strftime('%m/%d'))
+        
+    return correctWeek, badWeek, weekDate
