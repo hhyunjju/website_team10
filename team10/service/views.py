@@ -20,7 +20,10 @@ import mlflow
 from django.contrib.auth.decorators import login_required
 
 # MLflow Tracking URI 설정
-mlflow.set_tracking_uri("C:\\Users\\user\\TEAM10\\team10\\team10\\service\\mlruns")
+# mlflow.set_tracking_uri("C:\\Users\\user\\TEAM10\\team10\\team10\\service\\mlruns")
+mlflow_path = os.path.join(os.getcwd(), 'service\mlruns')
+mlflow_path = "file:\\"+mlflow_path
+mlflow.set_tracking_uri(mlflow_path)
 
 # 포즈 run ID와 모델 이름 설정
 run_id_pose = "6b8c4018707341eca7bf4e57438cc697"
