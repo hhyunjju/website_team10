@@ -19,30 +19,30 @@ import mlflow
 
 from django.contrib.auth.decorators import login_required
 
-# # # MLflow Tracking URI 설정
-# mlflow.set_tracking_uri("file:///C:/Users/user/big project/Test_final/team10/team10/service")
+# MLflow Tracking URI 설정
+mlflow.set_tracking_uri("C:\\Users\\user\\TEAM10\\team10\\team10\\service\\mlruns")
 
-# # run ID와 모델 이름 설정
-# run_id_pose = "7c0f50aeb0424ca7a2b8aaba54a8993e"
-# model_name_pose = "model_pose_final"
+# 포즈 run ID와 모델 이름 설정
+run_id_pose = "6b8c4018707341eca7bf4e57438cc697"
+model_name_pose = "model_pose_final"
 
-# # 포즈 모델을 불러오는 코드
-# model_uri_pose = f"runs:/{run_id_pose}/{model_name_pose}"
-# pose_model = mlflow.sklearn.load_model(model_uri_pose)
+# 포즈 모델을 불러오는 코드
+model_uri_pose = f"runs:/{run_id_pose}/{model_name_pose}"
+pose_model = mlflow.sklearn.load_model(model_uri_pose)
 
-# # run ID와 모델 이름 설정
-# run_id_stretch = "7c0f50aeb0424ca7a2b8aaba54a8993e"
-# model_name_stretch = "model_stretch_final"
+# 스트레칭 run ID와 모델 이름 설정
+run_id_stretch = "6b8c4018707341eca7bf4e57438cc697"
+model_name_stretch = "model_stretch_final"
 
-# # 스트레칭 모델을 불러오는 코드
-# model_uri_stretch = f"runs:/{run_id_stretch}/{model_name_stretch}"
-# stretching_model = mlflow.sklearn.load_model(model_uri_stretch)
+# 스트레칭 모델을 불러오는 코드
+model_uri_stretch = f"runs:/{run_id_stretch}/{model_name_stretch}"
+stretching_model = mlflow.sklearn.load_model(model_uri_stretch)
     
-model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
-pose_model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+# model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+# pose_model = joblib.load(model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
-stretching_model_path = os.path.join(os.getcwd(), 'service\pose_classification_model_stretch_final.pkl')
-stretching_model = joblib.load(stretching_model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
+# stretching_model_path = os.path.join(os.getcwd(), 'service\pose_classification_model_stretch_final.pkl')
+# stretching_model = joblib.load(stretching_model_path) # 여기 삭제하고 특정 이벤트 발생시 모델을 로드하도록.
 
 
 #임시로 만들었습니다
