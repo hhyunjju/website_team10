@@ -48,10 +48,7 @@
 		</style> <!--------------------------------css끝------------------------------------->
 	</head>
 	<body class="single is-preload">
-		<!-- 스플래시 컨테이너 -->
-		<div class="splash-container">
-			<h1 class="splash-text">잠시만 기다려 주세요...</h1>
-		</div>
+		
 		<!-- Wrapper -->
 			<div id="wrapper">
 
@@ -68,6 +65,7 @@
 									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
 								{% endif %}
 								<li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+								<li class="menu-item-contact"><a href="{% url 'brd:faq' %}">FAQ</a></li>
 								<li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
 								<li><a href="{% url 'service:service' %}">서비스</a></li>
 							</ul>
@@ -154,7 +152,7 @@
 									<li>
 										<a href="{% url 'brd:faq' %}">
 											<h3>FAQ</h3>
-											<p>저희의 바른자세 서비스에 대해 알아보세요</p>
+											<p>저희의 ~ 알아보세요</p>
 										</a>
 									</li>
 								</ul>
@@ -245,10 +243,7 @@
 										</ul>
 										<ul class="actions">
 											<!-- 게임화된 통계 페이지로 가는 링크를 추가합니다 -->
-											<li>
-												<a href="{% url 'service:game' %}" class="button large">자세 교정 게임하기</a>
-												<button onclick="downloadAllCharts()" class="button large">통계 결과 다운로드</button>
-											</li>
+											<li><a href="{% url 'service:game' %}" class="button large">자세 교정 게임하기</a></li>
 										</ul>
 									</footer>
 
@@ -470,6 +465,74 @@
 												}
 											});
 
+<<<<<<< HEAD
+											// 레이더 차트 생성
+											var radarCtx = document.getElementById('radarChart').getContext('2d');
+											var radarChart = new Chart(radarCtx, {
+												type: 'radar',
+												data: {
+													labels: ['거북목 자세', '턱괴는 자세', '엎드리는 자세', '누워 기대는 자세'],
+													datasets: [{
+														label: '자세 유형별 비교',
+														data: postureCounts, // 예시 데이터, 실제 데이터로 대체 필요
+														backgroundColor: 'rgba(255, 99, 132, 0.2)',
+														borderColor: 'rgba(255, 99, 132, 1)',
+														borderWidth: 1
+													}]
+												},
+												options: {
+													scales: {
+														r: {
+															angleLines: {
+																display: false
+															},
+															suggestedMin: 0,
+															suggestedMax: 100
+														}
+													}
+												}
+											});
+
+										};
+									</script>
+
+								<footer>
+									<ul class="stats">
+										
+									</ul>
+									<ul class="actions">
+										<!-- 게임화된 통계 페이지로 가는 링크를 추가합니다 -->
+										<li>
+											<a href="{% url 'service:game' %}" class="button large">자세 교정 게임하기</a>
+											<button onclick="downloadAllCharts()" class="button large">통계 결과 다운로드</button>
+										</li>
+									</ul>
+								</footer>
+							</article>
+
+					</div>
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="footer-logo">
+							<img src="{%static 'assets/images/logo_page.png' %}" alt="바른자세 로고" />
+						</div>
+						<ul class="icons">
+							<li><a href="https://twitter.com" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="https://facebook.com" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="https://instagram.com" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="mailto:your@email.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+						<div class="policy-links">
+							| <a href="javascript:void(0);" onclick="openPrivacyPolicy();">개인정보처리방침</a>
+							| <a href="javascript:void(0);" onclick="openTermsOfService();">이용약관</a>
+							| <a href="javascript:void(0);" onclick="openFaq();">자주묻는질문</a>
+							| <a href="javascript:void(0);" onclick="openDataPolicy();">데이터베이스이용약관</a> |
+						</div>
+						<script>
+							function openPrivacyPolicy() {
+								window.open('{% url 'home:privacy_policy' %}', 'Privacy Policy', 'width=600,height=400');
+=======
 					// 레이더 차트 생성
 					var radarCtx = document.getElementById('radarChart').getContext('2d');
 					var radarChart = new Chart(radarCtx, {
@@ -493,6 +556,7 @@
 									suggestedMin: 0,
 									suggestedMax: 100
 								}
+>>>>>>> origin/soobin
 							}
 						}
 					});
@@ -521,22 +585,6 @@
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
 			<script>
-<<<<<<< HEAD
-				document.addEventListener('DOMContentLoaded', () => {
-					const splashText = document.querySelector('.splash-text');
-					setTimeout(() => {
-						splashText.style.opacity = '1';
-						splashText.style.transform = 'translateY(0)';
-					}, 500);
-					// 스플래시 애니메이션 이후 메인 페이지로 전환
-					setTimeout(() => {
-						document.querySelector('.splash-container').style.opacity = '0';
-						document.querySelector('.splash-container').style.visibility = 'hidden';
-						// 혹은 스플래시 컨테이너를 DOM에서 제거하려면:
-						// document.querySelector('.splash-container').remove();
-					}, 2222); // 애니메이션 지속 시간을 조정하세요
-				});
-=======
 				function downloadAllCharts() {
 					// 각 차트의 이미지 URL을 가져오는 함수
 					function getImageUrl(chartId) {
@@ -587,7 +635,6 @@
 					});
 				}
 				
->>>>>>> origin/soobin
 			</script>
 	</body>
 </html>

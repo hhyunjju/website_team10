@@ -227,7 +227,7 @@
 				<!-- Main -->
 					<main id="login-main">
 						{% if messages %}
-							<div class="messages">
+							<div class="messages" style="display:none;">
 								{% for message in messages %}
 									<div class="{{ message.tags }}">{{ message }}</div>
 								{% endfor %}

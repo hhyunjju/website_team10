@@ -38,13 +38,21 @@
 			}
 			#posture-status {
 				position: absolute;
-				bottom: 10px; /* 오른쪽 아래에 위치하기 위한 설정 */
-				right: 30px;
+				top: 0; /* 상단에서 0px 떨어진 곳에 위치 */
+				left: 50%; /* 부모 요소의 가로 중앙 */
+				transform: translateX(-50%); /* X축으로 -50% 이동하여 가로 중앙 정렬 */
 				padding: 5px;
 				font-size: 22px;
+				border-radius: 10px; /* 모서리를 둥글게 */
+				text-align: center; /* 텍스트 중앙 정렬 */
+				
 			}
 			.video-controls{
 				margin-top: 30px;
+			}
+			.video{
+
+				object-fit: cover;
 			}
 		</style>
 		
@@ -289,6 +297,7 @@
 			<script type="text/javascript">
 				let iconUrl = "{% static 'assets/images/icons/자세경고아이콘.png' %}";
 				let gameiconUrl = "{% static 'assets/images/icons/스트레칭아이콘1.png' %}";
+				let userNickname = "{{ user.profile.nickname }}";
 			</script>
 			
 

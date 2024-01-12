@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>바른자세</title>
+		<title>바른자세 도우미</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/home.css' %}">
@@ -24,10 +24,11 @@
 				align-items: center;
 				z-index: 9999;
 				transition: visibility 0s, opacity 0.5s linear;
+				text-align:center;
 			}
 			.splash-text {
 				text-align: center;
-				font-size: 50px;
+				font-size: 40px;
 				opacity: 0;
 				transform: translateY(-100px);
 				transition: opacity 1s, transform 1s;
@@ -88,7 +89,7 @@
 	<body class="is-preload">
 	<!-- 스플래시 컨테이너 -->
 		<div class="splash-container">
-			<h1 class="splash-text">바른자세에 오신 것을 환영합니다</h1>
+			<h1 class="splash-text">바른자세 도우미에<br> 오신 것을 환영합니다</h1>
 		</div>
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -102,7 +103,7 @@
 									<li><a href="{% url 'accounts:login' %}?next={{request.path}}">로그인</a></li>
 									<li><a href="{% url 'accounts:signup' %}?next={{request.path}}">회원가입</a></li>
 								{% else %}
-									<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
+									<li><a href="{% url 'accounts:profile' %}">{{user.profile.nickname}}님!</a></li>
 									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
 								{% endif %}
 								<li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
