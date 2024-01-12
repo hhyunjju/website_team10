@@ -57,9 +57,6 @@
           }
         }, false);
     
-        // startVideo();
-
-        // gameOneSet();
         stretchingGame();
 
         clearphoto();
@@ -117,8 +114,6 @@
  
         var data = new FormData($('form')[0]);
         data.append("img_file", jpegBlob, fileName);
-        console.log('form에 이미지 추가');
-
         
 
         $.ajax({
@@ -129,15 +124,12 @@
           data: data,
           datatype: 'json',
           success: function (data) {
-            console.log('success');
-            console.log('stretching : '+data['class_name']);
             if (jQuery("#posture-status").html()==data['class_name']) {
               answer.push(1);
             }
             else {
               answer.push(0);
             }
-            console.log("현재 정답 : "+answer);
           },
           error: function(e){
             console.log('error');
@@ -289,14 +281,11 @@ function BIGTIMER(time, min, sec){
 
     function myAnswer() {
       return new Promise(resolve => {
-        console.log('최종 answer : '+answer);
         if(answer.indexOf(1)==-1){
-          console.log('실패');
           $('#stretchingStatus').html('X');
           stretchingAgain = true;
         } else if (answer.indexOf(1)>=0){
           stretchingAgain = false;
-          console.log('성공');
           $('#stretchingStatus').html('O');
         }
         resolve();
@@ -309,18 +298,13 @@ function BIGTIMER(time, min, sec){
 
     async function stretchingGame(){
       await myTimer('5초 뒤에 스트레칭이 시작됩니다.', 5000, 0, 5);
-      console.log('5초 타이머');
       await myStartVideo();
-      console.log('비디오 시작');
       await myTimerWithProgressBar('왼쪽의 동작을 10초 동안 따라해주세요.', 10000, 0, 10);
-      console.log('10초 타이머');
       await myAnswer();
-      console.log('정답 호출');
       while(stretchingAgain){
         await tryAgain();
         await sleep(1500);
         await myTimerWithProgressBar('왼쪽의 동작을 10초 동안 다시 따라해주세요.', 10000, 0, 10);
-        console.log('10초 타이머 재시작');
         await myAnswer();
       }
       await myStopVideo();

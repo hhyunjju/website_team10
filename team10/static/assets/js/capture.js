@@ -113,7 +113,6 @@ function updatePostureStatusCounts(class_name) {
     } 
 
     function to_statistics(){
-      // post('/login/',{ 'userId': userId, 'csrfmiddlewaretoken': '{{ csrf_token }}'});
       window.location.href = "http://localhost:8000/service/statistics";
     }
 
@@ -124,9 +123,7 @@ function updatePostureStatusCounts(class_name) {
           });
         clearInterval(sendImg);
         clearInterval(sendGameNoti);
-        // var videoElement = document.getElementById('video');
-        // jQuery("#posture-status").html('');
-        // videoElement.style.border = ''
+
         streamingStatus = false;
         to_statistics();
       }
@@ -154,21 +151,18 @@ function updatePostureStatusCounts(class_name) {
       let videoElement = document.getElementById('video');
       updatePostureStatusCounts(num);
       if (num==0) {
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
         videoElement.style.boxShadow = "0 0 8px 3px rgba(50, 205, 50, 0.7)";
         videoElement.style.border = '3px solid lime';
         document.getElementById('posture-status').style.color = 'lime'; 
         return 'Good Posture';
       } 
       if(num==-1){
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
         videoElement.style.boxShadow = "";
         videoElement.style.border = '';
         document.getElementById('posture-status').style.color = 'blue';
         return 'Unable to detect posture';
       }
       else {
-        console.log("badPostureCount: ", badPostureCount, ", goodPostureCount: ", goodPostureCount);
         videoElement.style.boxShadow = "0 0 15px 5px rgba(255, 0, 0, 0.7)";
         videoElement.style.border = '3px solid red';
         document.getElementById('posture-status').style.color = 'red';
@@ -194,7 +188,6 @@ function updatePostureStatusCounts(class_name) {
         var data = new FormData($('form')[0]);
         // var picdata = canvas.toDataURL('image/png');
         data.append("img_file", jpegBlob, fileName);
-        console.log('form에 이미지 추가');    
 
         $.ajax({
           type : "POST",
@@ -205,16 +198,12 @@ function updatePostureStatusCounts(class_name) {
           data: data,
           datatype: 'json',
           success: function (data) {
-            console.log(data);
-            console.log('success');
             jQuery("#posture-status").html(isBadPosture(Number(data['class_name'])));
           },
           error: function(e){
-            console.log('error');
           }
         });
       }, 'image/png');
-      console.log(streaming);
     } 
 
 

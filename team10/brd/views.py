@@ -39,7 +39,6 @@ def post_create(request):
         if form.is_valid():
             # DB에 추가
             # cleaned_data : dictionary
-            # post = Post.objects.create(**form.cleaned_data)
             post = form.save(commit=False)
             post.ip = request.META['REMOTE_ADDR']
             post.save()
@@ -71,12 +70,6 @@ def post_delete(request, id):
     else:
         return render(request, 'brd/post_delete.html', {'post':post})
 
-def faq_view(request):
-    # FAQ 페이지에 필요한 데이터를 처리
-    # 예시: context = {'faq_data': faq_data}
-
-    # FAQ 페이지의 템플릿을 렌더링하여 반환
-    return render(request, 'brd/faq.html')
 
 def comments_create(request, pk):
     #post가져오기

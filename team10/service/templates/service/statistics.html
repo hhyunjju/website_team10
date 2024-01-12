@@ -377,11 +377,6 @@
 											correct = correct.map(Number);
 											bad = bad.map(Number);
 
-											console.log('바른 자세 비율 : '+correct);
-											console.log('나쁜 자세 비율 : '+bad);
-											console.log('날짜 : '+weekdate);
-
-
 											// 막대 그래프 생성
 											var barCtx = document.getElementById('barChart').getContext('2d');
 											var barChart = new Chart(barCtx, {
