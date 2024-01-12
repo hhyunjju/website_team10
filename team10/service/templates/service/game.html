@@ -38,6 +38,9 @@
             -webkit-transform:rotateY(180deg); /* Safari and Chrome */
             -moz-transform:rotateY(180deg); /* Firefox */
             object-fit: cover;
+            /*left:11px; 
+            top:4px; 
+            position: relative;"*/
         }
 
         #progressBarContainer{
@@ -209,12 +212,6 @@
                 </ul>
             </section>
 
-        <!-- Actions -->
-            <section>
-                <ul class="actions stacked">
-                    <li><a href="#" class="button large fit">로그인</a></li>
-                </ul>
-            </section>
     </section>
     <body>
         <main class="game-main">
@@ -287,9 +284,4 @@
 
         <script src='{% static "assets/js/capture_game.js" %}'></script>
         <!-- 웹캠 스트림을 가져오기 위한 JavaScript -->
-        <script src="{% static 'assets/js/jquery.min.js' %}"></script>
-        <script src="{% static 'assets/js/browser.min.js' %}"></script>
-        <script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
-        <script src="{% static 'assets/js/util.js' %}"></script>
-        <script src="{% static 'assets/js/main.js' %}"></script>
     </body>
