@@ -521,22 +521,6 @@
 			<script src="{% static 'assets/js/util.js' %}"></script>
 			<script src="{% static 'assets/js/main.js' %}"></script>
 			<script>
-<<<<<<< HEAD
-				document.addEventListener('DOMContentLoaded', () => {
-					const splashText = document.querySelector('.splash-text');
-					setTimeout(() => {
-						splashText.style.opacity = '1';
-						splashText.style.transform = 'translateY(0)';
-					}, 500);
-					// 스플래시 애니메이션 이후 메인 페이지로 전환
-					setTimeout(() => {
-						document.querySelector('.splash-container').style.opacity = '0';
-						document.querySelector('.splash-container').style.visibility = 'hidden';
-						// 혹은 스플래시 컨테이너를 DOM에서 제거하려면:
-						// document.querySelector('.splash-container').remove();
-					}, 2222); // 애니메이션 지속 시간을 조정하세요
-				});
-=======
 				function downloadAllCharts() {
 					// 각 차트의 이미지 URL을 가져오는 함수
 					function getImageUrl(chartId) {
@@ -587,7 +571,6 @@
 					});
 				}
 				
->>>>>>> origin/soobin
 			</script>
 	</body>
 </html>
