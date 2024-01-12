@@ -24,10 +24,10 @@
 								{% else %}
 									<li><a href="{% url 'accounts:profile' %}">{{user}}님!</a></li>
 									<li><a href="{% url 'accounts:logout' %}?next={{request.path}}">로그 아웃</a></li>
+									<li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
+									<li><a href="{% url 'service:service' %}">서비스</a></li>
 								{% endif %}
-								<li class="menu-item-board"><a href="{% url 'brd:notice_board' %}">게시판</a></li>
 								<li class="menu-item-company"><a href="{% url 'home:intro' %}">회사소개</a></li>
-								<li><a href="{% url 'service:service' %}">서비스</a></li>
 							</ul>
 						</nav>
 						<nav class="main">
