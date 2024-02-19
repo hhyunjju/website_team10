@@ -19,10 +19,12 @@ from django.contrib.auth.decorators import login_required
 
 # MLflow Tracking URI 설정
 # mlflow.set_tracking_uri("C:\\Users\\user\\TEAM10\\team10\\team10\\service\\mlruns")
-mlflow_path = os.path.join(os.getcwd(), 'service\mlruns')
-mlflow_path = "file:\\"+mlflow_path
+# mlflow_path = os.path.join(os.getcwd(), 'service\mlruns')
+# mlflow_path = "file:\\"+mlflow_path
+# mlflow.set_tracking_uri(mlflow_path)
+mlflow_path = os.path.join(os.getcwd(), 'service/mlruns')
+mlflow_path = "file://" + mlflow_path.replace('\\', '/')
 mlflow.set_tracking_uri(mlflow_path)
-
 # # 포즈 run ID와 모델 이름 설정
 # run_id_pose = "6b8c4018707341eca7bf4e57438cc697"
 # model_name_pose = "model_pose_final"
@@ -39,12 +41,18 @@ mlflow.set_tracking_uri(mlflow_path)
 # model_uri_stretch = f"runs:/{run_id_stretch}/{model_name_stretch}"
 # stretching_model = mlflow.sklearn.load_model(model_uri_stretch)
     
-model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+# model_path = os.path.join(os.getcwd(), 'service\pose_classification_model.pkl')
+# pose_model = joblib.load(model_path) 
+
+# stretching_model_path = os.path.join(os.getcwd(), 'service\pose_classification_model_stretch_final.pkl')
+# stretching_model = joblib.load(stretching_model_path) 
+# 모델 파일 경로 설정
+# 백슬래시(\) 대신 슬래시(/) 사용
+model_path = os.path.join(os.getcwd(), 'service/pose_classification_model.pkl')
 pose_model = joblib.load(model_path) 
 
-stretching_model_path = os.path.join(os.getcwd(), 'service\pose_classification_model_stretch_final.pkl')
-stretching_model = joblib.load(stretching_model_path) 
-
+stretching_model_path = os.path.join(os.getcwd(), 'service/pose_classification_model_stretch_final.pkl')
+stretching_model = joblib.load(stretching_model_path)
 
 def service(request):
     return render(request, 'service/service.html')
